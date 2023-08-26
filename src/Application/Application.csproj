@@ -5,13 +5,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.7.1" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="LanguageExt.Core" Version="4.4.3" />
     <PackageReference Include="MediatR" Version="12.1.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Authentication\Commands\" />
     <Folder Include="Authentication\Queries\" />
     <Folder Include="ToDoItems\Commands\" />
     <Folder Include="ToDoItems\Queries\" />
