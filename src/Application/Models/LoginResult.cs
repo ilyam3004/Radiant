@@ -1,3 +1,3 @@
 ﻿namespace Application.Models;
 
-public record LoginResult(string Token) : IResult;
+public record LoginResult(string Token);
