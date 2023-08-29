@@ -3,6 +3,7 @@ using Application.Common.Behaviors;
 using System.Reflection;
 using Application.Authentication.Commands;
 using Application.Models;
+using LanguageExt.Common;
 using FluentValidation;
 using MediatR;
 
@@ -15,7 +16,7 @@ public static class DependencyInjection
     {
         services.AddMediatR(cfg => 
             cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
-                .AddBehavior<IPipelineBehavior<RegisterCommand, Result<RegisterResult, Exception>>,
+                .AddBehavior<IPipelineBehavior<RegisterCommand, Result<RegisterResult>>,
                 ValidationBehavior<RegisterCommand, RegisterResult>>());
         
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());

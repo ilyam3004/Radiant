@@ -1,16 +1,14 @@
-﻿using Application.Common.Behaviors;
-using Application.Common.Interfaces.Persistence;
+﻿using Application.Common.Interfaces.Persistence;
 using Application.Models;
 using Domain.Common.Exceptions;
 using Domain.Entities;
-using FluentValidation;
 using LanguageExt.Common;
 using MediatR;
 
 namespace Application.Authentication.Commands;
 
 public class RegisterCommandHandler
-    : IRequestHandler<RegisterCommand, Result<RegisterResult, Exception>>
+    : IRequestHandler<RegisterCommand, Result<RegisterResult>>
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -19,7 +17,7 @@ public class RegisterCommandHandler
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Result<RegisterResult, Exception>> Handle(
+    public async Task<Result<RegisterResult>> Handle(
         RegisterCommand command,
         CancellationToken cancellationToken)
     {
@@ -30,7 +28,7 @@ public class RegisterCommandHandler
         if (_unitOfWork.Users.UserExists(command.Email))
         {
             var exception = new DuplicateEmailException();
-            return exception;
+            return new Result<RegisterResult>(exception);
         }
         
         var user = new User
