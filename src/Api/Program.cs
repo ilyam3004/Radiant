@@ -1,7 +1,13 @@
 using Api;
 using Api.Common.Mapping;
 using Application;
+using Application.Authentication.Commands;
+using Application.Common.Behaviors;
+using Application.Models;
 using Infrastructure;
+using Infrastructure.Persistence;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 {

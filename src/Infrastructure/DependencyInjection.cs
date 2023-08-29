@@ -1,5 +1,4 @@
 ﻿using Application.Common.Interfaces.Persistence;
-using Domain.Entities;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +19,18 @@ public static class DependencyInjection
                     .GetConnectionString("DefaultConnection")));
 
         services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+        MigrateDatabase(services);
         return services;
+    }
+
+    private static void MigrateDatabase(IServiceCollection services)
+    {
+        var serviceProvider = services.BuildServiceProvider();
+        
+        using var scope = serviceProvider.CreateScope();
+        var dbContext = scope.ServiceProvider
+            .GetRequiredService<TodoDbContext>();
+        dbContext.Database.Migrate();
     }
 }

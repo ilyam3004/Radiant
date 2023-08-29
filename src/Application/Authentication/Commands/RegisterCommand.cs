@@ -1,5 +1,6 @@
-﻿using Application.Models;
-using LanguageExt.Common;
+﻿using Application.Common.Behaviors;
+using Application.Models;
+using FluentValidation;
 using MediatR;
 
 namespace Application.Authentication.Commands;
@@ -7,4 +8,4 @@ namespace Application.Authentication.Commands;
 public record RegisterCommand(
     string Email, 
     string Password, 
-    string Username) : IRequest<Result<RegisterResult>>;
+    string Username) : IRequest<Result<RegisterResult, Exception>>;

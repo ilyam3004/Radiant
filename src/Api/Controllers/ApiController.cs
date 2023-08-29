@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Domain.Common.Exceptions;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
@@ -12,6 +13,7 @@ public class ApiController : ControllerBase
         return ex switch
         {
             ValidationException => ValidationProblem(ex),
+            DuplicateEmailException => Problem(ex.Message, statusCode: StatusCodes.Status400BadRequest),
             UnauthorizedAccessException => Problem(ex.Message, statusCode: StatusCodes.Status401Unauthorized),
             _ => StatusCode(500, "Internal Server Error")
         };

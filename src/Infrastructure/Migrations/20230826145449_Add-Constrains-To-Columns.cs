@@ -24,7 +24,7 @@ namespace Infrastructure.Migrations
                 table: "TodoItems");
 
             migrationBuilder.AlterColumn<string>(
-                name: "UserName",
+                name: "Username",
                 table: "Users",
                 type: "character varying(10)",
                 maxLength: 10,
@@ -114,7 +114,7 @@ namespace Infrastructure.Migrations
                 table: "TodoItems");
 
             migrationBuilder.AlterColumn<string>(
-                name: "UserName",
+                name: "Username",
                 table: "Users",
                 type: "text",
                 nullable: false,
