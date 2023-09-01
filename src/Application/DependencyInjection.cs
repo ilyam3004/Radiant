@@ -1,12 +1,13 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Application.Common.Behaviors;
-using System.Reflection;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.DependencyInjection;
 using Application.Authentication.Commands;
+using Application.Authentication.Services;
+using Application.Authentication.Queries;
 using Application.Common.Extensions;
+using Microsoft.AspNetCore.Http;
 using Application.Models;
-using LanguageExt.Common;
+using System.Reflection;
 using FluentValidation;
-using MediatR;
 
 namespace Application;
 
@@ -17,7 +18,19 @@ public static class DependencyInjection
     {
         services.AddMediatR(cfg => 
             cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
-                .AddValidationBehavior<RegisterCommand, RegisterResult>());
+                .AddValidationBehavior<RegisterCommand, RegisterResult>()
+                .AddValidationBehavior<LoginQuery, LoginResult>());
+        
+        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+                options.Events.OnRedirectToLogin = context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    return Task.CompletedTask;
+                });
+
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddHttpContextAccessor();
         
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         

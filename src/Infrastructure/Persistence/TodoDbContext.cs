@@ -9,7 +9,7 @@ public class TodoDbContext : DbContext
         : base(options) 
     { }
 
-    public DbSet<User> Users { get; set; }
+    public DbSet<User?> Users { get; set; }
     public DbSet<TodoList> TodoLists { get; set; }
     public DbSet<TodoItem> TodoItems { get; set; }
 

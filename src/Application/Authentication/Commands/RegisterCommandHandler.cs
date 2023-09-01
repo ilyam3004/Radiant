@@ -21,11 +21,7 @@ public class RegisterCommandHandler
         RegisterCommand command,
         CancellationToken cancellationToken)
     {
-        //validate request
-        
-        //if request is not valid, return error
-
-        if (_unitOfWork.Users.UserExists(command.Email))
+        if (await _unitOfWork.Users.UserExists(command.Email))
         {
             var exception = new DuplicateEmailException();
             return new Result<RegisterResult>(exception);
@@ -36,12 +32,12 @@ public class RegisterCommandHandler
             Id = Guid.NewGuid(),
             Email = command.Email,
             Username = command.Username,
-            Password = BCrypt.Net.BCrypt.HashPassword(command.Password),
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(command.Password),
         };
         
-        _unitOfWork.Users.Add(user);
+        await _unitOfWork.Users.AddAsync(user);
         _unitOfWork.SaveChanges();
         
-        return new RegisterResult(user, "token");
+        return new RegisterResult(user);
     }
 }

@@ -5,4 +5,5 @@ using MediatR;
 namespace Application.Authentication.Queries;
 
 public record LoginQuery(
-    string Token): IRequest<Result<LoginResult>>;
+    string Email,
+    string Password): IRequest<Result<LoginResult>>;

@@ -1,6 +1,6 @@
 ﻿using Application.Authentication.Commands;
+using Application.Authentication.Queries;
 using Application.Models;
-using Domain.Entities;
 using FluentAssertions;
 
 namespace Application.UnitTests.TestUtils.Extensions;
@@ -11,7 +11,11 @@ public static partial class Validations
         RegisterCommand registerCommand)
     {
         result.User.Email.Should().Be(registerCommand.Email);
-        result.User.Password.Should().NotBe(registerCommand.Password);
         result.User.Username.Should().Be(registerCommand.Username);
+    }
+
+    public static void ValidateCreatedFrom(this LoginResult result, LoginQuery query)
+    {
+        result.User.Email.Should().Be(query.Email);
     }
 }

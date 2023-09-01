@@ -1,13 +1,7 @@
-using Api;
 using Api.Common.Mapping;
-using Application;
-using Application.Authentication.Commands;
-using Application.Common.Behaviors;
-using Application.Models;
 using Infrastructure;
-using Infrastructure.Persistence;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Application;
+using Api;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -21,6 +15,9 @@ var app = builder.Build();
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseAuthentication();
+    app.UseAuthorization();
     app.MapControllers();
+    app.MapDefaultControllerRoute();
     app.Run();
 }

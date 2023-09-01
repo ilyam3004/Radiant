@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces.Persistence;
+using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
 
 namespace Infrastructure.Persistence.Repositories;
@@ -9,8 +10,15 @@ internal sealed class UserRepository :
     public UserRepository(TodoDbContext context) : base(context)
     { }
     
-    public bool UserExists(string email)
+    public async Task<bool> UserExists(string email)
     {
-        return DbContext.Users.Any(u => u.Email == email);
+        return await DbContext.Users.AnyAsync(u => u.Email == email);
+    }
+    
+    public async Task<User?> GetByEmail(string email)
+    {
+        return await DbContext
+            .Users
+            .FirstOrDefaultAsync(u => u.Email == email);
     }
 }

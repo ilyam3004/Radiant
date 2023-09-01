@@ -1,3 +1,5 @@
 ﻿namespace Contracts.Responses;
 
-public record RegisterResponse(string Token);
+public record RegisterResponse(
+    string Email,
+    string Username);

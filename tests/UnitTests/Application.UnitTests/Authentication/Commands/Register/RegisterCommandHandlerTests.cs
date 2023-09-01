@@ -27,7 +27,7 @@ public class RegisterCommandHandlerTests
         //Arrange
         var registerCommand = RegisterCommandUtils.CreateRegisterCommand();
         _mockUnitOfWork.Setup(m => m.Users.UserExists(
-            registerCommand.Email)).Returns(false);
+            registerCommand.Email)).ReturnsAsync(false);
         
         //Act
         var result = await _sut.Handle(registerCommand, default);
@@ -39,7 +39,7 @@ public class RegisterCommandHandlerTests
         result.IsSuccess.Should().BeTrue();
         value.ValidateCreatedFrom(registerCommand);
         _mockUnitOfWork.Verify(m => 
-            m.Users.Add(It.IsAny<User>()));
+            m.Users.AddAsync(It.IsAny<User>()));
     }
 
     [Fact]
@@ -50,7 +50,7 @@ public class RegisterCommandHandlerTests
 
         _mockUnitOfWork.Setup(m => 
             m.Users.UserExists(registerCommand.Email)).
-            Returns(true);
+            ReturnsAsync(true);
         
         //Act
         var result = await _sut.Handle(registerCommand, default);
@@ -63,6 +63,6 @@ public class RegisterCommandHandlerTests
         result.IsFaulted.Should().BeTrue();
         value.Should().BeOfType<DuplicateEmailException>();
         _mockUnitOfWork.Verify(m => 
-            m.Users.Add(It.IsAny<User>()), Times.Never);
+            m.Users.AddAsync(It.IsAny<User>()), Times.Never);
     }
 }

@@ -1,3 +1,6 @@
-﻿namespace Application.Models;
+﻿using Domain.Entities;
 
-public record LoginResult(string Token);
+namespace Application.Models;
+
+public record LoginResult(
+    User User);

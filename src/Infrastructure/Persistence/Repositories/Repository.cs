@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories;
 
@@ -12,9 +13,9 @@ internal class Repository<TEntity> :
         DbContext = context;
     }
 
-    public void Add(TEntity entity)
+    public async Task AddAsync(TEntity entity)
     {
-        DbContext.Set<TEntity>().Add(entity);
+        await DbContext.Set<TEntity>().AddAsync(entity);
     }
     
     public void Update(TEntity entity)
@@ -27,13 +28,13 @@ internal class Repository<TEntity> :
         DbContext.Set<TEntity>().Remove(entity);
     }
     
-    public List<TEntity> GetAll()
+    public async Task<List<TEntity>> GetAll()
     {
-        return DbContext.Set<TEntity>().ToList();
+        return await DbContext.Set<TEntity>().ToListAsync();
     }
 
-    public TEntity? GetById(Guid id)
+    public async Task<TEntity?> GetByIdAsync(Guid id)
     {
-        return DbContext.Set<TEntity>().Find(id);
+        return await DbContext.Set<TEntity>().FindAsync(id);
     }
 }

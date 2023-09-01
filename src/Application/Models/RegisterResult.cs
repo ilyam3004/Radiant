@@ -2,4 +2,4 @@
 
 namespace Application.Models;
 
-public record RegisterResult(User User, string Token);
+public record RegisterResult(User User);
