@@ -3,6 +3,7 @@ using Application.Authentication.Services;
 using System.Security.Authentication;
 using Domain.Common.Exceptions;
 using Application.Models;
+using Application.Models.Authentication;
 using LanguageExt.Common;
 using MediatR;
 
@@ -37,8 +38,9 @@ public class LoginQueryHandler
                 "Invalid email or password");
             return new Result<LoginResult>(invalidPasswordException);
         }
-        
-        await _authService.Login(query);
+
+        var authRequest = new AuthRequest(user.Email, user.Id);
+        await _authService.Login(authRequest);
         
         return new LoginResult(user);
     }

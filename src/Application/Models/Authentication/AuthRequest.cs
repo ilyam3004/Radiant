@@ -1,6 +1,5 @@
 ﻿namespace Application.Models.Authentication;
 
-public class AuthRequest
-{
-    
-}
+public record AuthRequest(
+    string Email, 
+    Guid UserId);

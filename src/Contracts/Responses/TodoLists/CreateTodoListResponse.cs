@@ -1,6 +1,7 @@
 ﻿namespace Contracts.Responses.TodoLists;
 
-public class CreateTodoListResponse
-{
-    
-}
+public record CreateTodoListResponse(
+    Guid Id,
+    string Title,
+    List<TodoItemResponse> TodoItems,
+    Guid UserId);

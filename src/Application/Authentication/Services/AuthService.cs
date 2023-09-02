@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication;
 using Application.Authentication.Queries;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using Application.Models.Authentication;
+using Microsoft.AspNetCore.Localization;
 
 namespace Application.Authentication.Services;
 
@@ -15,12 +17,12 @@ public class AuthService : IAuthService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task Login(LoginQuery query)
+    public async Task Login(AuthRequest request)
     {
         var claims = new List<Claim>
         {
-            new(type: ClaimTypes.Email, value: query.Email),
-            new(type: ClaimTypes.Name, value: query.Password)
+            new(type: ClaimTypes.Email, value: request.Email),
+            new(type: ClaimTypes.NameIdentifier, value: request.UserId.ToString())
         };
 
         var identity = new ClaimsIdentity(claims, 
@@ -35,6 +37,12 @@ public class AuthService : IAuthService
                 AllowRefresh = true,
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(1),
             });
+    }
+
+    public string? GetUserId()
+    {
+        return _httpContextAccessor.HttpContext!.User
+            .FindFirst(ClaimTypes.NameIdentifier)?.Value;
     }
 
     public Task Logout()

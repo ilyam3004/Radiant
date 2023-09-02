@@ -1,9 +1,10 @@
-﻿using Application.Authentication.Queries;
+﻿using Application.Models.Authentication;
 
 namespace Application.Authentication.Services;
 
 public interface IAuthService
 {
-    Task Login(LoginQuery query);
+    Task Login(AuthRequest request);
+    string? GetUserId();
     Task Logout();
 }

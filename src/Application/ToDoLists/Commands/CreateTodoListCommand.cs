@@ -1,7 +1,8 @@
-﻿using LanguageExt.Common;
+﻿using Application.Models.TodoLists;
+using LanguageExt.Common;
 using MediatR;
 
-namespace Application.ToDoLists;
+namespace Application.ToDoLists.Commands;
 
 public record CreateTodoListCommand(
     string Title) : IRequest<Result<CreateTodoListResult>>;
