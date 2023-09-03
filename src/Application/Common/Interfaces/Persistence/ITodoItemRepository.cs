@@ -2,7 +2,8 @@
 
 namespace Application.Common.Interfaces.Persistence;
 
-public interface ITodoItemRepository : IRepository<TodoItem>
+public interface ITodoItemRepository 
+    : IRepository<TodoItem>
 {
     
 }

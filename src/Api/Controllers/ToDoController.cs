@@ -1,4 +1,5 @@
 ﻿using Application.ToDoItems.Commands;
+using Application.ToDoItems.Commands.RemoveTodoItem;
 using Application.ToDoLists.Commands.CreateTodoList;
 using Application.ToDoLists.Commands.RemoveTodoList;
 using Microsoft.AspNetCore.Authorization;
@@ -66,6 +67,18 @@ public class ToDoController : ApiController
         var command = _mapper.Map<CreateTodoItemCommand>(request);
         var result = await _sender.Send(command);
         
+        return result.Match(
+            value => Ok(_mapper.Map<TodoListResponse>(value)),
+            Problem);
+    }
+
+    [HttpDelete("remove-item/{id}")]
+    public async Task<IActionResult> RemoveTodoListItem([FromRoute] Guid id)
+    {
+        var command = new RemoveTodoItemCommand(id);
+
+        var result = await _sender.Send(command);
+
         return result.Match(
             value => Ok(_mapper.Map<TodoListResponse>(value)),
             Problem);
