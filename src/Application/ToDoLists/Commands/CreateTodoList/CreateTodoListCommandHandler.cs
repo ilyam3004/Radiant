@@ -1,12 +1,12 @@
-﻿using Application.Common.Interfaces.Persistence;
-using Application.Authentication.Services;
+﻿using Application.Authentication.Services;
+using Application.Common.Interfaces.Persistence;
 using Application.Models.TodoLists;
 using Domain.Common.Exceptions;
 using Domain.Entities;
 using LanguageExt.Common;
 using MediatR;
 
-namespace Application.ToDoLists.Commands;
+namespace Application.ToDoLists.Commands.CreateTodoList;
 
 public class CreateTodoListCommandHandler
     : IRequestHandler<CreateTodoListCommand, Result<CreateTodoListResult>>

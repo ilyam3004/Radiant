@@ -21,7 +21,7 @@ public class RegisterCommandHandler
         RegisterCommand command,
         CancellationToken cancellationToken)
     {
-        if (await _unitOfWork.Users.UserExists(command.Email))
+        if (await _unitOfWork.Users.UserExistsByEmail(command.Email))
         {
             var exception = new DuplicateEmailException();
             return new Result<RegisterResult>(exception);

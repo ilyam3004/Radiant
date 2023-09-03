@@ -1,12 +1,11 @@
-﻿using Application.ToDoLists;
-using Application.ToDoLists.Commands;
+﻿using Application.ToDoLists.Commands.CreateTodoList;
+using Application.ToDoLists.Commands.RemoveTodoList;
+using Microsoft.AspNetCore.Authorization;
+using Application.ToDoLists.Queries;
 using Contracts.Responses.TodoLists;
-using Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 using MapsterMapper;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
@@ -22,6 +21,18 @@ public class ToDoController : ApiController
         _mapper = mapper;
         _sender = sender;
     }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetUserTodoLists()
+    {
+        var query = new GetTodoListsQuery();
+
+        var result = await _sender.Send(query);
+
+        return result.Match(
+            value => Ok(_mapper.Map<GetTodoListsResponse>(value)),
+            Problem);
+    }
 
     [HttpPost("create/{title}")]
     public async Task<IActionResult> CreateTodoList([FromRoute]string title)
@@ -31,7 +42,19 @@ public class ToDoController : ApiController
         var result = await _sender.Send(command);
         
         return result.Match(
-            value => Ok(_mapper.Map<CreateTodoListResponse>(value)),
+            value => Ok(_mapper.Map<TodoListResponse>(value)),
+            Problem);
+    }
+
+    [HttpDelete("remove/{id}")]
+    public async Task<IActionResult> RemoveTodoList([FromRoute] Guid id)
+    {
+        var command = new RemoveTodoListCommand(id);
+
+        var result = await _sender.Send(command);
+        
+        return result.Match(
+            value => Ok(_mapper.Map<RemoveTodoListResponse>(value)),
             Problem);
     }
 }

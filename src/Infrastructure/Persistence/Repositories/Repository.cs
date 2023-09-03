@@ -23,14 +23,16 @@ internal class Repository<TEntity> :
         DbContext.Set<TEntity>().Update(entity);
     }
     
-    public void Remove(TEntity entity)
+    public void Remove(Guid id)
     {
-        DbContext.Set<TEntity>().Remove(entity);
+        var entity = DbContext.Set<TEntity>().Find(id);
+        DbContext.Set<TEntity>().Remove(entity!);
     }
     
     public async Task<List<TEntity>> GetAll()
     {
         return await DbContext.Set<TEntity>().ToListAsync();
+        
     }
 
     public async Task<TEntity?> GetByIdAsync(Guid id)

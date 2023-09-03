@@ -8,7 +8,7 @@ public class TodoListMappingConfig : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
-        config.NewConfig<CreateTodoListResult, CreateTodoListResponse>()
+        config.NewConfig<CreateTodoListResult, TodoListResponse>()
             .Map(dest => dest, src => src.TodoList)
             .Map(dest => dest.TodoItems, src => src.TodoList.TodoItems);
     }

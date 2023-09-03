@@ -2,7 +2,7 @@
 using LanguageExt.Common;
 using MediatR;
 
-namespace Application.ToDoLists.Commands;
+namespace Application.ToDoLists.Commands.CreateTodoList;
 
 public record CreateTodoListCommand(
     string Title) : IRequest<Result<CreateTodoListResult>>;
