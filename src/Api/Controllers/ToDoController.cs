@@ -1,7 +1,9 @@
-﻿using Application.ToDoLists.Commands.CreateTodoList;
+﻿using Application.ToDoItems.Commands;
+using Application.ToDoLists.Commands.CreateTodoList;
 using Application.ToDoLists.Commands.RemoveTodoList;
 using Microsoft.AspNetCore.Authorization;
 using Application.ToDoLists.Queries;
+using Contracts.Requests;
 using Contracts.Responses.TodoLists;
 using Microsoft.AspNetCore.Mvc;
 using MapsterMapper;
@@ -55,6 +57,17 @@ public class ToDoController : ApiController
         
         return result.Match(
             value => Ok(_mapper.Map<RemoveTodoListResponse>(value)),
+            Problem);
+    }
+    
+    [HttpPost("create-item")]
+    public async Task<IActionResult> CreateTodoListItem(CreateTodoItemRequest request)
+    {
+        var command = _mapper.Map<CreateTodoItemCommand>(request);
+        var result = await _sender.Send(command);
+        
+        return result.Match(
+            value => Ok(_mapper.Map<TodoListResponse>(value)),
             Problem);
     }
 }

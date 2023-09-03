@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ToDoItems\Commands\" />
     <Folder Include="ToDoItems\Queries\" />
   </ItemGroup>
 

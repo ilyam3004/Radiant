@@ -28,7 +28,7 @@ public class RemoveTodoListCommandHandler
         RemoveTodoListCommand command, 
         CancellationToken cancellationToken)
     {
-        var todoList = await _unitOfWork.Todos
+        var todoList = await _unitOfWork.TodoLists
             .GetByIdAsync(command.TodoListId);
         if (todoList is null)
         {
@@ -36,7 +36,7 @@ public class RemoveTodoListCommandHandler
             return new Result<RemoveTodoListResult>(exception);
         }
         
-        _unitOfWork.Todos.Remove(todoList.Id);
+        _unitOfWork.TodoLists.Remove(todoList.Id);
         _unitOfWork.SaveChanges();
         
         return new RemoveTodoListResult(

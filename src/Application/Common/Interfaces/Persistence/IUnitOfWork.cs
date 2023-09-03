@@ -3,6 +3,7 @@
 public interface IUnitOfWork : IDisposable
 {
     IUserRepository Users { get; }
-    ITodoListRepository Todos { get; }
+    ITodoListRepository TodoLists { get; }
+    ITodoItemRepository TodoItems { get; }
     int SaveChanges();
 }

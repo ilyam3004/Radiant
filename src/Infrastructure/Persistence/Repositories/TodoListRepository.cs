@@ -15,11 +15,24 @@ internal sealed class TodoListRepository :
         return await DbContext.TodoLists
             .AnyAsync(tl => tl.Title == title);
     }
-    
+
+    public async Task<bool> TodoListExists(Guid todoListId)
+    {
+        return await DbContext.TodoLists
+            .AnyAsync(tl => tl.Id == todoListId);
+    }
+
     public async Task<List<TodoList>> GetUserTodoLists(Guid userId)
     {
         return await DbContext.TodoLists
             .Include(tl => tl.TodoItems)
             .Where(tl => tl.UserId == userId).ToListAsync();
+    }
+
+    public async Task<TodoList?> GetTodoListByIdWithItems(Guid todoListId)
+    {
+        return await DbContext.TodoLists
+            .Include(tl => tl.TodoItems)
+            .FirstOrDefaultAsync(tl => tl.Id == todoListId);
     }
 }

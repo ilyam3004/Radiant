@@ -31,7 +31,7 @@ public class GetTodoListQueryHandler
             return new Result<GetTodoListsResult>(exception);
         }
 
-        var userTodos = await _unitOfWork.Todos
+        var userTodos = await _unitOfWork.TodoLists
             .GetUserTodoLists(userId!);
 
         return new GetTodoListsResult(userTodos);

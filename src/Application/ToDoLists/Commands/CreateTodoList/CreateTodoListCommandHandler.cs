@@ -25,7 +25,7 @@ public class CreateTodoListCommandHandler
         CreateTodoListCommand command, 
         CancellationToken cancellationToken)
     {
-        if (await _unitOfWork.Todos.IsTitleExists(command.Title))
+        if (await _unitOfWork.TodoLists.IsTitleExists(command.Title))
         {
             var exception = new TodoListAlreadyExistsException();
             return new Result<CreateTodoListResult>(exception);
@@ -41,7 +41,7 @@ public class CreateTodoListCommandHandler
             UserId = userId
         };
         
-        await _unitOfWork.Todos.AddAsync(todoList);
+        await _unitOfWork.TodoLists.AddAsync(todoList);
         _unitOfWork.SaveChanges();
 
         return new CreateTodoListResult(todoList);

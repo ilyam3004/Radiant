@@ -11,11 +11,13 @@ public class UnitOfWork : IUnitOfWork
     {
         _context = context;
         Users = new UserRepository(context);
-        Todos = new TodoListRepository(context);
+        TodoLists = new TodoListRepository(context);
+        TodoItems = new TodoItemRepository(context);
     }
     
     public IUserRepository Users { get; }
-    public ITodoListRepository Todos { get; }
+    public ITodoListRepository TodoLists { get; }
+    public ITodoItemRepository TodoItems { get; }
     
     public int SaveChanges()
     {
