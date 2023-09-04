@@ -2,4 +2,4 @@
 
 namespace Application.Models.TodoLists;
 
-public record TodoItemResult(TodoItem Todoitem);
+public record TodoItemResult(TodoItem TodoItem);

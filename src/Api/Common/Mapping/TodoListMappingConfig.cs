@@ -11,5 +11,8 @@ public class TodoListMappingConfig : IRegister
         config.NewConfig<TodoListResult, TodoListResponse>()
             .Map(dest => dest, src => src.TodoList)
             .Map(dest => dest.TodoItems, src => src.TodoList.TodoItems);
+
+        config.NewConfig<TodoItemResult, TodoItemResponse>()
+            .Map(dest => dest, src => src.TodoItem);
     }
 }
