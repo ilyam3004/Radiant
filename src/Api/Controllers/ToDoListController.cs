@@ -13,7 +13,7 @@ using MediatR;
 namespace Api.Controllers;
 
 [Authorize]
-[Route("todos")]
+[Route("todolists")]
 public class ToDoController : ApiController
 {
     private readonly IMapper _mapper;
