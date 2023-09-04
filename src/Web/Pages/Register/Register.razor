@@ -1,0 +1,30 @@
+﻿@page "/"
+@inject NavigationManager Navigation
+@inject IJSRuntime jsRuntime
+@inject HttpClient HttpClient
+
+<div class="w-25 m-auto">
+    <h4 class="card-header">Register</h4>
+    <div class="card-body">
+        <EditForm Model="_registerRequest" OnValidSubmit="HandleSubmit">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <InputText id="email" @bind-Value="_registerRequest.Email" class="form-control"/>
+                <ValidationMessage For="() => _registerRequest.Email"/>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <InputText id="password" @bind-Value="_registerRequest.Password" class="form-control" type="password"/>
+                <ValidationMessage For="() => _registerRequest.Password"/>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary" disabled="@loading">
+                    <span class="spinner-border spinner-border-sm me-1" 
+                          style="display: @(loading ? "inline-block" : "none")"></span>
+                    Register
+                </button>
+                <a href="../login" class="btn btn-link">Login</a>
+            </div>
+        </EditForm>
+    </div>
+</div>

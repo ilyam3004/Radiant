@@ -1,0 +1,34 @@
+﻿@page "/todo"
+
+<div class="app-container">
+    <div class="d-flex align-items-center flex-column">
+        <h3>Todo</h3>
+        <div class="d-flex align-items-center mb-3">
+            <div class="form-group mr-3 mb-0">
+                <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Enter a title of todolist"/>
+            </div>
+            <button
+                type="button"
+                class="btn btn-primary mr-3">
+                Create
+            </button>
+        </div>
+    </div>
+    <div style="margin-bottom: 5%"/>
+    <div style="margin: 0 5% 0 5%">
+        @for (int rowIndex = 0; rowIndex < todoLists.Count; rowIndex += 3)
+        {
+            <div class="row">
+                @for (int columnIndex = rowIndex; columnIndex < rowIndex + 3 && columnIndex < todoLists.Count; columnIndex++)
+                {
+                    <div class="col-md-4">
+                        <TodoListComponent TodoList="todoLists[columnIndex]"/>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
