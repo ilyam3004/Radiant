@@ -18,6 +18,8 @@ public class ApiController : ControllerBase
             UnauthorizedAccessException => Problem(ex.Message, statusCode: StatusCodes.Status401Unauthorized),
             UserNotFoundException => Problem(ex.Message, statusCode: StatusCodes.Status404NotFound),
             InvalidCredentialException => Problem(ex.Message, statusCode: StatusCodes.Status401Unauthorized),
+            TodoItemNotFoundException => Problem(ex.Message, statusCode: StatusCodes.Status404NotFound),
+            TodoListNotFoundException => Problem(ex.Message, statusCode: StatusCodes.Status404NotFound),
             _ => StatusCode(500, "Internal Server Error")
         };
     }

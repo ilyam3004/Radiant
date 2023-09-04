@@ -5,4 +5,4 @@ using MediatR;
 namespace Application.ToDoLists.Commands.CreateTodoList;
 
 public record CreateTodoListCommand(
-    string Title) : IRequest<Result<CreateTodoListResult>>;
+    string Title) : IRequest<Result<TodoListResult>>;

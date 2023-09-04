@@ -1,6 +1,8 @@
-﻿namespace Application.ToDoItems.Commands;
+﻿using Application.Models.TodoLists;
+using LanguageExt.Common;
+using MediatR;
 
-public class ToggleTodoItemCommand
-{
-    
-}
+namespace Application.ToDoItems.Commands.ToggleTodoItem;
+
+public record ToggleTodoItemCommand(
+    Guid TodoItemId) : IRequest<Result<TodoItemResult>>;

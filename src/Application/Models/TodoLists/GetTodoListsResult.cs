@@ -2,5 +2,4 @@
 
 namespace Application.Models.TodoLists;
 
-public record GetTodoListsResult(
-    List<TodoList> TodoLists);
+public record GetTodoListsResult(List<TodoList> TodoLists);

@@ -9,7 +9,7 @@ using MediatR;
 namespace Application.ToDoLists.Commands.CreateTodoList;
 
 public class CreateTodoListCommandHandler
-    : IRequestHandler<CreateTodoListCommand, Result<CreateTodoListResult>>
+    : IRequestHandler<CreateTodoListCommand, Result<TodoListResult>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IAuthService _authService;
@@ -21,14 +21,14 @@ public class CreateTodoListCommandHandler
         _authService = authService;
     }
     
-    public async Task<Result<CreateTodoListResult>> Handle(
+    public async Task<Result<TodoListResult>> Handle(
         CreateTodoListCommand command, 
         CancellationToken cancellationToken)
     {
         if (await _unitOfWork.TodoLists.IsTitleExists(command.Title))
         {
             var exception = new TodoListAlreadyExistsException();
-            return new Result<CreateTodoListResult>(exception);
+            return new Result<TodoListResult>(exception);
         }
 
         var userId = Guid.Parse(_authService.GetUserId()!);
@@ -44,6 +44,6 @@ public class CreateTodoListCommandHandler
         await _unitOfWork.TodoLists.AddAsync(todoList);
         _unitOfWork.SaveChanges();
 
-        return new CreateTodoListResult(todoList);
+        return new TodoListResult(todoList);
     }
 }

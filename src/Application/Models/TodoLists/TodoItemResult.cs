@@ -1,6 +1,5 @@
-﻿namespace Application.Models.TodoLists;
+﻿using Domain.Entities;
 
-public class TodoItemResult
-{
-    
-}
+namespace Application.Models.TodoLists;
+
+public record TodoItemResult(TodoItem Todoitem);

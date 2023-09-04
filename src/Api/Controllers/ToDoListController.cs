@@ -13,13 +13,13 @@ using MediatR;
 namespace Api.Controllers;
 
 [Authorize]
-[Route("todolists")]
-public class ToDoController : ApiController
+[Route("todo-lists")]
+public class ToDoListController : ApiController
 {
     private readonly IMapper _mapper;
     private readonly ISender _sender;
 
-    public ToDoController(IMapper mapper, ISender sender)
+    public ToDoListController(IMapper mapper, ISender sender)
     {
         _mapper = mapper;
         _sender = sender;
@@ -58,29 +58,6 @@ public class ToDoController : ApiController
         
         return result.Match(
             value => Ok(_mapper.Map<RemoveTodoListResponse>(value)),
-            Problem);
-    }
-    
-    [HttpPost("create-item")]
-    public async Task<IActionResult> CreateTodoListItem(CreateTodoItemRequest request)
-    {
-        var command = _mapper.Map<CreateTodoItemCommand>(request);
-        var result = await _sender.Send(command);
-        
-        return result.Match(
-            value => Ok(_mapper.Map<TodoListResponse>(value)),
-            Problem);
-    }
-
-    [HttpDelete("remove-item/{id}")]
-    public async Task<IActionResult> RemoveTodoListItem([FromRoute] Guid id)
-    {
-        var command = new RemoveTodoItemCommand(id);
-
-        var result = await _sender.Send(command);
-
-        return result.Match(
-            value => Ok(_mapper.Map<TodoListResponse>(value)),
             Problem);
     }
 }
