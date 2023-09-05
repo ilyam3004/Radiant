@@ -1,31 +1,31 @@
 ﻿version: '3.8'
+
+networks:
+  dev:
+    driver: bridge
+
 services:
   api:
     build:
       context: .
-      dockerfile: Dockerfile.api
+      dockerfile: src/Api/Dockerfile
     ports:
-      - "5000:80"
+      - "5074:80"
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=postgres;User Id=postgres;Password=password;
     depends_on:
       - postgres
-    environment:
-      - ConnectionStrings__DefaultConnection=Host=localhost;Port=5432;Database=postgres;User Id=postgres;Password=password;
-
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile.web
-    ports:
-      - "5001:80" # Map your Web app port to the desired host port
-    depends_on:
-      - api
+    networks:
+      - dev
 
   postgres:
-    image: postgres:latest
-    container_name: postgres
-    ports:
-      - "5432:5432" # Map PostgreSQL port to the desired host port
+    image: postgres
     environment:
-      POSTGRES_USER: YourUsername
-      POSTGRES_PASSWORD: YourPassword
-      POSTGRES_DB: YourDatabaseName
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"  
+    networks:
+      - dev
+
