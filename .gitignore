@@ -3,3 +3,6 @@
 obj/
 bin/
 ToDo.sln.DotSettings.user
+.vs/
+
+Backup/

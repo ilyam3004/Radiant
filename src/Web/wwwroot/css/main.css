@@ -5,3 +5,11 @@
 .complete {
     text-decoration: line-through;
 }
+
+.alert-container {
+    width: 40%;
+    position: fixed;
+    top: 70%;
+    left: 30%;
+    z-index: 10;
+}

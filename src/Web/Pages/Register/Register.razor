@@ -1,21 +1,38 @@
-﻿@page "/"
-@inject NavigationManager Navigation
-@inject IJSRuntime jsRuntime
-@inject HttpClient HttpClient
+﻿@using Web.Components.Base;
+@using Web.Components;
 
+@inherits AuthBaseComponent
+
+@page "/"
+
+@if (isError)
+{
+    <AlertComponent Errors="@errorResponse.Errors" IsError="true"/>
+}
 <div class="w-25 m-auto">
     <h4 class="card-header">Register</h4>
     <div class="card-body">
-        <EditForm Model="_registerRequest" OnValidSubmit="HandleSubmit">
+        <EditForm Model="registerRequest" OnValidSubmit="HandleRegisterSubmit">
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <InputText id="email" @bind-Value="_registerRequest.Email" class="form-control"/>
-                <ValidationMessage For="() => _registerRequest.Email"/>
+                <InputText id="email" 
+                           @bind-Value="registerRequest.Email" 
+                           class="form-control"/>
+                <ValidationMessage For="() => registerRequest.Email"/>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <InputText id="password" @bind-Value="_registerRequest.Password" class="form-control" type="password"/>
-                <ValidationMessage For="() => _registerRequest.Password"/>
+                <InputText id="password" @bind-Value="registerRequest.Password" 
+                           class="form-control"
+                           type="password"/>
+                <ValidationMessage For="() => registerRequest.Password"/>
+            </div>
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <InputText id="username" 
+                           @bind-Value="registerRequest.Username" 
+                           class="form-control"/>
+                <ValidationMessage For="() => registerRequest.Username" />
             </div>
             <div>
                 <button type="submit" class="btn btn-primary" disabled="@loading">

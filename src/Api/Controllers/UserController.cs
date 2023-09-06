@@ -25,6 +25,7 @@ public class UserController : ApiController
     [HttpPost("register")]
     public async Task<IActionResult> Result(RegisterRequest request)
     {
+        Console.WriteLine(request);
         var command = _mapper.Map<RegisterCommand>(request);
 
         var result = await _sender.Send(command);
