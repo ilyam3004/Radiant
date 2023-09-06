@@ -5,39 +5,40 @@
 
 @page "/"
 
-@if (isError)
+
+@if (IsError)
 {
-    <AlertComponent Errors="@errorResponse.Errors" IsError="true"/>
+    <AlertComponent ErrorResponse="@ErrorResponse" IsError="true"/>
 }
 <div class="w-25 m-auto">
     <h4 class="card-header">Register</h4>
     <div class="card-body">
-        <EditForm Model="registerRequest" OnValidSubmit="HandleRegisterSubmit">
+        <EditForm Model="_registerRequest" OnValidSubmit="HandleRegisterSubmit">
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <InputText id="email" 
-                           @bind-Value="registerRequest.Email" 
+                           @bind-Value="_registerRequest.Email" 
                            class="form-control"/>
-                <ValidationMessage For="() => registerRequest.Email"/>
+                <ValidationMessage For="() => _registerRequest.Email"/>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <InputText id="password" @bind-Value="registerRequest.Password" 
+                <InputText id="password" @bind-Value="_registerRequest.Password" 
                            class="form-control"
                            type="password"/>
-                <ValidationMessage For="() => registerRequest.Password"/>
+                <ValidationMessage For="() => _registerRequest.Password"/>
             </div>
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
                 <InputText id="username" 
-                           @bind-Value="registerRequest.Username" 
+                           @bind-Value="_registerRequest.Username" 
                            class="form-control"/>
-                <ValidationMessage For="() => registerRequest.Username" />
+                <ValidationMessage For="() => _registerRequest.Username" />
             </div>
             <div>
-                <button type="submit" class="btn btn-primary" disabled="@loading">
+                <button type="submit" class="btn btn-primary" disabled="@Loading">
                     <span class="spinner-border spinner-border-sm me-1" 
-                          style="display: @(loading ? "inline-block" : "none")"></span>
+                          style="display: @(Loading ? "inline-block" : "none")"></span>
                     Register
                 </button>
                 <a href="../login" class="btn btn-link">Login</a>

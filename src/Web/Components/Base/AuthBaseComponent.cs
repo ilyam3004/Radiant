@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System.Text.Json;
-using Newtonsoft.Json.Bson;
 using Web.Models.Requests;
 using Web.Models.Response;
 using Web.Services;
@@ -19,25 +17,25 @@ public class AuthBaseComponent : ComponentBase
     [Inject]
     public IJSRuntime jsRuntime { get; set; }
 
-    protected RegisterRequest registerRequest = new RegisterRequest();
-    protected LoginRequest loginRequest = new LoginRequest();
+    protected readonly RegisterRequest _registerRequest = new();
+    protected readonly LoginRequest _loginRequest = new();
+    protected ErrorResponse ErrorResponse = new();
 
-    protected bool isError;
-
-    protected bool loading;
-
-    protected ErrorResponse errorResponse = new();
+    protected bool IsError;
+    protected bool Loading;
 
     protected async Task HandleRegisterSubmit()
     {
-        loading = true;
-        var response = await UserService.Register(registerRequest);
-        loading = false;
-
+        IsError = false;
+        Loading = true;
+        var response = await UserService.Register(_registerRequest);
+        Loading = false;
+        
         if (response.IsT1) 
         {
-            errorResponse = response.AsT1;
-            ShowError();
+            ErrorResponse = response.AsT1;
+            IsError = true;
+            
             return;
         }
 
@@ -46,16 +44,19 @@ public class AuthBaseComponent : ComponentBase
 
     protected async Task HandleLoginSubmit()
     {
-        loading = true;
-        var response = await UserService.Login(loginRequest);
-        loading = false;
-        Navigation.NavigateTo("../todo");
-    }
+        IsError = false;
+        Loading = true;
+        var response = await UserService.Login(_loginRequest);
+        Loading = false;
+        
+        if (response.IsT1) 
+        {
+            ErrorResponse = response.AsT1;
+            IsError = true;
+            
+            return;
+        }
 
-    private async Task ShowError() 
-    {
-        isError = true;
-        await Task.Delay(5000);
-        isError = false;
+        Navigation.NavigateTo("../todo");
     }
 }

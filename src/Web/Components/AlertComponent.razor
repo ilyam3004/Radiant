@@ -1,24 +1,40 @@
-﻿@if (IsError)
+﻿@using OneOf.Types
+@using Web.Models.Response
+
+@inherits ComponentBase
+
+@if (IsAlertVisible)
 {
-    <div class="alert-container alert alert-danger">
-        <h5>An error occurred</h5>
-        @foreach (var validationError in Errors)
-        {
-            <p>
-                @foreach (var error in validationError.Value)
+    @if (IsError)
+    {
+        <div class="alert-container alert alert-danger show" role="alert">
+            @if (ErrorResponse.Detail is null)
+            {
+                <h5>Validation error</h5>
+                @foreach (var validationError in ErrorResponse.Errors!)
                 {
-                    @error
+                    <p>
+                        @foreach (var error in validationError.Value)
+                        {
+                            @error
+                        }
+                    </p>
                 }
-            </p>
-        }
-    </div>
-}
-else
-{
-    <div class="alert alert-success">
-        <h4>Success</h4>
-        <p>@Message</p>
-    </div>
+            }
+            else
+            {
+                <h5>Oopps!</h5>
+                <p>@ErrorResponse.Detail</p>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-success">
+            <h4>Success</h4>
+            <p>@Message</p>
+        </div>
+    }
 }
 
 @code
@@ -30,5 +46,18 @@ else
     public string Message { get; set; }
 
     [Parameter]
-    public Dictionary<string, string[]> Errors { get; set; }
+    public ErrorResponse ErrorResponse { get; set; }
+
+    private bool IsAlertVisible = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(5000);
+        CloseAlert();
+    }
+
+    private void CloseAlert()
+    {
+        IsAlertVisible = false;
+    }
 }

@@ -1,27 +1,39 @@
-﻿@inject NavigationManager NavigationManager;
+﻿@using Web.Components.Base;
+@using Web.Components;
+
+@inherits AuthBaseComponent
 
 @page "/login"
 
+@if (IsError)
+{
+    <AlertComponent ErrorResponse="@ErrorResponse" IsError="true"/>
+}
 <div class="w-25 m-auto">
     <h4 class="card-header">Login</h4>
     <div class="card-body">
-        <EditForm Model="loginModel" OnValidSubmit="HandleSubmit">
+        <EditForm Model="_registerRequest" OnValidSubmit="HandleLoginSubmit">
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <InputText id="email" @bind-Value="loginModel.Email" class="form-control"/>
-                <ValidationMessage For="() => loginModel.Email"/>
+                <InputText id="email" 
+                           @bind-Value="_loginRequest.Email" 
+                           class="form-control"/>
+                <ValidationMessage For="() => _loginRequest.Email"/>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <InputText id="password" @bind-Value="loginModel.Password" class="form-control" type="password"/>
-                <ValidationMessage For="() => loginModel.Password"/>
+                <InputText id="password" @bind-Value="_loginRequest.Password" 
+                           class="form-control"
+                           type="password"/>
+                <ValidationMessage For="() => _loginRequest.Password"/>
             </div>
             <div>
-                <button type="submit" class="btn btn-primary" disabled="@loading">
-                    <span class="spinner-border spinner-border-sm me-1" style="display: @(loading ? "inline-block" : "none")"></span>
+                <button type="submit" class="btn btn-primary" disabled="@Loading">
+                    <span class="spinner-border spinner-border-sm me-1" 
+                          style="display: @(Loading ? "inline-block" : "none")"></span>
                     Login
                 </button>
-                <a href="/register" class="btn btn-link">Register</a>
+                <a href="../" class="btn btn-link">Register</a>
             </div>
         </EditForm>
     </div>

@@ -18,20 +18,20 @@ public class UserService : IUserService
     {
 
         var response = await _httpClient
-            .PostAsJsonAsync("users/register", request);
+            .PostAsJsonAsync("users/login", request);
 
         if (response.IsSuccessStatusCode)
         {
             var result = await response.Content
                 .ReadFromJsonAsync<LoginResponse>();
 
-            return result;
+            return result!;
         }
 
         var errorResult = await response.Content
                 .ReadFromJsonAsync<ErrorResponse>();
 
-        return errorResult;
+        return errorResult!;
     }
 
     public async Task<OneOf<RegisterResponse, ErrorResponse>> Register(RegisterRequest request)
@@ -44,12 +44,12 @@ public class UserService : IUserService
             var result = await response.Content
                 .ReadFromJsonAsync<RegisterResponse>();
 
-            return result;
+            return result!;
         }
         
         var errorResult = await response.Content
                 .ReadFromJsonAsync<ErrorResponse>();
 
-        return errorResult;
+        return errorResult!;
     }
 }
