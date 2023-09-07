@@ -35,7 +35,7 @@ public class AuthService : IAuthService
             {
                 IsPersistent = true,
                 AllowRefresh = true,
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(1),
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
             });
     }
 

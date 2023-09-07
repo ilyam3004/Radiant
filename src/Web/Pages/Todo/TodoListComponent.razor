@@ -28,20 +28,7 @@
                 <tbody>
                 @for (int i = 0; i < TodoList.TodoItems.Count; i++)
                 {
-                    <tr>
-                        <td>@(i + 1)</td>
-                        <td>@TodoList.TodoItems[i].Note</td>
-                        <td>@(TodoList.TodoItems[i].Done ? "Finished" : "In progress")</td>
-                        <td>
-                            <button class="btn btn-danger"
-                                    @onclick="() => RemoveTodoItem(TodoList.TodoItems[i - 1])">
-                                Delete
-                            </button>
-                            <button class="btn btn-success" ng-click="finished($index)">
-                                Finished
-                            </button>
-                        </td>
-                    </tr>
+                    <TodoItemComponent todoItem="todoList"/>
                 }
                 </tbody>
             </table>

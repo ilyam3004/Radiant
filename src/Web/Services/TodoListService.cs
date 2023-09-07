@@ -1,30 +1,30 @@
-﻿using System.Net.Http.Json;
-using Web.Models.Requests;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Reflection.Metadata;
 using Web.Models.Response;
 using OneOf;
 
 namespace Web.Services;
 
-public class UserService : IUserService
+public class TodoListService : ITodoListService
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private HttpClient HttpClient => _httpClientFactory.CreateClient("API");
 
-    public UserService(IHttpClientFactory httpClientFactory)
+    public TodoListService(IHttpClientFactory httpClientFactory)
     {
         _httpClientFactory = httpClientFactory;
     }
 
-    public async Task<OneOf<LoginResponse, ErrorResponse>> Login(LoginRequest request)
+    public async Task<OneOf<GetTodoListsResponse, ErrorResponse>> GetUserTodoLists()
     {
-
-        var response = await HttpClient
-            .PostAsJsonAsync("users/login", request);
+        var response = await 
+            HttpClient.GetAsync("todo-lists");
 
         if (response.IsSuccessStatusCode)
         {
             var result = await response.Content
-                .ReadFromJsonAsync<LoginResponse>();
+                .ReadFromJsonAsync<GetTodoListsResponse>();
 
             return result!;
         }
@@ -35,19 +35,20 @@ public class UserService : IUserService
         return errorResult!;
     }
 
-    public async Task<OneOf<RegisterResponse, ErrorResponse>> Register(RegisterRequest request)
+    public async Task<OneOf<TodoListResponse, ErrorResponse>> CreateTodoList(
+        string title)
     {
-        var response = await HttpClient
-            .PostAsJsonAsync("users/register", request);
+        var response = await HttpClient.PostAsync(
+            $"todo-lists/create/{title}", null);
 
         if (response.IsSuccessStatusCode)
         {
             var result = await response.Content
-                .ReadFromJsonAsync<RegisterResponse>();
+                .ReadFromJsonAsync<TodoListResponse>();
 
             return result!;
         }
-        
+
         var errorResult = await response.Content
                 .ReadFromJsonAsync<ErrorResponse>();
 

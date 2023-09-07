@@ -1,11 +1,9 @@
 ﻿namespace Web.Models.Response;
 
-public class ErrorResponse
-{
-    public string Type { get; init; }  = null!;
-    public string Title { get; init; }  = null!;
-    public int Status { get; init; }
-    public string TraceId { get; init; } = null!;
-    public string? Detail { get; init; }
-    public Dictionary<string, string[]>? Errors { get; init; }
-}
+public record ErrorResponse(
+    string Type, 
+    string Title, 
+    int Status, 
+    string TraceId, 
+    string? Detail,
+    Dictionary<string, string[]>? Errors);

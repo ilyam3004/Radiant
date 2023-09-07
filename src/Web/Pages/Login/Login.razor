@@ -7,12 +7,12 @@
 
 @if (IsError)
 {
-    <AlertComponent ErrorResponse="@ErrorResponse" IsError="true"/>
+    <AlertComponent ErrorResponse="@_errorResponse" IsError="true"/>
 }
 <div class="w-25 m-auto">
     <h4 class="card-header">Login</h4>
     <div class="card-body">
-        <EditForm Model="_registerRequest" OnValidSubmit="HandleLoginSubmit">
+        <EditForm Model="_loginRequest" OnValidSubmit="HandleLoginSubmit">
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <InputText id="email" 

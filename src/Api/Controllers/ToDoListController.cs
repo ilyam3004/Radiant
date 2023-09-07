@@ -1,10 +1,7 @@
-﻿using Application.ToDoItems.Commands;
-using Application.ToDoItems.Commands.RemoveTodoItem;
-using Application.ToDoLists.Commands.CreateTodoList;
+﻿using Application.ToDoLists.Commands.CreateTodoList;
 using Application.ToDoLists.Commands.RemoveTodoList;
 using Microsoft.AspNetCore.Authorization;
 using Application.ToDoLists.Queries;
-using Contracts.Requests;
 using Contracts.Responses.TodoLists;
 using Microsoft.AspNetCore.Mvc;
 using MapsterMapper;

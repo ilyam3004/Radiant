@@ -19,7 +19,7 @@ public class AuthBaseComponent : ComponentBase
 
     protected readonly RegisterRequest _registerRequest = new();
     protected readonly LoginRequest _loginRequest = new();
-    protected ErrorResponse ErrorResponse = new();
+    protected ErrorResponse _errorResponse;
 
     protected bool IsError;
     protected bool Loading;
@@ -33,7 +33,7 @@ public class AuthBaseComponent : ComponentBase
         
         if (response.IsT1) 
         {
-            ErrorResponse = response.AsT1;
+            _errorResponse = response.AsT1;
             IsError = true;
             
             return;
@@ -51,7 +51,7 @@ public class AuthBaseComponent : ComponentBase
         
         if (response.IsT1) 
         {
-            ErrorResponse = response.AsT1;
+            _errorResponse = response.AsT1;
             IsError = true;
             
             return;

@@ -1,5 +1,14 @@
-﻿@page "/todo"
+﻿@using Web.Components.Base;
+@using Web.Components;
 
+@inherits TodoBaseComponent;
+
+@page "/todo"
+
+@if (IsError)
+{
+    <AlertComponent ErrorResponse="@_errorResponse" IsError="true" />
+}
 <div class="app-container">
     <div class="d-flex align-items-center flex-column">
         <h3>Todo</h3>
@@ -8,27 +17,36 @@
                 <input
                     type="text"
                     class="form-control"
+                    @bind="todoListTitle"
                     placeholder="Enter a title of todolist"/>
             </div>
             <button
                 type="button"
-                class="btn btn-primary mr-3">
+                class="btn btn-primary mr-3"
+                @onclick="CreateTodoList">
                 Create
             </button>
         </div>
     </div>
     <div style="margin-bottom: 5%"/>
     <div style="margin: 0 5% 0 5%">
-        @for (int rowIndex = 0; rowIndex < todoLists.Count; rowIndex += 3)
+        @if (todoLists.Count != 0)
         {
-            <div class="row">
-                @for (int columnIndex = rowIndex; columnIndex < rowIndex + 3 && columnIndex < todoLists.Count; columnIndex++)
-                {
-                    <div class="col-md-4">
-                        <TodoListComponent TodoList="todoLists[columnIndex]"/>
-                    </div>
-                }
-            </div>
+            @for (int rowIndex = 0; rowIndex < todoLists.Count; rowIndex += 3)
+            {
+                <div class="row">
+                    @for (int columnIndex = rowIndex; columnIndex < rowIndex + 3 && columnIndex < todoLists.Count; columnIndex++)
+                    {
+                        <div class="col-md-4">
+                            <TodoListComponent TodoList="todoLists[columnIndex]"/>
+                        </div>
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <div style="margin: auto;">You don't have any todolists</div>
         }
     </div>
 </div>
