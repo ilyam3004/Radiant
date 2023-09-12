@@ -8,7 +8,19 @@ public static class DependencyInjection
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
-        
+
+        services.AddCors(options =>
+        {
+            options.AddPolicy("corsSpecs", builder =>
+            {
+                builder.WithOrigins("http://localhost:5076")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .SetIsOriginAllowed((host) => true)
+                    .AllowCredentials();
+            });
+        });
+
         return services;
     }
 }

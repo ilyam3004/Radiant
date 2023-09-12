@@ -1,41 +1,108 @@
-﻿<div>
-    <h5>@TodoList.Title</h5>
-    @if (TodoList != null)
-    {
-        <div class="d-flex align-items-center mb-3">
-            <div class="form-group mr-3 mb-0">
-                <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Enter a note"/>
-            </div>
-            <button
-                type="button"
-                class="btn btn-success mr-3">
-                Add
-            </button>
+﻿@using Web.Components.Base;
+@using Web.Models.Response
+@using Contracts.Requests
+@using Contracts.Responses.TodoLists
+
+<div>
+    <div class="d-flex justify-content-between">
+        <h5>@TodoList.Title</h5>
+        <button class="btn btn-danger"
+                @onclick="RemoveTodoList">
+            Remove
+        </button>
+    </div>
+    <div style="margin-bottom: 3%"/>
+    <div class="d-flex justify-content-center mb-3">
+        <div class="form-group mr-3 mb-0">
+            <input type="text"
+                   class="form-control"
+                   @bind="Note"
+                   placeholder="Enter a note"/>
         </div>
-        <div class="table-wrapper">
-            <table class="table table-hover table-bordered">
-                <thead>
+        <button type="button"
+                class="btn btn-success mr-3"
+                @onclick="AddTodoItem">
+            Add
+        </button>
+    </div>
+    <div class="table-wrapper">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>№</th>
+                <th>Note</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in TodoList.TodoItems)
+            {
+                int i = 0;
                 <tr>
-                    <th>№</th>
-                    <th>Note</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <td @onclick="() => ToggleTodoItem(item.Id)">@(i + 1)</td>
+                    <td class="@GetCompletedClass(item.Done)" 
+                        @onclick="() => ToggleTodoItem(item.Id)">
+                        item.Note
+                    </td>
+                    <td @onclick="() => ToggleTodoItem(item.Id)">
+                        @(item.Done ? "Done" : "In progress")
+                    </td>
+                    <td>
+                        <button class="btn btn-close p-0" 
+                                style="font-size: 12px; margin-left: 30%"
+                                @onclick="() => RemoveTodoItem(item)"/>
+                    </td>
                 </tr>
-                </thead>
-                <tbody>
-                @for (int i = 0; i < TodoList.TodoItems.Count; i++)
-                {
-                    <TodoItemComponent todoItem="todoList"/>
-                }
-                </tbody>
-            </table>
-        </div>
-    }
-    else
-    {
-        <p>No todolist provided</p>
-    }
+                i++;
+            }
+            </tbody>
+        </table>
+    </div>
 </div>
+
+@code
+{
+    [Parameter]
+    public TodoListResponse TodoList { get; set; }
+
+    [Parameter]
+    public EventCallback<TodoListResponse> OnRemoveTodoList { get; set; }
+    
+    [Parameter]
+    public EventCallback<CreateTodoItemRequest> OnAddTodoItem { get; set; }
+    
+    [Parameter]
+    public EventCallback<Guid> OnRemoveTodoItem { get; set; }
+    
+    [Parameter]
+    public EventCallback<Guid> OnToggleTodoItem { get; set; }
+
+    private string Note { get; set; } = null!;
+
+    private async Task RemoveTodoList()
+    {
+        await OnRemoveTodoList.InvokeAsync(TodoList);
+    }
+
+    private async Task AddTodoItem()
+    {
+        await OnAddTodoItem.InvokeAsync(
+            new CreateTodoItemRequest(Note, TodoList.Id));
+    }
+    
+    private async Task RemoveTodoItem(TodoItemResponse item)
+    {
+        await OnRemoveTodoItem.InvokeAsync(item.Id);
+    }
+    
+    private async Task ToggleTodoItem(Guid todoItemId)
+    {
+        await OnToggleTodoItem.InvokeAsync(todoItemId);   
+    }
+    
+    private string GetCompletedClass(bool done)
+    {
+        return done ? "completed" : "";
+    }
+}

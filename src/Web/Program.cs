@@ -22,6 +22,7 @@ builder.Services.AddHttpClient("API", options =>
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITodoListService, TodoListService>();
+builder.Services.AddScoped<ITodoItemService, TodoItemService>();
 
 builder.Services.AddScoped<CookieHandler>();
 

@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Reflection.Metadata;
+using Contracts.Responses.TodoLists;
 using Web.Models.Response;
 using OneOf;
 
@@ -45,6 +46,26 @@ public class TodoListService : ITodoListService
         {
             var result = await response.Content
                 .ReadFromJsonAsync<TodoListResponse>();
+
+            return result!;
+        }
+
+        var errorResult = await response.Content
+                .ReadFromJsonAsync<ErrorResponse>();
+
+        return errorResult!;
+    }
+
+    public async Task<OneOf<RemoveTodoListResponse, ErrorResponse>> RemoveTodoList(
+        Guid todoListId)
+    {
+        var response = await HttpClient.DeleteAsync(
+            $"todo-lists/remove/{todoListId}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var result = await response.Content
+                .ReadFromJsonAsync<RemoveTodoListResponse>();
 
             return result!;
         }

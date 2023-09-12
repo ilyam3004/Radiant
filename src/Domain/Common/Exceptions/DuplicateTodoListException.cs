@@ -1,8 +1,8 @@
 ﻿namespace Domain.Common.Exceptions;
 
-public class TodoListAlreadyExistsException : Exception
+public class DuplicateTodoListException : Exception
 {
-    public TodoListAlreadyExistsException(
+    public DuplicateTodoListException(
         string message = "Todo list with the same name already exists")
         : base(message)
     { }

@@ -13,3 +13,7 @@
     left: 30%;
     z-index: 10;
 }
+
+.completed {
+    text-decoration: line-through;
+}

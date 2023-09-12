@@ -50,8 +50,8 @@ dotnet_style_operator_placement_when_wrapping = beginning_of_line
 tab_width = 4
 indent_size = 4
 
-[*.cs]
-csharp_using_directive_placement = outside_namespace:silent
-csharp_prefer_simple_using_statement = true:suggestion
-csharp_prefer_braces = true:silent
-csharp_style_namespace_declarations = block_scoped:silent
+# [*.cs]
+# csharp_using_directive_placement = outside_namespace:silent
+# csharp_prefer_simple_using_statement = true:suggestion
+# csharp_prefer_braces = true:silent
+# csharp_style_namespace_declarations = block_scoped:silent

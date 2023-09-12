@@ -1,22 +1,20 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-using Application.Authentication.Queries;
+using Application.Models.Authentication;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-using Application.Models.Authentication;
-using Microsoft.AspNetCore.Localization;
 
 namespace Application.Authentication.Services;
 
 public class AuthService : IAuthService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-
+    
     public AuthService(IHttpContextAccessor httpContextAccessor)
     {
         _httpContextAccessor = httpContextAccessor;
     }
-
+    
     public async Task Login(AuthRequest request)
     {
         var claims = new List<Claim>
@@ -35,7 +33,7 @@ public class AuthService : IAuthService
             {
                 IsPersistent = true,
                 AllowRefresh = true,
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                ExpiresUtc = DateTimeOffset.UtcNow.AddDays(1),
             });
     }
 

@@ -15,6 +15,7 @@ public class ApiController : ControllerBase
         {
             ValidationException => ValidationProblem(ex),
             DuplicateEmailException => Problem(ex.Message, statusCode: StatusCodes.Status400BadRequest),
+            DuplicateTodoListException => Problem(ex.Message, statusCode: StatusCodes.Status400BadRequest),
             UnauthorizedAccessException => Problem(ex.Message, statusCode: StatusCodes.Status401Unauthorized),
             UserNotFoundException => Problem(ex.Message, statusCode: StatusCodes.Status404NotFound),
             InvalidCredentialException => Problem(ex.Message, statusCode: StatusCodes.Status401Unauthorized),

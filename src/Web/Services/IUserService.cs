@@ -1,4 +1,5 @@
-﻿using Web.Models.Requests;
+﻿using Contracts.Responses;
+using Web.Models.Requests;
 using Web.Models.Response;
 using OneOf;
 

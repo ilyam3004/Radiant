@@ -27,7 +27,7 @@ public class CreateTodoListCommandHandler
     {
         if (await _unitOfWork.TodoLists.IsTitleExists(command.Title))
         {
-            var exception = new TodoListAlreadyExistsException();
+            var exception = new DuplicateTodoListException();
             return new Result<TodoListResult>(exception);
         }
 
