@@ -13,7 +13,7 @@ public static class DependencyInjection
         {
             options.AddPolicy("corsSpecs", builder =>
             {
-                builder.WithOrigins("http://localhost:5076")
+                builder.WithOrigins("http://web:80")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .SetIsOriginAllowed((host) => true)

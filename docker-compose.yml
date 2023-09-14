@@ -1,11 +1,23 @@
 ﻿version: '3.8'
 
-networks:
-  dev:
-    driver: bridge
-
 services:
+  web:
+    image: ilya3004/todo:web
+    container_name: web
+    build:
+      
+      context: .
+      dockerfile: src/Web/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    networks:
+      - dev
+
   api:
+    image: ilya3004/todo:api
+    container_name: api
     build:
       context: .
       dockerfile: src/Api/Dockerfile
@@ -19,12 +31,17 @@ services:
       - dev
 
   postgres:
+    container_name: postgres
     image: postgres
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     ports:
-      - "5432:5432"  
+      - "5432:5432"
     networks:
       - dev
+        
+networks:
+  dev:
+    driver: bridge

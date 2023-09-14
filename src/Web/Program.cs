@@ -16,7 +16,7 @@ builder.Services.AddScoped(sp =>
 
 builder.Services.AddHttpClient("API", options =>
     {
-        options.BaseAddress = new Uri("http://localhost:5074/");
+        options.BaseAddress = new Uri("http://api:5074/");
     })
     .AddHttpMessageHandler<CookieHandler>();
 
