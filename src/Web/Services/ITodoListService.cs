@@ -1,7 +1,6 @@
-﻿using Contracts.Responses.TodoLists;
-using Web.Models.Response;
-using Web.Models;
+﻿using Web.Models;
 using OneOf;
+using Web.Models.Responses;
 
 namespace Web.Services;
 

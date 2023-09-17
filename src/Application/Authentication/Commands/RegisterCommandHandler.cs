@@ -1,8 +1,8 @@
 ﻿using Application.Common.Interfaces.Persistence;
-using Application.Models;
 using Domain.Common.Exceptions;
-using Domain.Entities;
 using LanguageExt.Common;
+using Application.Models;
+using Domain.Entities;
 using MediatR;
 
 namespace Application.Authentication.Commands;

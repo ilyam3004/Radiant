@@ -1,6 +1,5 @@
-﻿using Contracts.Responses;
-using Web.Models.Requests;
-using Web.Models.Response;
+﻿using Web.Models.Requests;
+using Web.Models.Responses;
 using OneOf;
 
 namespace Web.Services;

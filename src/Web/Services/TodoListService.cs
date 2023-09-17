@@ -1,8 +1,5 @@
-﻿using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Reflection.Metadata;
-using Contracts.Responses.TodoLists;
-using Web.Models.Response;
+﻿using System.Net.Http.Json;
+using Web.Models.Responses;
 using OneOf;
 
 namespace Web.Services;

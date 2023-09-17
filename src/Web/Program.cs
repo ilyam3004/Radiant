@@ -8,22 +8,24 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped(sp =>
-    new HttpClient
-    {
-        BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
-    });
+builder.Services.AddScoped(
+    sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) }
+);
 
-builder.Services.AddHttpClient("API", options =>
-    {
-        options.BaseAddress = new Uri("http://api:5074/");
-    })
+builder.Services.AddScoped<CookieHandler>();
+
+builder.Services
+    .AddHttpClient(
+        "API",
+        options =>
+        {
+            options.BaseAddress = new Uri("https://todo-flow-api.azurewebsites.net/");
+        }
+    )
     .AddHttpMessageHandler<CookieHandler>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITodoListService, TodoListService>();
 builder.Services.AddScoped<ITodoItemService, TodoItemService>();
-
-builder.Services.AddScoped<CookieHandler>();
 
 await builder.Build().RunAsync();

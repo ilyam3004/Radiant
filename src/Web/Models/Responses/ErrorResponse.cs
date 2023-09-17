@@ -1,4 +1,4 @@
-﻿namespace Web.Models.Response;
+﻿namespace Web.Models.Responses;
 
 public record ErrorResponse(
     string Type, 

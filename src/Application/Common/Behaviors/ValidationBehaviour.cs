@@ -1,4 +1,5 @@
-﻿using LanguageExt.Common;
+﻿
+using LanguageExt.Common;
 using FluentValidation;
 using MediatR;
 

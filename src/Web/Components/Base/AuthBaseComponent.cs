@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Web.Models.Requests;
-using Web.Models.Response;
+using Web.Models.Responses;
 using Web.Services;
 
 namespace Web.Components.Base;

@@ -3,30 +3,30 @@
 services:
   web:
     image: ilya3004/todo:web
-    container_name: web
     build:
-      
       context: .
       dockerfile: src/Web/Dockerfile
-    ports:
-      - "80:80"
     depends_on:
       - api
+    ports:
+      - "8080:80"
     networks:
       - dev
 
   api:
     image: ilya3004/todo:api
-    container_name: api
     build:
       context: .
       dockerfile: src/Api/Dockerfile
     ports:
-      - "5074:80"
+      - "8181:80"
     environment:
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=postgres;User Id=postgres;Password=password;
+      - LogFilePath=logs/log.txt;
     depends_on:
       - postgres
+    volumes:
+      - logs:/app/logs/
     networks:
       - dev
 
@@ -41,7 +41,10 @@ services:
       - "5432:5432"
     networks:
       - dev
-        
+
 networks:
   dev:
     driver: bridge
+
+volumes: 
+  logs:

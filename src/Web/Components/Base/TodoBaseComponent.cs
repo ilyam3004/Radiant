@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Contracts.Requests;
-using Contracts.Responses.TodoLists;
 using Web.Models;
-using Web.Models.Response;
+using Web.Models.Requests;
+using Web.Models.Responses;
 using Web.Services;
 
 namespace Web.Components.Base;

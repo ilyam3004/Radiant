@@ -9,18 +9,6 @@ public static class DependencyInjection
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 
-        services.AddCors(options =>
-        {
-            options.AddPolicy("corsSpecs", builder =>
-            {
-                builder.WithOrigins("http://web:80")
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .SetIsOriginAllowed((host) => true)
-                    .AllowCredentials();
-            });
-        });
-
         return services;
     }
 }

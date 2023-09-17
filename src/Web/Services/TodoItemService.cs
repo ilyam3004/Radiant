@@ -1,9 +1,8 @@
 ﻿using System.Net.Http.Json;
-using Web.Models.Response;
-using Contracts.Requests;
 using System.Text;
-using Contracts.Responses.TodoLists;
 using OneOf;
+using Web.Models.Requests;
+using Web.Models.Responses;
 
 namespace Web.Services;
 
