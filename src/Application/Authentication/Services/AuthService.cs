@@ -9,12 +9,12 @@ namespace Application.Authentication.Services;
 public class AuthService : IAuthService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-    
+
     public AuthService(IHttpContextAccessor httpContextAccessor)
     {
         _httpContextAccessor = httpContextAccessor;
     }
-    
+
     public async Task Login(AuthRequest request)
     {
         var claims = new List<Claim>
@@ -23,7 +23,7 @@ public class AuthService : IAuthService
             new(type: ClaimTypes.NameIdentifier, value: request.UserId.ToString())
         };
 
-        var identity = new ClaimsIdentity(claims, 
+        var identity = new ClaimsIdentity(claims,
             CookieAuthenticationDefaults.AuthenticationScheme);
 
         await _httpContextAccessor.HttpContext!.SignInAsync(
@@ -43,9 +43,11 @@ public class AuthService : IAuthService
             .FindFirst(ClaimTypes.NameIdentifier)?.Value;
     }
 
+    public Dictionary<string, string> GetUserClaims()
+        => _httpContextAccessor.HttpContext
+            .User.Claims.ToDictionary(x => x.Type, x => x.Value);
+
     public Task Logout()
-    {
-        return _httpContextAccessor.HttpContext!.SignOutAsync(
+        => _httpContextAccessor.HttpContext!.SignOutAsync(
             CookieAuthenticationDefaults.AuthenticationScheme);
-    }
 }

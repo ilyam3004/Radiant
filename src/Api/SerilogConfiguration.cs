@@ -1,6 +1,6 @@
-﻿using Serilog;
+﻿using Serilog.Formatting.Compact;
 using Serilog.Events;
-using Serilog.Formatting.Compact;
+using Serilog;
 
 namespace Api;
 
