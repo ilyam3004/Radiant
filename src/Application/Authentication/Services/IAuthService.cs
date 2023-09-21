@@ -5,7 +5,7 @@ namespace Application.Authentication.Services;
 public interface IAuthService
 {
     Task Login(AuthRequest request);
-    Dictionary<string, string> GetUserClaims();
+    List<UserClaim> GetUserClaims();
     string? GetUserId();
     Task Logout();
 }

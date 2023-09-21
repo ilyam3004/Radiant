@@ -1,6 +1,5 @@
 ﻿import {Injectable} from '@angular/core';
-import { HttpInterceptor, HttpHandler, HttpRequest, HttpEvent }
-  from '@angular/common/http';
+import { HttpInterceptor, HttpHandler, HttpRequest, HttpEvent } from '@angular/common/http';
 import {Observable} from "rxjs";
 import {environment} from "../../environments/environment";
 import {AuthService} from "../core/services/auth.service";
@@ -12,7 +11,8 @@ export class ApiInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const apiReq = request
-      .clone({ url: `${environment.apiBaseUrl}/${request.url}`});
+      .clone({url: `${environment.apiBaseUrl}/${request.url}`,
+        withCredentials: true});
 
     return next.handle(apiReq);
   }

@@ -17,7 +17,10 @@ public static class DependencyInjection
                 .AllowAnyMethod()
                 .AllowCredentials());
         });
+        
         services.AddAuthorization();
+
+        services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddCarter();
 

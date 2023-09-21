@@ -12,16 +12,15 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   public register(request: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>("register", request);
+    return this.http.post<AuthResponse>("users/register", request);
   }
 
-  public login(request: LoginRequest) {
-    return this.http.post<AuthResponse>("users/login", request,
-      { withCredentials: true });
+  public login(request: LoginRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>("users/login", request);
   }
 
   public logout() {
-    return this.http.get("user/logout");
+    return this.http.get("users/logout");
   }
 
   public loadUser() {

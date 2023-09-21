@@ -43,9 +43,12 @@ public class AuthService : IAuthService
             .FindFirst(ClaimTypes.NameIdentifier)?.Value;
     }
 
-    public Dictionary<string, string> GetUserClaims()
+    public List<UserClaim> GetUserClaims()
         => _httpContextAccessor.HttpContext
-            .User.Claims.ToDictionary(x => x.Type, x => x.Value);
+            .User
+            .Claims
+            .Select(x => new UserClaim(x.Type, x.Value))
+            .ToList();
 
     public Task Logout()
         => _httpContextAccessor.HttpContext!.SignOutAsync(
