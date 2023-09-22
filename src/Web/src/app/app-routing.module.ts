@@ -10,7 +10,7 @@ const todoModule = () => import('./modules/todo/todo.module')
 const routes: Routes = [
   { path: 'todo', loadChildren: todoModule, canActivate: [AuthGuard]},
   { path: 'account', loadChildren: authModule },
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: 'todo' }
 ];
 
 @NgModule({

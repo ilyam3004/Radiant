@@ -19,7 +19,7 @@ public static class DependencyInjection
         });
         
         services.AddAuthorization();
-
+        
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddCarter();

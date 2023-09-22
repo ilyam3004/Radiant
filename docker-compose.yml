@@ -12,7 +12,7 @@ services:
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=postgres;User Id=postgres;Password=password;
       - LogFilePath=logs/log.txt;
     depends_on:
-      - postgres  
+      - postgres
     volumes:
       - logs:/app/logs/
     networks:
@@ -27,15 +27,26 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
-    networks:
-      - dev
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - dev
+  
+  web:
+    container_name: web
+    image: ilya3004/todo:web
+    build:
+      context: src/Web
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"
+    networks:
+      - dev
 
 networks:
   dev:
     driver: bridge
 
-volumes: 
+volumes:
   logs:
   postgres_data:

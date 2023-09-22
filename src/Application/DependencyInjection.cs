@@ -3,8 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Application.Authentication.Commands;
 using Application.Authentication.Services;
 using Application.Authentication.Queries;
-using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Builder;
 using Application.Common.Behaviors;
 using Application.Common.Extensions;
 using Microsoft.AspNetCore.Http;
@@ -30,15 +28,19 @@ public static class DependencyInjection
 
         services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
+            {
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Events.OnRedirectToLogin = context =>
                 {
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     return Task.CompletedTask;
-                });
-
+                };
+            });
+        
         services.AddScoped<IAuthService, AuthService>();
         services.AddHttpContextAccessor();
-
+        
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
         return services;
