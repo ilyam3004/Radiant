@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using MapsterMapper;
 using MediatR;
 using Carter;
+using Contracts.Requests;
 
 namespace Api.Endpoints;
 
@@ -17,7 +18,7 @@ public class ToDoListController : ICarterModule
             .RequireAuthorization();
 
         group.MapGet("", GetUserTodoLists);
-        group.MapPost("{title}", CreateTodoList);
+        group.MapPost("", CreateTodoList);
         group.MapDelete("{id:guid}", RemoveTodoList);
     }
     
@@ -34,11 +35,11 @@ public class ToDoListController : ICarterModule
             ApiEndpoints.Problem);
     }
     
-    private async Task<IResult> CreateTodoList([FromRoute]string title,
+    private async Task<IResult> CreateTodoList(CreateTodoListRequest request,
         ISender sender,
         IMapper mapper)
     {
-        var command = new CreateTodoListCommand(title);
+        var command = mapper.Map<CreateTodoListCommand>(request);
 
         var result = await sender.Send(command);
         
