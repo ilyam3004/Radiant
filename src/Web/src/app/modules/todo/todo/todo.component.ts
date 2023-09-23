@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {AuthService} from "../../../core/services/auth.service";
+import {TodoService} from "../../../core/services/todo.service";
 import {AlertService} from "../../../core/services/alert.service";
+import {AuthService} from "../../../core/services/auth.service";
 import {ActivatedRoute, Router} from '@angular/router';
 import {TodoList} from 'src/app/core/models/todo';
-import {TodoService} from "../../../core/services/todo.service";
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-todo',
@@ -13,34 +13,50 @@ import {TodoService} from "../../../core/services/todo.service";
 export class TodoComponent implements OnInit {
   todoListTitle: string = "";
   todoLists: TodoList[] = [];
+  loading: boolean = false;
+  todoListsNotFound: boolean = false;
 
   constructor(private authService: AuthService,
               private alertService: AlertService,
               private todoService: TodoService,
               private route: ActivatedRoute,
-              private router: Router) {
-  }
+              private router: Router) { }
 
   ngOnInit(): void {
+    this.loading = true;
     this.loadTodoLists();
   }
 
-  private loadTodoLists() {
-
+  createTodolist() {
+    this.todoService.createTodoList({title: this.todoListTitle})
+      .subscribe(
+        (response) => {
+          this.alertService.success(
+            `Todo ${response.title} list created`,
+            {keepAfterRouteChange: true, autoClose: true});
+          this.todoLists.push(response);
+        },
+        (error) => {
+          this.alertService.error(error);
+        });
   }
 
-  private createTodolist() {
-    this.todoService.getTodoLists().subscribe(
-      (response: TodoList[]) => {
-        this.todoLists = response;
-      },
-      (error) => {
-        this.alertService.error(error,
-          {keepAfterRouteChange: true, autoClose: true});
-      })
+  removeTodoList(todoListId: string) {
+    this.todoService.removeTodoList(todoListId)
+      .subscribe(
+        (response) => {
+          this.todoLists = this.todoLists.filter(todoList =>
+            todoList.id !== todoListId);
+          this.alertService.success(response.message);
+        },
+        (error) => {
+            this.alertService.error(error,
+                {keepAfterRouteChange: true, autoClose: true});
+        }
+    )
   }
 
-  private logOut() {
+  logOut() {
     this.authService.logout()
       .subscribe((data) => {
         this.alertService.success("Log out successful",
@@ -51,5 +67,18 @@ export class TodoComponent implements OnInit {
           {keepAfterRouteChange: true, autoClose: true});
         this.router.navigate(['/account/login'], {relativeTo: this.route});
       });
+  }
+
+  private loadTodoLists() {
+    this.todoService.getTodoLists().subscribe(
+      (response: TodoList[]) => {
+        this.todoLists = response;
+        this.loading = false;
+      },
+      (error) => {
+        this.alertService.error(error,
+          {keepAfterRouteChange: true, autoClose: true});
+        this.loading = false;
+      })
   }
 }

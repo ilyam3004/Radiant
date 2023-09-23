@@ -1,36 +1,36 @@
-<!--<div>-->
-<!--  <div class="d-flex justify-content-between">-->
-<!--    <h5>@TodoList.Title</h5>-->
-<!--    <button class="btn btn-danger"-->
-<!--            @onclick="RemoveTodoList">-->
-<!--      Remove-->
-<!--    </button>-->
-<!--  </div>-->
-<!--  <div style="margin-bottom: 3%"/>-->
-<!--  <div class="d-flex justify-content-center mb-3">-->
-<!--    <div class="form-group mr-3 mb-0">-->
-<!--      <input type="text"-->
-<!--             class="form-control"-->
-<!--             @bind="Note"-->
-<!--             placeholder="Enter a note"/>-->
-<!--    </div>-->
-<!--    <button type="button"-->
-<!--            class="btn btn-success mr-3"-->
-<!--            @onclick="AddTodoItem">-->
-<!--      Add-->
-<!--    </button>-->
-<!--  </div>-->
-<!--  <div class="table-wrapper">-->
-<!--    <table class="table table-hover table-bordered">-->
-<!--      <thead>-->
-<!--      <tr>-->
-<!--        <th>№</th>-->
-<!--        <th>Note</th>-->
-<!--        <th>Status</th>-->
-<!--        <th></th>-->
-<!--      </tr>-->
-<!--      </thead>-->
-<!--      <tbody>-->
+<div>
+  <div class="d-flex justify-content-between">
+    <h5>@TodoList.Title</h5>
+    <button class="btn btn-danger"
+            (click)="removeTodoList">
+      Remove
+    </button>
+  </div>
+  <div style="margin-bottom: 3%"></div>
+  <div class="d-flex justify-content-center mb-3">
+    <div class="form-group mr-3 mb-0">
+      <input type="text"
+             class="form-control"
+             [(ngModel)]="note"
+             placeholder="Enter a note"/>
+    </div>
+    <button type="button"
+            class="btn btn-success mr-3"
+            (click)="addTodoItem()">
+      Add
+    </button>
+  </div>
+  <div class="table-wrapper">
+    <table class="table table-hover table-bordered">
+      <thead>
+      <tr>
+        <th>№</th>
+        <th>Note</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
 <!--      @foreach (var item in TodoList.TodoItems)-->
 <!--      {-->
 <!--      int i = 0;-->
@@ -51,7 +51,7 @@
 <!--      </tr>-->
 <!--      i++;-->
 <!--      }-->
-<!--      </tbody>-->
-<!--    </table>-->
-<!--  </div>-->
-<!--</div>-->
+      </tbody>
+    </table>
+  </div>
+</div>
