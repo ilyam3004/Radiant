@@ -1,9 +1,10 @@
-import {TodoService} from "../../../core/services/todo.service";
-import {AlertService} from "../../../core/services/alert.service";
-import {AuthService} from "../../../core/services/auth.service";
-import {ActivatedRoute, Router} from '@angular/router';
-import {TodoList} from 'src/app/core/models/todo';
-import {Component, OnInit} from '@angular/core';
+import { TodoService } from "../../../core/services/todo.service";
+import { AlertService } from "../../../core/services/alert.service";
+import { AuthService } from "../../../core/services/auth.service";
+import { ActivatedRoute, Router } from '@angular/router';
+import {CreateTodoItemRequest, GetTodoListsResponse, TodoItem, TodoList} from 'src/app/core/models/todo';
+import { Component, OnInit } from '@angular/core';
+import { first } from "rxjs";
 
 @Component({
   selector: 'app-todo',
@@ -17,68 +18,134 @@ export class TodoComponent implements OnInit {
   todoListsNotFound: boolean = false;
 
   constructor(private authService: AuthService,
-              private alertService: AlertService,
-              private todoService: TodoService,
-              private route: ActivatedRoute,
-              private router: Router) { }
+    private alertService: AlertService,
+    private todoService: TodoService,
+    private route: ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.loading = true;
     this.loadTodoLists();
   }
 
-  createTodolist() {
-    this.todoService.createTodoList({title: this.todoListTitle})
-      .subscribe(
-        (response) => {
-          this.alertService.success(
-            `Todo ${response.title} list created`,
-            {keepAfterRouteChange: true, autoClose: true});
-          this.todoLists.push(response);
+  private loadTodoLists() {
+    this.todoService.getTodoLists()
+      .pipe(first())
+      .subscribe((response: GetTodoListsResponse) => {
+          this.todoLists = response.todoLists;
+          this.loading = false;
         },
         (error) => {
+          this.alertService.error(error,
+            { keepAfterRouteChange: true, autoClose: true });
+          this.loading = false;
+        })
+  }
+
+  createTodolist() {
+    this.todoService.createTodoList({ title: this.todoListTitle })
+      .subscribe({
+        next: (todoList: TodoList) => {
+          this.alertService.success(
+            `Todo ${todoList.title} list created`,
+            { keepAfterRouteChange: true, autoClose: true });
+          this.todoLists.push(todoList);
+        },
+        error: error => {
           this.alertService.error(error);
-        });
+        }
+      });
   }
 
   removeTodoList(todoListId: string) {
     this.todoService.removeTodoList(todoListId)
-      .subscribe(
-        (response) => {
+      .subscribe({
+        next: (response) => {
           this.todoLists = this.todoLists.filter(todoList =>
             todoList.id !== todoListId);
           this.alertService.success(response.message);
         },
-        (error) => {
-            this.alertService.error(error,
-                {keepAfterRouteChange: true, autoClose: true});
+        error: (error) => {
+          this.alertService.error(error,
+            { keepAfterRouteChange: true, autoClose: true });
         }
-    )
+      });
+  }
+
+  addTodoItem(createRequest: CreateTodoItemRequest) {
+    this.todoService.addTodoItem(createRequest)
+      .subscribe({
+      next: (todoList: TodoList) => {
+        this.updateTodoList(todoList);
+      },
+      error: (error) => {
+        this.alertService.error(error,
+          { keepAfterRouteChange: true, autoClose: true });
+      }
+    });
+  }
+
+  removeTodoItem(todoItemId: string) {
+    this.todoService.removeTodoItem(todoItemId)
+      .subscribe({
+        next: (todoList: TodoList) => {
+          this.updateTodoList(todoList);
+        },
+        error: (error) => {
+          this.alertService.error(error,
+            { keepAfterRouteChange: true, autoClose: true });
+        }
+      });
+  }
+
+  toggleTodoItem(todoItemId: string) {
+    this.todoService.toggleTodoItem(todoItemId)
+      .subscribe({
+        next: (todoItem: TodoItem) => {
+          this.updateTodoItem(todoItem);
+        },
+        error: (error) => {
+          this.alertService.error(error,
+            { keepAfterRouteChange: true, autoClose: true });
+        }
+      });
   }
 
   logOut() {
     this.authService.logout()
-      .subscribe((data) => {
-        this.alertService.success("Log out successful",
-          {keepAfterRouteChange: true, autoClose: true});
-        this.router.navigate(['/account/login'], {relativeTo: this.route});
-      }, (error) => {
-        this.alertService.error("Log out failed",
-          {keepAfterRouteChange: true, autoClose: true});
-        this.router.navigate(['/account/login'], {relativeTo: this.route});
+      .subscribe({
+        next: (data) => {
+          this.alertService.success("Log out successful",
+            { keepAfterRouteChange: true, autoClose: true });
+          this.router.navigate(['/account/login'], { relativeTo: this.route });
+        },
+        error: (error) => {
+          this.alertService.error("Log out failed",
+            { keepAfterRouteChange: true, autoClose: true });
+          this.router.navigate(['/account/login'], { relativeTo: this.route });
+        }
       });
   }
 
-  private loadTodoLists() {
-    this.todoService.getTodoLists().subscribe(
-      (response: TodoList[]) => {
-        this.todoLists = response;
-        this.loading = false;
-      },
-      (error) => {
-        this.alertService.error(error,
-          {keepAfterRouteChange: true, autoClose: true});
-        this.loading = false;
-      })
+  updateTodoList(updatedTodoList: TodoList) {
+    const index = this.todoLists.findIndex((item) => item.id === updatedTodoList.id);
+
+    if (index !== -1) {
+      this.todoLists[index] = updatedTodoList;
+    }
+  }
+
+  updateTodoItem(updatedTodoItem: TodoItem) {
+    const todoList = this.todoLists.find(
+      (item) => item.id === updatedTodoItem.todoListId);
+
+    if (todoList) {
+      const index = todoList.todoItems.findIndex(
+        (item) => item.id === updatedTodoItem.id);
+
+      if (index !== -1) {
+        todoList.todoItems[index] = updatedTodoItem;
+      }
+    }
   }
 }

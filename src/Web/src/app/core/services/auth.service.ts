@@ -8,7 +8,6 @@ import { map, catchError, Observable, of } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-
   constructor(private http: HttpClient) { }
 
   public register(request: RegisterRequest): Observable<AuthResponse> {
@@ -19,8 +18,8 @@ export class AuthService {
     return this.http.post<AuthResponse>("users/login", request);
   }
 
-  public logout() {
-    return this.http.get("users/logout");
+  public logout(): Observable<string> {
+    return this.http.get<string>("users/logout");
   }
 
   public loadUser() {

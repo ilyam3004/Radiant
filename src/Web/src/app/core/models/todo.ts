@@ -1,15 +1,15 @@
 export interface TodoList {
-    id: string,
-    title: string,
-    todoItems: TodoItem[],
-    userId: string
+  id: string,
+  title: string,
+  todoItems: TodoItem[],
+  userId: string
 }
 
 export interface TodoItem {
-    id: string,
-    note: string,
-    done: boolean,
-    todoListId: string
+  id: string,
+  note: string,
+  done: boolean,
+  todoListId: string
 }
 
 export interface RemoveTodoListResponse {
@@ -23,4 +23,8 @@ export interface CreateTodoListRequest {
 export interface CreateTodoItemRequest {
   note: string,
   todoListId: string
+}
+
+export interface GetTodoListsResponse {
+  todoLists: TodoList[]
 }
