@@ -33,13 +33,14 @@ export class TodoComponent implements OnInit {
       .pipe(first())
       .subscribe((response: GetTodoListsResponse) => {
           this.todoLists = response.todoLists;
+          this.todoListsNotFound = this.todoLists.length === 0;
           this.loading = false;
         },
         (error) => {
           this.alertService.error(error,
             { keepAfterRouteChange: true, autoClose: true });
           this.loading = false;
-        })
+        });
   }
 
   createTodolist() {
@@ -50,6 +51,7 @@ export class TodoComponent implements OnInit {
             `Todo ${todoList.title} list created`,
             { keepAfterRouteChange: true, autoClose: true });
           this.todoLists.push(todoList);
+          this.todoListsNotFound = false;
         },
         error: error => {
           this.alertService.error(error);
@@ -64,12 +66,17 @@ export class TodoComponent implements OnInit {
           this.todoLists = this.todoLists.filter(todoList =>
             todoList.id !== todoListId);
           this.alertService.success(response.message);
+          this.setNotFoundIfEmpty();
         },
         error: (error) => {
           this.alertService.error(error,
             { keepAfterRouteChange: true, autoClose: true });
         }
       });
+  }
+
+  private setNotFoundIfEmpty() {
+    return this.todoListsNotFound = this.todoLists.length === 0;
   }
 
   addTodoItem(createRequest: CreateTodoItemRequest) {

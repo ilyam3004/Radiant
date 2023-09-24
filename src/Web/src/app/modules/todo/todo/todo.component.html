@@ -1,4 +1,4 @@
-<div class="todo-container">
+<div class="container-fluid" style="width: 90%; margin-top: 3%;">
   <div class="d-flex align-items-center flex-column">
     <h3>Todo</h3>
     <div class="d-flex align-items-center mb-3">
@@ -14,28 +14,39 @@
   </div>
   <div style="margin-bottom: 5%"></div>
   <div style="margin: 0 3% 0 3%"></div>
-  <div class="row">
-    <div *ngIf="loading">
-      <div class="d-flex justify-content-center" style="height: 65vh;">
-        <div class="spinner-border text-secondary" role="status" style="margin: auto">
-        </div>
+  <div *ngIf="loading">
+    <div class="d-flex justify-content-center"
+         style="height: 65vh;">
+      <div class="spinner-border text-secondary"
+           role="status"
+           style="margin: auto">
       </div>
     </div>
-    <div *ngIf="!loading">
-      <div *ngIf="todoListsNotFound">
-        <div class="d-flex justify-content-center">
-          Movies not found
+  </div>
+  <div *ngIf="!loading">
+    <div class="row">
+      <div *ngIf="loading">
+        <div class="d-flex justify-content-center" style="height: 65vh;">
+          <div class="spinner-border text-secondary" role="status" style="margin: auto">
+          </div>
         </div>
       </div>
-      <div *ngIf="!todoListsNotFound">
-        <div class="row">
-          <div class="col-12 col-md-6 col-lg-4" *ngFor="let todoList of todoLists">
-            <todo-list [todoList]="todoList"
-                       (removeTodoListEvent)="removeTodoList($event)"
-                       (addTodoItemEvent)="addTodoItem($event)"
-                       (removeTodoItemEvent)="removeTodoItem($event)"
-                       (toggleTodoItemEvent)="toggleTodoItem($event)"/>
-            <div style="margin-bottom: 10%"></div>
+      <div *ngIf="!loading">
+        <div *ngIf="todoListsNotFound">
+          <div class="not-found-container">
+            TodoLists not found😢
+          </div>
+        </div>
+        <div *ngIf="!todoListsNotFound">
+          <div class="row">
+            <div class="col-12 col-md-6 col-lg-4" *ngFor="let todoList of todoLists">
+              <todo-list [todoList]="todoList"
+                         (removeTodoListEvent)="removeTodoList($event)"
+                         (addTodoItemEvent)="addTodoItem($event)"
+                         (removeTodoItemEvent)="removeTodoItem($event)"
+                         (toggleTodoItemEvent)="toggleTodoItem($event)"/>
+              <div style="margin-bottom: 10%"></div>
+            </div>
           </div>
         </div>
       </div>
