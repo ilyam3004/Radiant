@@ -1,25 +1,18 @@
 <div class="container-fluid" style="width: 90%; margin-top: 3%;">
-  <div class="d-flex align-items-center flex-column">
+  <div style="margin-bottom: 3%;" class="d-flex align-items-center flex-column">
     <h3>Todo</h3>
     <div class="d-flex align-items-center mb-3">
       <div class="form-group mr-3 mb-0">
-        <input type="text" class="form-control"
-               placeholder="Enter a title of todolist"
-               [(ngModel)]="todoListTitle"/>
+        <input type="text" class="form-control" placeholder="Enter a title of todolist" [(ngModel)]="todoListTitle" />
       </div>
       <button type="button" class="btn btn-primary mr-3" (click)="createTodolist()">
         Create
       </button>
     </div>
   </div>
-  <div style="margin-bottom: 5%"></div>
-  <div style="margin: 0 3% 0 3%"></div>
   <div *ngIf="loading">
-    <div class="d-flex justify-content-center"
-         style="height: 65vh;">
-      <div class="spinner-border text-secondary"
-           role="status"
-           style="margin: auto">
+    <div class="d-flex justify-content-center" style="height: 65vh;">
+      <div class="spinner-border text-secondary" role="status" style="margin: auto">
       </div>
     </div>
   </div>
@@ -38,15 +31,10 @@
           </div>
         </div>
         <div *ngIf="!todoListsNotFound">
-          <div class="row">
-            <div class="col-12 col-md-6 col-lg-4" *ngFor="let todoList of todoLists">
-              <todo-list [todoList]="todoList"
-                         (removeTodoListEvent)="removeTodoList($event)"
-                         (addTodoItemEvent)="addTodoItem($event)"
-                         (removeTodoItemEvent)="removeTodoItem($event)"
-                         (toggleTodoItemEvent)="toggleTodoItem($event)"/>
-              <div style="margin-bottom: 10%"></div>
-            </div>
+          <div class="todo-list-container" *ngFor="let todoList of todoLists">
+            <todo-list class="todo-list" [todoList]="todoList" (removeTodoListEvent)="removeTodoList($event)"
+              (addTodoItemEvent)="addTodoItem($event)" (removeTodoItemEvent)="removeTodoItem($event)"
+              (toggleTodoItemEvent)="toggleTodoItem($event)" />
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import {CreateTodoItemRequest, TodoList} from "../../../core/models/todo";
-import {TodoService} from "../../../core/services/todo.service";
+import { CreateTodoItemRequest, TodoList } from "../../../core/models/todo";
+import { TodoService } from "../../../core/services/todo.service";
 
 @Component({
   selector: 'todo-list',
@@ -35,6 +35,6 @@ export class TodoListComponent {
   }
 
   getCompletedClass(done: boolean): string {
-      return done ? "completed" : "";
+    return done ? "completed" : "";
   }
 }
