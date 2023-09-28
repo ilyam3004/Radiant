@@ -10,6 +10,7 @@ export interface TodoItem {
   note: string,
   done: boolean,
   todoListId: string
+  priority: Priority
 }
 
 export interface RemoveTodoListResponse {
@@ -22,9 +23,16 @@ export interface CreateTodoListRequest {
 
 export interface CreateTodoItemRequest {
   note: string,
-  todoListId: string
+  todoListId: string,
+  Priority: Priority
 }
 
 export interface GetTodoListsResponse {
   todoLists: TodoList[]
+}
+
+export enum Priority {
+  Low = "Low🟢",
+  Medium = "Medium🟡",
+  High = "High🔴"
 }
