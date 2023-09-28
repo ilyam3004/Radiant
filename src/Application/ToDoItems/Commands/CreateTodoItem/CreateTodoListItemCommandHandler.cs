@@ -32,6 +32,7 @@ public class CreateTodoListItemCommandHandler
             Id = Guid.NewGuid(),
             Note = command.Note,
             Done = false,
+            Priority = command.Priority,
             TodoListId = command.TodoListId
         });
         _unitOfWork.SaveChanges();

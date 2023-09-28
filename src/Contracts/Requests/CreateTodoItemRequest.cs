@@ -1,5 +1,8 @@
-﻿namespace Contracts.Requests;
+﻿using Contracts.Models;
+
+namespace Contracts.Requests;
 
 public record CreateTodoItemRequest(
     string Note,
-    Guid TodoListId);
+    Guid TodoListId,
+    Priority Priority);

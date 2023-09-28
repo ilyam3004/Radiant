@@ -29,14 +29,14 @@
       </thead>
       <tbody>
         <tr *ngIf="todoList.todoItems.length === 0">
-          <td colspan="4" class="text-center">TodoList is empty</td>
+          <td colspan="5" class="text-center">TodoList is empty</td>
         </tr>
         <tr *ngFor="let item of todoList.todoItems; let i = index">
           <td [width]="40" (click)="toggleTodoItem(item.id)">{{ i + 1 }}</td>
           <td [class]="getCompletedClass(item.done)" (click)="toggleTodoItem(item.id)">{{ item.note }}</td>
           <td [width]="100" (click)="toggleTodoItem(item.id)">{{ item.done ? 'Done' : 'In progress' }}</td>
           <td [width]="40">
-            {{item.priority.valueOf()}}
+            {{priorities[item.priority]}}
           </td>
           <td [width]="40">
             <button class="btn btn-close p-0" style="font-size: 12px; margin-left: 30%;"

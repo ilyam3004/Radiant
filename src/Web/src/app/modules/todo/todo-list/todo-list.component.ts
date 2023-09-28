@@ -14,6 +14,7 @@ export class TodoListComponent {
   @Output() addTodoItemEvent = new EventEmitter<CreateTodoItemRequest>();
   @Output() removeTodoItemEvent = new EventEmitter<string>();
   @Output() toggleTodoItemEvent = new EventEmitter<string>();
+  priorities: string[] = ["🟢", "🟡", "🔴"];
 
   selectedPriority: Priority | null = null;
 

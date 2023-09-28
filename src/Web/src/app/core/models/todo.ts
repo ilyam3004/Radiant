@@ -32,7 +32,7 @@ export interface GetTodoListsResponse {
 }
 
 export enum Priority {
-  Low = "Low🟢",
-  Medium = "Medium🟡",
-  High = "High🔴"
+  Low = 0,
+  Medium = 1,
+  High = 2
 }

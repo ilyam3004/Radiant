@@ -8,8 +8,9 @@ import {Priority} from "../../../core/models/todo";
 })
 export class PriorityPickerComponent {
   @Output() selectPriorityEvent = new EventEmitter<Priority>();
-  priorityOptions: Priority[] = Object.values(Priority);
+  priorityOptions: Priority[] = [Priority.Low, Priority.Medium, Priority.High];
   selectedPriority: Priority | null = null;
+  priorities: string[] = ["Low🟢", "Medium🟡", "High🔴"];
 
   selectPriority(priority: Priority): void {
     this.selectedPriority = priority;
