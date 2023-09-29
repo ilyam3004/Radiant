@@ -7,12 +7,12 @@ using MediatR;
 
 namespace Application.ToDoItems.Commands;
 
-public class CreateTodoListItemCommandHandler 
+public class CreateTodoItemCommandHandler 
     : IRequestHandler<CreateTodoItemCommand, Result<TodoListResult>>
 {
     private readonly IUnitOfWork _unitOfWork;
 
-    public CreateTodoListItemCommandHandler(IUnitOfWork unitOfWork)
+    public CreateTodoItemCommandHandler(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }

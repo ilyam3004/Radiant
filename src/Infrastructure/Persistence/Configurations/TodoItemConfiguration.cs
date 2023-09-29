@@ -1,6 +1,6 @@
-﻿using Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Domain.Entities;
 
 namespace Infrastructure.Persistence.Configurations;
 
@@ -12,7 +12,7 @@ public class TodoItemConfiguration : IEntityTypeConfiguration<TodoItem>
 
         builder.Property(ti => ti.Note)
             .IsRequired()
-            .HasMaxLength(100);
+            .HasMaxLength(255);
 
         builder.Property(ti => ti.Priority)
             .IsRequired();

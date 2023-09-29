@@ -1,15 +1,16 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Application.ToDoLists.Commands.CreateTodoList;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.DependencyInjection;
 using Application.Authentication.Commands;
 using Application.Authentication.Services;
 using Application.Authentication.Queries;
-using Application.Common.Behaviors;
+using Application.ToDoItems.Commands;
 using Application.Common.Extensions;
+using Application.Models.TodoLists;
 using Microsoft.AspNetCore.Http;
 using Application.Models;
 using System.Reflection;
 using FluentValidation;
-using MediatR;
 
 namespace Application;
 
@@ -22,9 +23,9 @@ public static class DependencyInjection
             cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
                 .AddValidationBehavior<RegisterCommand, RegisterResult>()
                 .AddValidationBehavior<LoginQuery, LoginResult>()
+                .AddValidationBehavior<CreateTodoListCommand, TodoListResult>()
+                .AddValidationBehavior<CreateTodoItemCommand, TodoListResult>()
                 .AddLoggingBehaviour<RegisterCommand, RegisterResult>());
-
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
 
         services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
