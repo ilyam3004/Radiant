@@ -16,5 +16,11 @@ public class TodoItemConfiguration : IEntityTypeConfiguration<TodoItem>
 
         builder.Property(ti => ti.Priority)
             .IsRequired();
+        
+        builder.Property(ti => ti.Deadline)
+            .IsRequired(false);
+        
+        builder.Property(ti => ti.CreatedAt)
+            .IsRequired();
     }
 }

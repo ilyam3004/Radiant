@@ -7,4 +7,6 @@ public record TodoItemResponse(
     string Note,
     bool Done,
     Priority Priority,
-    Guid TodoListId);
+    Guid TodoListId,
+    DateTime? Deadline, 
+    DateTime CreatedAt);

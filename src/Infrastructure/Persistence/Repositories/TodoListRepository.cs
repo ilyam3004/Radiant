@@ -25,7 +25,8 @@ internal sealed class TodoListRepository :
     public async Task<List<TodoList>> GetUserTodoLists(Guid userId)
     {
         return await DbContext.TodoLists
-            .Include(tl => tl.TodoItems)
+            .Include(tl => 
+                tl.TodoItems.OrderBy(ti => ti.CreatedAt))
             .Where(tl => tl.UserId == userId).ToListAsync();
     }
 

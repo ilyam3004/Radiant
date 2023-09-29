@@ -8,4 +8,5 @@ namespace Application.ToDoItems.Commands;
 public record CreateTodoItemCommand(
     string Note,
     Guid TodoListId,
-    Priority Priority) : IRequest<Result<TodoListResult>>;
+    Priority Priority,
+    DateTime? Deadline) : IRequest<Result<TodoListResult>>;
