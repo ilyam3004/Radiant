@@ -17,7 +17,7 @@ export class TodoListComponent {
   priorities: string[] = ["🟢", "🟡", "🔴"];
 
   selectedPriority: Priority | null = null;
-
+  deadline: string | null = null;
   note: string = "";
 
   constructor(private todoService: TodoService,
@@ -28,12 +28,18 @@ export class TodoListComponent {
   }
 
   addTodoItem() {
-    console.log(this.selectedPriority);
+    console.log({
+      note: this.note,
+      todoListId: this.todoList!.id,
+      Priority: this.selectedPriority,
+      deadline: null
+    })
     if(this.selectedPriority !== null) {
       this.addTodoItemEvent.emit({
         note: this.note,
         todoListId: this.todoList!.id,
-        Priority: this.selectedPriority
+        Priority: this.selectedPriority,
+        deadline: Date.parse(this.deadline!)
       })
     } else {
       this.alertService.error("Please select a priority");
@@ -54,5 +60,9 @@ export class TodoListComponent {
 
   handlePriorityChange(priority: Priority): void {
     this.selectedPriority = priority;
+  }
+
+  handleDateTimeChange(dateTime: string): void {
+    this.deadline = dateTime;
   }
 }

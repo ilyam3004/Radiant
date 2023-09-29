@@ -9,8 +9,10 @@ export interface TodoItem {
   id: string,
   note: string,
   done: boolean,
-  todoListId: string
-  priority: Priority
+  todoListId: string,
+  priority: Priority,
+  deadline: Date | null,
+  createdAt: Date
 }
 
 export interface RemoveTodoListResponse {
@@ -24,7 +26,8 @@ export interface CreateTodoListRequest {
 export interface CreateTodoItemRequest {
   note: string,
   todoListId: string,
-  Priority: Priority
+  priority: Priority,
+  deadline: Date | null,
 }
 
 export interface GetTodoListsResponse {
