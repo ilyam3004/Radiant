@@ -1,14 +1,20 @@
 <div>
   <div class="d-flex justify-content-between">
     <h5>{{ todoList.title }}</h5>
-    <button class="btn btn-danger" (click)="removeTodoList()">Remove</button>
+    <button class="btn btn-danger" (click)="removeTodoList()">
+      Remove
+    </button>
   </div>
   <div style="margin-bottom: 2%"></div>
   <div class="d-flex justify-content-center mb-3">
     <div class="form-group mr-3 mb-0">
       <input type="text" class="form-control" [(ngModel)]="note" placeholder="Enter a note" />
     </div>
-    <button type="button" class="btn btn-success mr-3" (click)="addTodoItem()">Add</button>
+    <button type="button" class="btn btn-success mr-3" (click)="addTodoItem()">
+      Add
+    </button>
+    <div style="margin-right: 2%"></div>
+    <priority-picker (selectPriorityEvent)="handlePriorityChange($event)"/>
   </div>
   <div class="table-wrapper">
     <table class="table table-hover table-bordered">
@@ -17,17 +23,21 @@
           <th>№</th>
           <th>Note</th>
           <th>Status</th>
+          <th>Priority</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngIf="todoList.todoItems.length === 0">
-          <td colspan="4" class="text-center">TodoList is empty</td>
+          <td colspan="5" class="text-center">TodoList is empty</td>
         </tr>
         <tr *ngFor="let item of todoList.todoItems; let i = index">
           <td [width]="40" (click)="toggleTodoItem(item.id)">{{ i + 1 }}</td>
           <td [class]="getCompletedClass(item.done)" (click)="toggleTodoItem(item.id)">{{ item.note }}</td>
           <td [width]="100" (click)="toggleTodoItem(item.id)">{{ item.done ? 'Done' : 'In progress' }}</td>
+          <td [width]="40">
+            {{priorities[item.priority]}}
+          </td>
           <td [width]="40">
             <button class="btn btn-close p-0" style="font-size: 12px; margin-left: 30%;"
               (click)="removeTodoItem(item.id)"></button>

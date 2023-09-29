@@ -5,17 +5,21 @@ import { TodoComponent } from './todo/todo.component';
 import { AuthGuard } from "../../helpers/auth.guard";
 import { TodoListComponent } from './todo-list/todo-list.component';
 import { FormsModule } from '@angular/forms';
+import { PriorityPickerComponent } from './priority-picker/priority-picker.component';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
   declarations: [
     TodoComponent,
-    TodoListComponent
+    TodoListComponent,
+    PriorityPickerComponent
   ],
   imports: [
     CommonModule,
     TodoRoutingModule,
-    FormsModule
+    FormsModule,
+    NgbDropdownModule
   ],
   providers: [AuthGuard]
 })
