@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { TodoRoutingModule } from './todo-routing.module';
 import { TodoComponent } from './todo/todo.component';
 import { AuthGuard } from "../../helpers/auth.guard";
@@ -23,8 +23,8 @@ import { DateTimePickerComponent } from './date-time-picker/date-time-picker.com
     FormsModule,
     NgbDropdownModule,
     NgbDatepickerModule,
-    NgbTimepickerModule
+    NgbTimepickerModule,
   ],
-  providers: [AuthGuard]
+  providers: [AuthGuard, DatePipe]
 })
 export class TodoModule { }

@@ -39,7 +39,9 @@
           <td [class]="getCompletedClass(item.done)" (click)="toggleTodoItem(item.id)">{{ item.note }}</td>
           <td [width]="100" (click)="toggleTodoItem(item.id)">{{ item.done ? 'Done' : 'In progress' }}</td>
           <td [width]="40">{{priorities[item.priority]}}</td>
-          <td>{{ item.deadline == null ? 'No deadline' : item.deadline }}</td>
+          <td [width]="170" [class]="getDeadlineClass(item)">
+            {{ item.deadline == null ? 'No deadline' : convertDateToReadableFormat(item.deadline) }}
+          </td>
           <td [width]="40">
             <button class="btn btn-close p-0" style="font-size: 12px; margin-left: 30%;"
               (click)="removeTodoItem(item.id)"></button>
