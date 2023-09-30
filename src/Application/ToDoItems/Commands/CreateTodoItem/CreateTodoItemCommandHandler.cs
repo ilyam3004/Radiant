@@ -33,8 +33,11 @@ public class CreateTodoItemCommandHandler
             Note = command.Note,
             Done = false,
             Priority = command.Priority,
+            Deadline = command.Deadline,
+            CreatedAt = DateTime.UtcNow,
             TodoListId = command.TodoListId
         });
+        
         _unitOfWork.SaveChanges();
 
         var todoList = await _unitOfWork.TodoLists
