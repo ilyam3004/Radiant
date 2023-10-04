@@ -47,8 +47,6 @@ export class RegisterComponent implements OnInit {
       username: this.form.value['username']
     }
 
-    console.log(request);
-
     this.loading = true;
     this.accountService.register(request)
       .pipe(first())

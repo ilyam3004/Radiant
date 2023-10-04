@@ -12,43 +12,80 @@ import {DatePipe} from "@angular/common";
 export class TodoListComponent {
   @Input() todoList!: TodoList;
   @Output() removeTodoListEvent = new EventEmitter<string>();
-  @Output() addTodoItemEvent = new EventEmitter<CreateTodoItemRequest>();
-  @Output() removeTodoItemEvent = new EventEmitter<string>();
-  @Output() toggleTodoItemEvent = new EventEmitter<string>();
-  priorities: string[] = ["🟢", "🟡", "🔴"];
+  @Output() addTodoItemEvent = new EventEmitter<TodoList>();
+  @Output() removeTodoItemEvent = new EventEmitter<TodoList>();
+  @Output() toggleTodoItemEvent = new EventEmitter<TodoItem>();
 
+  priorities: string[] = ["🟢", "🟡", "🔴"];
+  newTodoItemLoading: boolean = false;
   selectedPriority: Priority | null = null;
   deadline: string | null = null;
   note: string = "";
 
   constructor(private todoService: TodoService,
               private alertService: AlertService,
-              private datePipe: DatePipe) {
-  }
+              private datePipe: DatePipe) { }
 
   removeTodoList() {
     this.removeTodoListEvent.emit(this.todoList.id);
   }
 
   addTodoItem() {
-    if (this.selectedPriority !== null) {
-      this.addTodoItemEvent.emit({
-        note: this.note,
-        todoListId: this.todoList!.id,
-        priority: this.selectedPriority,
-        deadline: this.deadline == null ? null : new Date(this.deadline).toISOString()
-      })
-    } else {
+    if (this.selectedPriority === null) {
       this.alertService.error("Please select a priority");
+      return;
     }
+    var createRequest: CreateTodoItemRequest = {
+      note: this.note,
+      todoListId: this.todoList!.id,
+      priority: this.selectedPriority,
+      deadline: this.deadline == null ? null : new Date(this.deadline).toISOString()
+    }
+
+    this.newTodoItemLoading = true;
+    this.todoService.addTodoItem(createRequest)
+      .subscribe({
+        next: (todoList: TodoList) => {
+          this.addTodoItemEvent.emit(todoList);
+          this.newTodoItemLoading = false;
+        },
+        error: (error) => {
+          this.newTodoItemLoading = false;
+          this.alertService.error(error,
+            {keepAfterRouteChange: true, autoClose: true});
+        }
+      });
   }
 
   toggleTodoItem(itemId: string) {
-    this.toggleTodoItemEvent.emit(itemId);
+    this.changeTodoItemLoadingState(itemId, true);
+    this.todoService.toggleTodoItem(itemId)
+      .subscribe({
+        next: (todoItem: TodoItem) => {
+          this.changeTodoItemLoadingState(itemId, false);
+          this.toggleTodoItemEvent.emit(todoItem);
+        },
+        error: (error) => {
+          this.changeTodoItemLoadingState(itemId, false);
+          this.alertService.error(error,
+            { keepAfterRouteChange: true, autoClose: true });
+        }
+      });
   }
 
   removeTodoItem(todoItemId: string) {
-    this.removeTodoItemEvent.emit(todoItemId);
+    this.changeTodoItemLoadingState(todoItemId, true);
+    this.todoService.removeTodoItem(todoItemId)
+      .subscribe({
+        next: (todoList: TodoList) => {
+          this.removeTodoItemEvent.emit(todoList);
+        },
+        error: (error) => {
+          this.changeTodoItemLoadingState(todoItemId, false);
+          this.alertService.error(error,
+            { keepAfterRouteChange: true, autoClose: true });
+        }
+      });
   }
 
   handlePriorityChange(priority: Priority): void {
@@ -64,7 +101,7 @@ export class TodoListComponent {
   }
 
   getDeadlineClass(todoItem: TodoItem): string {
-    if(todoItem.deadline !== null) {
+    if (todoItem.deadline !== null) {
       if (!todoItem.done && this.isDeadLineExpired(new Date(todoItem.deadline))) {
         return "deadline-expired";
       }
@@ -81,7 +118,7 @@ export class TodoListComponent {
     }
 
     if (this.isDeadLineTomorrow(date)) {
-      return 'Tomorrow';
+      return 'Tomorrow at ' + this.datePipe.transform(isoDate, 'HH:mm') ?? '-';
     }
 
     if (this.isDeadLineToday(date)) {
@@ -123,5 +160,10 @@ export class TodoListComponent {
   isYearsEqual(date: Date): boolean {
     const currentDate = new Date();
     return date.getFullYear() == currentDate.getFullYear();
+  }
+
+  private changeTodoItemLoadingState(itemId: string, state: boolean) {
+    this.todoList.todoItems
+      .find((item) => item.id === itemId)!.loading = state;
   }
 }
