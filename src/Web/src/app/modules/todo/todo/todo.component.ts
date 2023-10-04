@@ -52,6 +52,7 @@ export class TodoComponent implements OnInit {
             { keepAfterRouteChange: true, autoClose: true });
           this.todoLists.push(todoList);
           this.todoListsNotFound = false;
+          this.todoListTitle = "";
         },
         error: error => {
           this.alertService.error(error);
@@ -76,7 +77,7 @@ export class TodoComponent implements OnInit {
   }
 
   private setNotFoundIfEmpty() {
-    return this.todoListsNotFound = this.todoLists.length === 0;
+    this.todoListsNotFound = this.todoLists.length === 0;
   }
 
   addTodoItem(createRequest: CreateTodoItemRequest) {
