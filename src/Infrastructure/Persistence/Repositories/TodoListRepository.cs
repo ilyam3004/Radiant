@@ -30,10 +30,42 @@ internal sealed class TodoListRepository :
             .Where(tl => tl.UserId == userId).ToListAsync();
     }
 
+    public async Task<TodoList> GetUserTodayTodolist(Guid userId)
+    {
+        var todayTodolist = await DbContext.TodoLists
+            .Include(tl => tl.TodoItems.Where(ti => 
+                ti.CreatedAt.Date == DateTime.UtcNow.Date))
+            .FirstOrDefaultAsync(tl => tl.UserId == userId 
+                                       && tl.Title == "Today" 
+                                       && tl.CreatedAt.Date == DateTime.UtcNow.Date);
+        
+        if (todayTodolist is not null) return todayTodolist;
+        
+        var newTodayTodoList = await CreateTodayTodoList(userId);
+        return newTodayTodoList;
+
+    }
+
     public async Task<TodoList?> GetTodoListByIdWithItems(Guid todoListId)
     {
         return await DbContext.TodoLists
             .Include(tl => tl.TodoItems)
             .FirstOrDefaultAsync(tl => tl.Id == todoListId);
+    }
+    
+    private async Task<TodoList> CreateTodayTodoList(Guid userId)
+    {
+        var todayTodolist = new TodoList
+        {
+            Id = Guid.NewGuid(),
+            Title = "Today",
+            TodoItems = new List<TodoItem>(),
+            UserId = userId,
+            CreatedAt = DateTime.UtcNow
+        };
+        
+        await AddAsync(todayTodolist);
+
+        return todayTodolist;
     }
 }

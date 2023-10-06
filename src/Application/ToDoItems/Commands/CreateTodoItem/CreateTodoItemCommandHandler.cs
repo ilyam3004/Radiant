@@ -1,11 +1,11 @@
 ﻿using Application.Common.Interfaces.Persistence;
 using Application.Models.TodoLists;
 using Domain.Common.Exceptions;
-using LanguageExt.Common;
 using Domain.Entities;
+using LanguageExt.Common;
 using MediatR;
 
-namespace Application.ToDoItems.Commands;
+namespace Application.ToDoItems.Commands.CreateTodoItem;
 
 public class CreateTodoItemCommandHandler 
     : IRequestHandler<CreateTodoItemCommand, Result<TodoListResult>>

@@ -1,9 +1,9 @@
-﻿using Application.Authentication.Services;
-using Application.Common.Interfaces.Persistence;
+﻿using Application.Common.Interfaces.Persistence;
+using Application.Authentication.Services;
 using Application.Models.TodoLists;
 using Domain.Common.Exceptions;
-using Domain.Entities;
 using LanguageExt.Common;
+using Domain.Entities;
 using MediatR;
 
 namespace Application.ToDoLists.Commands.CreateTodoList;
@@ -38,7 +38,8 @@ public class CreateTodoListCommandHandler
             Id = Guid.NewGuid(),
             Title = command.Title,
             TodoItems = new List<TodoItem>(),
-            UserId = userId
+            UserId = userId,
+            CreatedAt = DateTime.UtcNow
         };
         
         await _unitOfWork.TodoLists.AddAsync(todoList);

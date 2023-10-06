@@ -5,15 +5,15 @@ using Domain.Common.Exceptions;
 using LanguageExt.Common;
 using MediatR;
 
-namespace Application.ToDoLists.Queries;
+namespace Application.ToDoLists.Queries.GetTodoLists;
 
-public class GetTodoListQueryHandler
+public class GetTodoListsQueryHandler
     : IRequestHandler<GetTodoListsQuery, Result<GetTodoListsResult>>
 {
     private readonly IAuthService _authService;
     private readonly IUnitOfWork _unitOfWork;
     
-    public GetTodoListQueryHandler(IAuthService authService, IUnitOfWork unitOfWork)
+    public GetTodoListsQueryHandler(IAuthService authService, IUnitOfWork unitOfWork)
     {
         _authService = authService;
         _unitOfWork = unitOfWork;
@@ -23,7 +23,7 @@ public class GetTodoListQueryHandler
         GetTodoListsQuery request, 
         CancellationToken cancellationToken)
     {
-        var userId = Guid.Parse(_authService.GetUserId());
+        var userId = Guid.Parse(_authService.GetUserId()!);
         
         if(!await _unitOfWork.Users.UserExistsById(userId))
         {

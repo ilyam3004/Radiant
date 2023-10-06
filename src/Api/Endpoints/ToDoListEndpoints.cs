@@ -1,6 +1,7 @@
-﻿using Application.ToDoLists.Commands.CreateTodoList;
+﻿using Application.ToDoLists.Queries.GetTodayTodoList;
+using Application.ToDoLists.Commands.CreateTodoList;
 using Application.ToDoLists.Commands.RemoveTodoList;
-using Application.ToDoLists.Queries;
+using Application.ToDoLists.Queries.GetTodoLists;
 using Contracts.Responses.TodoLists;
 using Microsoft.AspNetCore.Mvc;
 using MapsterMapper;
@@ -20,6 +21,7 @@ public class ToDoListController : ICarterModule
         group.MapGet("", GetUserTodoLists);
         group.MapPost("", CreateTodoList);
         group.MapDelete("{id:guid}", RemoveTodoList);
+        group.MapGet("today", GetTodayTodoList);
     }
     
     private async Task<IResult> GetUserTodoLists(ISender sender,
@@ -60,6 +62,19 @@ public class ToDoListController : ICarterModule
         return result.Match(
             value => Results.Ok(
                 mapper.Map<RemoveTodoListResponse>(value)),
+            ApiEndpoints.Problem);
+    }
+
+    private async Task<IResult> GetTodayTodoList(
+        ISender sender, IMapper mapper)
+    {
+        var query = new GetTodayTodoListQuery();
+        
+        var result = await sender.Send(query);
+        
+        return result.Match(
+            value => Results.Ok(
+                mapper.Map<TodoListResponse>(value)),
             ApiEndpoints.Problem);
     }
 }
