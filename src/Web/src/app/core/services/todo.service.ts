@@ -23,6 +23,9 @@ export class TodoService {
     return this.http.get<GetTodoListsResponse>("todo-lists");
   }
 
+  public getTodayTodoList(): Observable<TodoList> {
+    return this.http.get<TodoList>("todo-lists/today");
+  }
   public removeTodoList(todoListId: string): Observable<RemoveTodoListResponse> {
     return this.http.delete<RemoveTodoListResponse>(`todo-lists/${todoListId}`);
   }

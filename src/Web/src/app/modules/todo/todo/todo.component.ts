@@ -3,7 +3,7 @@ import { AlertService } from "../../../core/services/alert.service";
 import { AuthService } from "../../../core/services/auth.service";
 import { ActivatedRoute, Router } from '@angular/router';
 import {CreateTodoItemRequest, GetTodoListsResponse, TodoItem, TodoList} from 'src/app/core/models/todo';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import { first } from "rxjs";
 
 @Component({
@@ -13,6 +13,7 @@ import { first } from "rxjs";
 })
 export class TodoComponent implements OnInit {
   todoListTitle: string = "";
+  todayTodoList: TodoList = {} as TodoList;
   todoLists: TodoList[] = [];
   loading: boolean = false;
   todoListsNotFound: boolean = false;
@@ -26,6 +27,7 @@ export class TodoComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
     this.loadTodoLists();
+    this.loadTodayTodoList();
   }
 
   private loadTodoLists() {
@@ -40,6 +42,18 @@ export class TodoComponent implements OnInit {
           this.alertService.error(error,
             { keepAfterRouteChange: true, autoClose: true });
           this.loading = false;
+        });
+  }
+
+  private loadTodayTodoList() {
+    this.todoService.getTodayTodoList()
+      .pipe(first())
+      .subscribe((response: TodoList) => {
+          this.todayTodoList = response;
+        },
+        (error) => {
+          this.alertService.error(error,
+            { keepAfterRouteChange: true, autoClose: true });
         });
   }
 

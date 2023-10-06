@@ -33,7 +33,19 @@ public class GetTodayTodoListQueryHandler : IRequestHandler<GetTodayTodoListQuer
 
         var todayTodolist = await _unitOfWork.TodoLists
             .GetUserTodayTodolist(userId);
+        
+        var userTodoLists = await _unitOfWork.TodoLists
+            .GetUserTodoLists(userId);
 
+        foreach (var todoList in userTodoLists)
+        {
+            foreach (var todoItem in todoList.TodoItems)
+            {
+                if(todoItem.Deadline == DateTime.UtcNow.Date)
+                    todayTodolist.TodoItems.Add(todoItem);
+            }
+        }
+        
         return new TodoListResult(todayTodolist);
     }
 }
