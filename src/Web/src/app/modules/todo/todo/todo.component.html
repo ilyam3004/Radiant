@@ -35,8 +35,12 @@
             </div>
             <div *ngIf="!todoListsNotFound">
               <div class="todo-list-container" *ngFor="let todoList of todoLists">
-                <todo-list class="todo-list" [todoList]="todoList" (removeTodoListEvent)="removeTodoList($event)"
-                           (addTodoItemEvent)="addTodoItem($event)" (removeTodoItemEvent)="removeTodoItem($event)"
+                <todo-list class="todo-list"
+                           [todoList]="todoList"
+                           [isTodayTodoList]="false"
+                           (removeTodoListEvent)="removeTodoList($event)"
+                           (addTodoItemEvent)="addTodoItem($event)"
+                           (removeTodoItemEvent)="removeTodoItem($event)"
                            (toggleTodoItemEvent)="toggleTodoItem($event)"/>
               </div>
             </div>
@@ -48,8 +52,12 @@
         <ng-template ngbNavContent>
           <div class="row" style="margin-top: 3%">
             <div class="todo-list-container">
-              <todo-list class="todo-list" [todoList]="todayTodoList" (removeTodoListEvent)="removeTodoList($event)"
-                         (addTodoItemEvent)="addTodoItem($event)" (removeTodoItemEvent)="removeTodoItem($event)"
+              <todo-list class="todo-list"
+                         [todoList]="todayTodoList"
+                         [isTodayTodoList]="true"
+                         (removeTodoListEvent)="removeTodoList($event)"
+                         (addTodoItemEvent)="addTodoItem($event)"
+                         (removeTodoItemEvent)="removeTodoItem($event)"
                          (toggleTodoItemEvent)="toggleTodoItem($event)"/>
             </div>
           </div>

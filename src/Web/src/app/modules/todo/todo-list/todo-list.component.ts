@@ -11,8 +11,9 @@ import {DatePipe} from "@angular/common";
 })
 export class TodoListComponent {
   @Input() todoList!: TodoList;
+  @Input() isTodayTodoList: boolean = false;
   @Output() removeTodoListEvent = new EventEmitter<string>();
-  @Output() addTodoItemEvent = new EventEmitter<CreateTodoItemRequest>();
+  @Output() addTodoItemEvent = new EventEmitter<[CreateTodoItemRequest, boolean]>();
   @Output() removeTodoItemEvent = new EventEmitter<string>();
   @Output() toggleTodoItemEvent = new EventEmitter<string>();
   priorities: string[] = ["🟢", "🟡", "🔴"];
@@ -32,12 +33,16 @@ export class TodoListComponent {
 
   addTodoItem() {
     if (this.selectedPriority !== null) {
-      this.addTodoItemEvent.emit({
-        note: this.note,
-        todoListId: this.todoList!.id,
-        priority: this.selectedPriority,
-        deadline: this.deadline == null ? null : new Date(this.deadline).toISOString()
-      })
+      this.addTodoItemEvent.emit(
+        [
+          {
+            note: this.note,
+            todoListId: this.todoList!.id,
+            priority: this.selectedPriority,
+            deadline: this.deadline == null ? null : new Date(this.deadline).toISOString()
+          },
+          this.isTodayTodoList
+        ])
     } else {
       this.alertService.error("Please select a priority");
     }
@@ -64,7 +69,7 @@ export class TodoListComponent {
   }
 
   getDeadlineClass(todoItem: TodoItem): string {
-    if(todoItem.deadline !== null) {
+    if (todoItem.deadline !== null) {
       if (!todoItem.done && this.isDeadLineExpired(new Date(todoItem.deadline))) {
         return "deadline-expired";
       }

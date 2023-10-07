@@ -97,12 +97,18 @@ export class TodoComponent implements OnInit {
     return this.todoListsNotFound = this.todoLists.length === 0;
   }
 
-  addTodoItem(createRequest: CreateTodoItemRequest) {
-    console.log(createRequest);
+  addTodoItem(params: [CreateTodoItemRequest, boolean]) {
+    var createRequest = params[0];
+    var isTodayTodoList = params[1];
+
     this.todoService.addTodoItem(createRequest)
       .subscribe({
       next: (todoList: TodoList) => {
-        this.updateTodoList(todoList);
+        if (isTodayTodoList) {
+          this.todayTodoList = todoList;
+        } else {
+          this.updateTodoList(todoList);
+        }
       },
       error: (error) => {
         this.alertService.error(error,
