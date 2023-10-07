@@ -2,8 +2,8 @@ import { TodoService } from "../../../core/services/todo.service";
 import { AlertService } from "../../../core/services/alert.service";
 import { AuthService } from "../../../core/services/auth.service";
 import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import {CreateTodoItemRequest, GetTodoListsResponse, TodoItem, TodoList} from 'src/app/core/models/todo';
-import { Component, HostBinding, OnInit } from '@angular/core';
 import { first } from "rxjs";
 
 @Component({
@@ -15,7 +15,8 @@ export class TodoComponent implements OnInit {
   todoListTitle: string = "";
   todayTodoList: TodoList = {} as TodoList;
   todoLists: TodoList[] = [];
-  loading: boolean = false;
+  fetchTodoListsLoading: boolean = false;
+  fetchTodayTodoListLoading: boolean = false;
   todoListsNotFound: boolean = false;
 
   constructor(private authService: AuthService,
@@ -25,35 +26,38 @@ export class TodoComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
-    this.loading = true;
     this.loadTodoLists();
     this.loadTodayTodoList();
   }
 
   private loadTodoLists() {
+    this.fetchTodoListsLoading = true;
     this.todoService.getTodoLists()
       .pipe(first())
       .subscribe((response: GetTodoListsResponse) => {
+          this.fetchTodoListsLoading = false;
           this.todoLists = response.todoLists;
           this.todoListsNotFound = this.todoLists.length === 0;
-          this.loading = false;
         },
         (error) => {
+          this.fetchTodoListsLoading = false;
           this.alertService.error(error,
             { keepAfterRouteChange: true, autoClose: true });
-          this.loading = false;
         });
   }
 
   private loadTodayTodoList() {
+    this.fetchTodayTodoListLoading = true;
     this.todoService.getTodayTodoList()
       .pipe(first())
       .subscribe((response: TodoList) => {
           this.todayTodoList = response;
+          this.fetchTodayTodoListLoading = false;
         },
         (error) => {
           this.alertService.error(error,
             { keepAfterRouteChange: true, autoClose: true });
+          this.fetchTodayTodoListLoading = false;
         });
   }
 
@@ -94,6 +98,7 @@ export class TodoComponent implements OnInit {
   }
 
   addTodoItem(createRequest: CreateTodoItemRequest) {
+    console.log(createRequest);
     this.todoService.addTodoItem(createRequest)
       .subscribe({
       next: (todoList: TodoList) => {

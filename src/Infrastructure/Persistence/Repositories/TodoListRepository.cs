@@ -43,7 +43,6 @@ internal sealed class TodoListRepository :
         
         var newTodayTodoList = await CreateTodayTodoList(userId);
         return newTodayTodoList;
-
     }
 
     public async Task<TodoList?> GetTodoListByIdWithItems(Guid todoListId)

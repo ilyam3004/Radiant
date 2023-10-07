@@ -46,6 +46,8 @@ public class GetTodayTodoListQueryHandler : IRequestHandler<GetTodayTodoListQuer
             }
         }
         
+        _unitOfWork.SaveChanges();
+        
         return new TodoListResult(todayTodolist);
     }
 }

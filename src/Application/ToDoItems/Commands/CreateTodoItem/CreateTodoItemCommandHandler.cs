@@ -1,8 +1,8 @@
 ﻿using Application.Common.Interfaces.Persistence;
 using Application.Models.TodoLists;
 using Domain.Common.Exceptions;
-using Domain.Entities;
 using LanguageExt.Common;
+using Domain.Entities;
 using MediatR;
 
 namespace Application.ToDoItems.Commands.CreateTodoItem;
