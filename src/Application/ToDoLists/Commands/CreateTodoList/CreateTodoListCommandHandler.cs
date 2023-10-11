@@ -39,7 +39,8 @@ public class CreateTodoListCommandHandler
             Title = command.Title,
             TodoItems = new List<TodoItem>(),
             UserId = userId,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            IsTodayTodoList = false
         };
         
         await _unitOfWork.TodoLists.AddAsync(todoList);

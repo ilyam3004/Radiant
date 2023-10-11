@@ -33,10 +33,8 @@ internal sealed class TodoListRepository :
     public async Task<TodoList> GetUserTodayTodolist(Guid userId)
     {
         var todayTodolist = await DbContext.TodoLists
-            .Include(tl => tl.TodoItems.Where(ti => 
-                ti.CreatedAt.Date == DateTime.UtcNow.Date))
             .FirstOrDefaultAsync(tl => tl.UserId == userId 
-                                       && tl.Title == "Today" 
+                                       && tl.IsTodayTodoList == true
                                        && tl.CreatedAt.Date == DateTime.UtcNow.Date);
         
         if (todayTodolist is not null) return todayTodolist;
@@ -60,7 +58,8 @@ internal sealed class TodoListRepository :
             Title = "Today",
             TodoItems = new List<TodoItem>(),
             UserId = userId,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            IsTodayTodoList = true
         };
         
         await AddAsync(todayTodolist);

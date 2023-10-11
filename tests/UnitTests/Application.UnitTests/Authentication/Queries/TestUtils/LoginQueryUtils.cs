@@ -1,5 +1,5 @@
-﻿using Application.Authentication.Queries;
-using Application.UnitTests.TestUtils.Constants;
+﻿using Application.UnitTests.TestUtils.Constants;
+using Application.Authentication.Queries;
 using Domain.Entities;
 
 namespace Application.UnitTests.Authentication.Queries.TestUtils;

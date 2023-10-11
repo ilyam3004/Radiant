@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import {NgbCalendar, NgbDateStruct, NgbModal, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
+import {NgbCalendar, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'date-time-picker',
@@ -12,6 +11,7 @@ export class DateTimePickerComponent {
   model: NgbDateStruct = this.calendar.getToday();
   date: { year: number; month: number } = this.calendar.getToday();
   time = { hour: 0, minute: 0 };
+  todayTodoList: boolean = false;
 
   selectedDateTime: string = "";
 
@@ -23,6 +23,12 @@ export class DateTimePickerComponent {
   }
 
   sendValueAndCloseModal(modal: any) {
+    if(this.todayTodoList){
+      this.model.year = this.calendar.getToday().year;
+      this.model.month = this.calendar.getToday().month;
+      this.model.day = this.calendar.getToday().day;
+   }
+
     this.selectedDateTime = this.model.year + "/"
       + this.createValidForm(this.model.month) + "/"
       + this.createValidForm(this.model.day) + " "

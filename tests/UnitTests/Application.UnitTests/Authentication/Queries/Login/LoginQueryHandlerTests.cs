@@ -8,7 +8,6 @@ using Application.Models.Authentication;
 using Domain.Common.Exceptions;
 using FluentAssertions;
 using Domain.Entities;
-using Microsoft.AspNetCore.Authentication;
 using Moq;
 
 namespace Application.UnitTests.Authentication.Queries.Login;
