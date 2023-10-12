@@ -4,6 +4,7 @@ obj/
 bin/
 ToDo.sln.DotSettings.user
 .vs/
+logs/
 
 *.user
 

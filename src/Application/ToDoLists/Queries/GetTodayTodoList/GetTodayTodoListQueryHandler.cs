@@ -47,10 +47,9 @@ public class GetTodayTodoListQueryHandler : IRequestHandler<GetTodayTodoListQuer
         var userTodoLists = await _unitOfWork.TodoLists
             .GetUserTodoLists(todayTodolist.UserId);
 
-        foreach (var todoItem in userTodoLists.SelectMany(todoList => todoList.TodoItems
-                     .Where(ti => ti.Deadline == DateTime.UtcNow.Date)))
-        {
-            todayTodolist.TodoItems.Add(todoItem);
-        }
+        todayTodolist.TodoItems
+            .AddRange(userTodoLists.SelectMany(todoList => 
+                todoList.TodoItems.Where(ti => 
+                    ti.Deadline != null && ti.Deadline.Value.Date == DateTime.UtcNow.Date)));
     }
 }
