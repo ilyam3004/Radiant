@@ -33,7 +33,8 @@ internal sealed class TodoListRepository :
     public async Task<TodoList> GetUserTodayTodolist(Guid userId)
     {
         var todayTodolist = await DbContext.TodoLists
-            .FirstOrDefaultAsync(tl => tl.UserId == userId 
+            .Include(tl => tl.TodoItems)
+            .FirstOrDefaultAsync(tl => tl.UserId == userId
                                        && tl.IsTodayTodoList == true
                                        && tl.CreatedAt.Date == DateTime.UtcNow.Date);
         

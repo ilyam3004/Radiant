@@ -11,10 +11,9 @@ import {DatePipe} from "@angular/common";
 })
 export class TodoListComponent {
   @Input() todoList!: TodoList;
-  @Input() isTodayTodoList: boolean = false;
   @Output() removeTodoListEvent = new EventEmitter<string>();
   @Output() addTodoItemEvent = new EventEmitter<[CreateTodoItemRequest, boolean]>();
-  @Output() removeTodoItemEvent = new EventEmitter<string>();
+  @Output() removeTodoItemEvent = new EventEmitter<[string, boolean]>();
   @Output() toggleTodoItemEvent = new EventEmitter<string>();
   priorities: string[] = ["🟢", "🟡", "🔴"];
 
@@ -22,10 +21,8 @@ export class TodoListComponent {
   deadline: string | null = null;
   note: string = "";
 
-  constructor(private todoService: TodoService,
-              private alertService: AlertService,
-              private datePipe: DatePipe) {
-  }
+  constructor(private alertService: AlertService,
+              private datePipe: DatePipe) { }
 
   removeTodoList() {
     this.removeTodoListEvent.emit(this.todoList.id);
@@ -41,7 +38,7 @@ export class TodoListComponent {
             priority: this.selectedPriority,
             deadline: this.deadline == null ? null : new Date(this.deadline).toISOString()
           },
-          this.isTodayTodoList
+          this.todoList.isTodayTodoList
         ])
     } else {
       this.alertService.error("Please select a priority");
@@ -53,7 +50,7 @@ export class TodoListComponent {
   }
 
   removeTodoItem(todoItemId: string) {
-    this.removeTodoItemEvent.emit(todoItemId);
+    this.removeTodoItemEvent.emit([todoItemId, this.todoList.isTodayTodoList]);
   }
 
   handlePriorityChange(priority: Priority): void {

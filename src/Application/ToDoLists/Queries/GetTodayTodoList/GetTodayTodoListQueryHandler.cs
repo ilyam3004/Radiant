@@ -34,9 +34,9 @@ public class GetTodayTodoListQueryHandler : IRequestHandler<GetTodayTodoListQuer
 
         var todayTodolist = await _unitOfWork.TodoLists
             .GetUserTodayTodolist(userId);
+        _unitOfWork.SaveChanges();
 
         AddTodoItemsWithTodayDeadline(todayTodolist);
-
         _unitOfWork.SaveChanges();
 
         return new TodoListResult(todayTodolist);

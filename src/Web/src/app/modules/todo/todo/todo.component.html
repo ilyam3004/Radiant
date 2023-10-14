@@ -37,7 +37,6 @@
               <div class="todo-list-container" *ngFor="let todoList of todoLists">
                 <todo-list class="todo-list"
                            [todoList]="todoList"
-                           [isTodayTodoList]="false"
                            (removeTodoListEvent)="removeTodoList($event)"
                            (addTodoItemEvent)="addTodoItem($event)"
                            (removeTodoItemEvent)="removeTodoItem($event)"
@@ -54,7 +53,6 @@
             <div class="todo-list-container">
               <todo-list class="todo-list"
                          [todoList]="todayTodoList"
-                         [isTodayTodoList]="true"
                          (removeTodoListEvent)="removeTodoList($event)"
                          (addTodoItemEvent)="addTodoItem($event)"
                          (removeTodoItemEvent)="removeTodoItem($event)"

@@ -2,7 +2,9 @@ export interface TodoList {
   id: string,
   title: string,
   todoItems: TodoItem[],
-  userId: string
+  userId: string,
+  createdAt: Date,
+  isTodayTodoList: boolean
 }
 
 export interface TodoItem {

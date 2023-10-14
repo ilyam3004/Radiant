@@ -5,8 +5,7 @@ namespace Api;
 
 public static class BuildExtensions
 {
-    public static WebApplication BuildWithOptions(
-        this WebApplicationBuilder builder)
+    public static WebApplication BuildWithOptions(this WebApplicationBuilder builder)
     {
         var app = builder.Build();
 
