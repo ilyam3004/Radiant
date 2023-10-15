@@ -12,7 +12,8 @@ export interface TodoItem {
   todoListId: string,
   priority: Priority,
   deadline: string | null,
-  createdAt: Date
+  createdAt: Date,
+  loading: boolean
 }
 
 export interface RemoveTodoListResponse {

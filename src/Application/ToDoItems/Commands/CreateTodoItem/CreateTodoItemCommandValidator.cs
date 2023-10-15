@@ -7,7 +7,6 @@ public class CreateTodoItemCommandValidator : AbstractValidator<CreateTodoItemCo
     public CreateTodoItemCommandValidator()
     {
         RuleFor(x => x.Priority)
-            .NotEmpty()
             .NotNull()
             .WithMessage("Priority is required");
 

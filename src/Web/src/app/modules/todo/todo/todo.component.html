@@ -5,26 +5,27 @@
       <div class="form-group mr-3 mb-0">
         <input type="text" class="form-control" placeholder="Enter a title of todolist" [(ngModel)]="todoListTitle" />
       </div>
-      <button type="button" class="btn btn-primary mr-3" (click)="createTodolist()">
+      <button [disabled]="newTodoLoading" class="btn btn-primary mr-3" (click)="createTodolist()">
+        <span *ngIf="newTodoLoading" class="spinner-border spinner-border-sm me-1"></span>
         Create
       </button>
     </div>
   </div>
-  <div *ngIf="loading">
+  <div *ngIf="fetchTodoListsLoading">
     <div class="d-flex justify-content-center" style="height: 65vh;">
       <div class="spinner-border text-secondary" role="status" style="margin: auto">
       </div>
     </div>
   </div>
-  <div *ngIf="!loading">
+  <div *ngIf="!fetchTodoListsLoading">
     <div class="row">
-      <div *ngIf="loading">
+      <div *ngIf="fetchTodoListsLoading">
         <div class="d-flex justify-content-center" style="height: 65vh;">
           <div class="spinner-border text-secondary" role="status" style="margin: auto">
           </div>
         </div>
       </div>
-      <div *ngIf="!loading">
+      <div *ngIf="!fetchTodoListsLoading">
         <div *ngIf="todoListsNotFound">
           <div class="not-found-container">
             TodoLists not found😢

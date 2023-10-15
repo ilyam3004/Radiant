@@ -2,7 +2,7 @@ import { TodoService } from "../../../core/services/todo.service";
 import { AlertService } from "../../../core/services/alert.service";
 import { AuthService } from "../../../core/services/auth.service";
 import { ActivatedRoute, Router } from '@angular/router';
-import {CreateTodoItemRequest, GetTodoListsResponse, TodoItem, TodoList} from 'src/app/core/models/todo';
+import {GetTodoListsResponse, TodoItem, TodoList} from 'src/app/core/models/todo';
 import { Component, OnInit } from '@angular/core';
 import { first } from "rxjs";
 
@@ -14,7 +14,8 @@ import { first } from "rxjs";
 export class TodoComponent implements OnInit {
   todoListTitle: string = "";
   todoLists: TodoList[] = [];
-  loading: boolean = false;
+  fetchTodoListsLoading: boolean = false;
+  newTodoLoading: boolean = false;
   todoListsNotFound: boolean = false;
 
   constructor(private authService: AuthService,
@@ -24,7 +25,7 @@ export class TodoComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
-    this.loading = true;
+    this.fetchTodoListsLoading = true;
     this.loadTodoLists();
   }
 
@@ -34,16 +35,17 @@ export class TodoComponent implements OnInit {
       .subscribe((response: GetTodoListsResponse) => {
           this.todoLists = response.todoLists;
           this.todoListsNotFound = this.todoLists.length === 0;
-          this.loading = false;
+          this.fetchTodoListsLoading = false;
         },
         (error) => {
           this.alertService.error(error,
             { keepAfterRouteChange: true, autoClose: true });
-          this.loading = false;
+          this.fetchTodoListsLoading = false;
         });
   }
 
   createTodolist() {
+    this.newTodoLoading = true;
     this.todoService.createTodoList({ title: this.todoListTitle })
       .subscribe({
         next: (todoList: TodoList) => {
@@ -51,10 +53,13 @@ export class TodoComponent implements OnInit {
             `Todo ${todoList.title} list created`,
             { keepAfterRouteChange: true, autoClose: true });
           this.todoLists.push(todoList);
+          this.newTodoLoading = false;
           this.todoListsNotFound = false;
+          this.todoListTitle = "";
         },
         error: error => {
           this.alertService.error(error);
+          this.newTodoLoading = false;
         }
       });
   }
@@ -75,47 +80,16 @@ export class TodoComponent implements OnInit {
       });
   }
 
-  private setNotFoundIfEmpty() {
-    return this.todoListsNotFound = this.todoLists.length === 0;
+  addTodoItem(todoList: TodoList) {
+    this.updateTodoList(todoList);
   }
 
-  addTodoItem(createRequest: CreateTodoItemRequest) {
-    this.todoService.addTodoItem(createRequest)
-      .subscribe({
-      next: (todoList: TodoList) => {
-        this.updateTodoList(todoList);
-      },
-      error: (error) => {
-        this.alertService.error(error,
-          { keepAfterRouteChange: true, autoClose: true });
-      }
-    });
+  removeTodoItem(todoList: TodoList) {
+    this.updateTodoList(todoList);
   }
 
-  removeTodoItem(todoItemId: string) {
-    this.todoService.removeTodoItem(todoItemId)
-      .subscribe({
-        next: (todoList: TodoList) => {
-          this.updateTodoList(todoList);
-        },
-        error: (error) => {
-          this.alertService.error(error,
-            { keepAfterRouteChange: true, autoClose: true });
-        }
-      });
-  }
-
-  toggleTodoItem(todoItemId: string) {
-    this.todoService.toggleTodoItem(todoItemId)
-      .subscribe({
-        next: (todoItem: TodoItem) => {
-          this.updateTodoItem(todoItem);
-        },
-        error: (error) => {
-          this.alertService.error(error,
-            { keepAfterRouteChange: true, autoClose: true });
-        }
-      });
+  toggleTodoItem(todoItem: TodoItem) {
+    this.updateTodoItem(todoItem);
   }
 
   logOut() {
@@ -134,7 +108,7 @@ export class TodoComponent implements OnInit {
       });
   }
 
-  updateTodoList(updatedTodoList: TodoList) {
+  private updateTodoList(updatedTodoList: TodoList) {
     const index = this.todoLists.findIndex((item) => item.id === updatedTodoList.id);
 
     if (index !== -1) {
@@ -142,7 +116,7 @@ export class TodoComponent implements OnInit {
     }
   }
 
-  updateTodoItem(updatedTodoItem: TodoItem) {
+  private updateTodoItem(updatedTodoItem: TodoItem) {
     const todoList = this.todoLists.find(
       (item) => item.id === updatedTodoItem.todoListId);
 
@@ -154,5 +128,9 @@ export class TodoComponent implements OnInit {
         todoList.todoItems[index] = updatedTodoItem;
       }
     }
+  }
+
+  private setNotFoundIfEmpty() {
+    this.todoListsNotFound = this.todoLists.length === 0;
   }
 }
