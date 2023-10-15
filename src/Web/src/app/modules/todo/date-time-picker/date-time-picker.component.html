@@ -5,7 +5,7 @@
   </div>
   <div class="modal-body">
     <div class="flex-container" style="margin-bottom: 3%">
-      <div *ngIf="!isTodayTodoList">
+      <div *ngIf="isTodayTodoList">
         <ngb-datepicker #dp [(ngModel)]="model" (navigate)="date = $event.next"/>
         <div style="margin-bottom: 5%"></div>
           <button class="btn btn-sm btn-outline-primary me-2" (click)="selectToday()">

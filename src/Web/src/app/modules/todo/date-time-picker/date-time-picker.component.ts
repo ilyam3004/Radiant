@@ -16,8 +16,7 @@ export class DateTimePickerComponent {
   selectedDateTime: string = "";
 
   constructor(private modalService: NgbModal,
-              private calendar: NgbCalendar) {
-  }
+              private calendar: NgbCalendar) { }
 
   selectToday() {
     this.model = this.calendar.getToday();

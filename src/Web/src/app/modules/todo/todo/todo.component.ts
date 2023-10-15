@@ -27,8 +27,8 @@ export class TodoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadTodoLists();
     this.loadTodayTodoList();
+    this.loadTodoLists();
   }
 
   private loadTodoLists() {
@@ -38,6 +38,7 @@ export class TodoComponent implements OnInit {
       .subscribe((response: GetTodoListsResponse) => {
           this.fetchTodoListsLoading = false;
           this.todoLists = response.todoLists;
+          console.log(this.todoLists)
           this.todoListsNotFound = this.todoLists.length === 0;
         },
         (error) => {
