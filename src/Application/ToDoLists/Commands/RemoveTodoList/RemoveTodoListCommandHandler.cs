@@ -35,7 +35,7 @@ public class RemoveTodoListCommandHandler
         }
         
         _unitOfWork.TodoLists.Remove(todoList.Id);
-        _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
         
         return new RemoveTodoListResult(
             Success.TodoList.Removed(todoList.Title));

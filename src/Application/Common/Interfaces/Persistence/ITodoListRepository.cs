@@ -8,5 +8,7 @@ public interface ITodoListRepository : IRepository<TodoList>
     Task<bool> TodoListExists(Guid todoListId);
     Task<List<TodoList>> GetUserTodoLists(Guid userId);
     Task<TodoList> GetUserTodayTodolist(Guid userId);
+    Task RemovePrevTodayTodoLists(Guid userId);
+    Task<TodoList> CreateNewTodayTodoList(Guid userId);
     Task<TodoList?> GetTodoListByIdWithItems(Guid todoListId);
 }

@@ -110,6 +110,7 @@ export class TodoComponent implements OnInit {
             this.todayTodoList = todoList;
           } else {
             this.updateTodoList(todoList);
+            this.reloadTodayTodoListIfDeadlineToday(createRequest.deadline);
           }
         },
         error: (error) => {
@@ -119,19 +120,19 @@ export class TodoComponent implements OnInit {
       });
   }
 
-  removeTodoItem(params: [string, boolean]) {
-    const todoItemId = params[0];
+  removeTodoItem(params: [TodoItem, boolean]) {
+    const todoItem = params[0];
     const isTodayTodoList = params[1];
 
-    this.todoService.removeTodoItem(todoItemId)
+    this.todoService.removeTodoItem(todoItem.id)
       .subscribe({
         next: (todoList: TodoList) => {
           if (isTodayTodoList) {
             this.todayTodoList = todoList;
           } else {
             this.updateTodoList(todoList);
+            this.reloadTodayTodoListIfDeadlineToday(todoItem.deadline);
           }
-          this.updateTodoList(todoList);
         },
         error: (error) => {
           this.alertService.error(error,
@@ -140,11 +141,18 @@ export class TodoComponent implements OnInit {
       });
   }
 
-  toggleTodoItem(todoItemId: string) {
+  toggleTodoItem(params: [string, boolean]) {
+    const todoItemId = params[0];
+    const isTodayTodoList = params[1];
+
     this.todoService.toggleTodoItem(todoItemId)
       .subscribe({
         next: (todoItem: TodoItem) => {
-          this.updateTodoItem(todoItem);
+          if (isTodayTodoList) {
+            this.updateTodayTodoListItem(todoItem)
+          } else {
+            this.updateTodoItem(todoItem);
+          }
         },
         error: (error) => {
           this.alertService.error(error,
@@ -189,5 +197,30 @@ export class TodoComponent implements OnInit {
         todoList.todoItems[index] = updatedTodoItem;
       }
     }
+  }
+
+  private updateTodayTodoListItem(updatedTodoItem: TodoItem) {
+    const index = this.todayTodoList.todoItems.findIndex(
+      (item) => item.id === updatedTodoItem.id);
+
+    if (index !== -1) {
+      this.todayTodoList.todoItems[index] = updatedTodoItem;
+    }
+  }
+
+  private reloadTodayTodoListIfDeadlineToday(deadline: string | null) {
+    if(deadline) {
+      if (this.isDeadLineToday(new Date(deadline))) {
+        this.loadTodayTodoList();
+      }
+    }
+  }
+
+  private isDeadLineToday(date: Date): boolean {
+    const currentDate = new Date();
+
+    return date.getDate() === currentDate.getDate()
+      && date.getMonth() === currentDate.getMonth()
+      && date.getFullYear() === currentDate.getFullYear();
   }
 }

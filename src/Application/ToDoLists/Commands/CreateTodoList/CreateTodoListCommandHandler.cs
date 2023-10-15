@@ -44,7 +44,7 @@ public class CreateTodoListCommandHandler
         };
         
         await _unitOfWork.TodoLists.AddAsync(todoList);
-        _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return new TodoListResult(todoList);
     }

@@ -1,13 +1,14 @@
 ﻿using Application.Common.Interfaces.Persistence;
 using Application.Models.TodoLists;
 using Domain.Common.Exceptions;
+using Domain.Common.Messages;
 using LanguageExt.Common;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.ToDoItems.Commands.CreateTodoItem;
 
-public class CreateTodoItemCommandHandler 
+public class CreateTodoItemCommandHandler
     : IRequestHandler<CreateTodoItemCommand, Result<TodoListResult>>
 {
     private readonly IUnitOfWork _unitOfWork;
@@ -18,7 +19,7 @@ public class CreateTodoItemCommandHandler
     }
 
     public async Task<Result<TodoListResult>> Handle(
-        CreateTodoItemCommand command, 
+        CreateTodoItemCommand command,
         CancellationToken cancellationToken)
     {
         if (!await _unitOfWork.TodoLists.TodoListExists(command.TodoListId))
@@ -37,12 +38,28 @@ public class CreateTodoItemCommandHandler
             CreatedAt = DateTime.UtcNow,
             TodoListId = command.TodoListId
         });
-        
-        _unitOfWork.SaveChangesAsync();
+
+        await _unitOfWork.SaveChangesAsync();
 
         var todoList = await _unitOfWork.TodoLists
             .GetTodoListByIdWithItems(command.TodoListId);
-        
-        return new TodoListResult(todoList!);
+
+        if (todoList.IsTodayTodoList)
+            AddItemsWithTodayDeadline(todoList);
+
+        return new TodoListResult(todoList);
+    }
+
+    private async Task AddItemsWithTodayDeadline(TodoList todayTodolist)
+    {
+        var userTodoLists = await _unitOfWork.TodoLists
+            .GetUserTodoLists(todayTodolist.UserId);
+
+        var itemsToAdd = userTodoLists
+            .SelectMany(todoList => todoList.TodoItems
+                .Where(ti => ti.Deadline != null && ti.Deadline.Value.Date == DateTime.UtcNow.Date))
+            .ToList();
+
+        todayTodolist.TodoItems.AddRange(itemsToAdd);
     }
 }

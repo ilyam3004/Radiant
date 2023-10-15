@@ -4,11 +4,12 @@ using Domain.Entities;
 
 namespace Infrastructure.Persistence.Repositories;
 
-internal sealed class TodoListRepository : 
+internal sealed class TodoListRepository :
     Repository<TodoList>, ITodoListRepository
 {
     public TodoListRepository(TodoDbContext context) : base(context)
-    { }
+    {
+    }
 
     public async Task<bool> IsTitleExists(string title)
     {
@@ -25,7 +26,7 @@ internal sealed class TodoListRepository :
     public async Task<List<TodoList>> GetUserTodoLists(Guid userId)
     {
         return await DbContext.TodoLists
-            .Include(tl => 
+            .Include(tl =>
                 tl.TodoItems.OrderBy(ti => ti.CreatedAt))
             .Where(tl => tl.UserId == userId && !tl.IsTodayTodoList)
             .ToListAsync();
@@ -33,16 +34,11 @@ internal sealed class TodoListRepository :
 
     public async Task<TodoList> GetUserTodayTodolist(Guid userId)
     {
-        var todayTodolist = await DbContext.TodoLists
+        return await DbContext.TodoLists
             .Include(tl => tl.TodoItems)
             .FirstOrDefaultAsync(tl => tl.UserId == userId
                                        && tl.IsTodayTodoList == true
                                        && tl.CreatedAt.Date == DateTime.UtcNow.Date);
-        
-        if (todayTodolist is not null) return todayTodolist;
-        
-        var newTodayTodoList = await CreateTodayTodoList(userId);
-        return newTodayTodoList;
     }
 
     public async Task<TodoList?> GetTodoListByIdWithItems(Guid todoListId)
@@ -52,7 +48,16 @@ internal sealed class TodoListRepository :
             .FirstOrDefaultAsync(tl => tl.Id == todoListId);
     }
     
-    private async Task<TodoList> CreateTodayTodoList(Guid userId)
+    public async Task RemovePrevTodayTodoLists(Guid userId)
+    {
+        var prevTodoLists = await DbContext.TodoLists
+            .Where(tl => tl.UserId == userId && !tl.IsTodayTodoList)
+            .ToListAsync();
+        
+        DbContext.RemoveRange(prevTodoLists);
+    }
+
+    public async Task<TodoList> CreateNewTodayTodoList(Guid userId)
     {
         var todayTodolist = new TodoList
         {
@@ -63,7 +68,7 @@ internal sealed class TodoListRepository :
             CreatedAt = DateTime.UtcNow,
             IsTodayTodoList = true
         };
-        
+
         await AddAsync(todayTodolist);
 
         return todayTodolist;

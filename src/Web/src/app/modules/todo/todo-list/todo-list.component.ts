@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {CreateTodoItemRequest, Priority, TodoItem, TodoList} from "../../../core/models/todo";
-import {TodoService} from "../../../core/services/todo.service";
 import {AlertService} from "../../../core/services/alert.service";
 import {DatePipe} from "@angular/common";
 
@@ -13,8 +12,8 @@ export class TodoListComponent {
   @Input() todoList!: TodoList;
   @Output() removeTodoListEvent = new EventEmitter<string>();
   @Output() addTodoItemEvent = new EventEmitter<[CreateTodoItemRequest, boolean]>();
-  @Output() removeTodoItemEvent = new EventEmitter<[string, boolean]>();
-  @Output() toggleTodoItemEvent = new EventEmitter<string>();
+  @Output() removeTodoItemEvent = new EventEmitter<[TodoItem, boolean]>();
+  @Output() toggleTodoItemEvent = new EventEmitter<[string, boolean]>();
   priorities: string[] = ["🟢", "🟡", "🔴"];
 
   selectedPriority: Priority | null = null;
@@ -46,11 +45,11 @@ export class TodoListComponent {
   }
 
   toggleTodoItem(itemId: string) {
-    this.toggleTodoItemEvent.emit(itemId);
+    this.toggleTodoItemEvent.emit([itemId, this.todoList.isTodayTodoList]);
   }
 
-  removeTodoItem(todoItemId: string) {
-    this.removeTodoItemEvent.emit([todoItemId, this.todoList.isTodayTodoList]);
+  removeTodoItem(todoItem: TodoItem) {
+    this.removeTodoItemEvent.emit([todoItem, this.todoList.isTodayTodoList]);
   }
 
   handlePriorityChange(priority: Priority): void {
