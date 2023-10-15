@@ -36,7 +36,7 @@ public class RegisterCommandHandler
         };
         
         await _unitOfWork.Users.AddAsync(user);
-        _unitOfWork.SaveChanges();
+        _unitOfWork.SaveChangesAsync();
         
         return new RegisterResult(user);
     }

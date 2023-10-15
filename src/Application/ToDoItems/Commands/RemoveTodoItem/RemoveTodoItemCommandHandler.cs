@@ -29,7 +29,7 @@ public class RemoveTodoItemCommandHandler
         }
         
         _unitOfWork.TodoItems.Remove(command.TodoItemId);
-        _unitOfWork.SaveChanges();
+        _unitOfWork.SaveChangesAsync();
         
         var todoList = await _unitOfWork.TodoLists
             .GetTodoListByIdWithItems(todoItem.TodoListId);

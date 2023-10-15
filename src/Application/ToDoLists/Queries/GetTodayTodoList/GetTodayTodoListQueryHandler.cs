@@ -34,11 +34,10 @@ public class GetTodayTodoListQueryHandler : IRequestHandler<GetTodayTodoListQuer
 
         var todayTodolist = await _unitOfWork.TodoLists
             .GetUserTodayTodolist(userId);
-        _unitOfWork.SaveChanges();
+        await _unitOfWork.SaveChangesAsync();
 
-        AddTodoItemsWithTodayDeadline(todayTodolist);
-        _unitOfWork.SaveChanges();
-
+        //AddTodoItemsWithTodayDeadline(todayTodolist);
+        
         return new TodoListResult(todayTodolist);
     }
 
@@ -46,10 +45,12 @@ public class GetTodayTodoListQueryHandler : IRequestHandler<GetTodayTodoListQuer
     {
         var userTodoLists = await _unitOfWork.TodoLists
             .GetUserTodoLists(todayTodolist.UserId);
+        
+        var itemsToAdd = userTodoLists
+            .SelectMany(todoList => todoList.TodoItems
+                .Where(ti => ti.Deadline != null && ti.Deadline.Value.Date == DateTime.UtcNow.Date))
+            .ToList();
 
-        todayTodolist.TodoItems
-            .AddRange(userTodoLists.SelectMany(todoList => 
-                todoList.TodoItems.Where(ti => 
-                    ti.Deadline != null && ti.Deadline.Value.Date == DateTime.UtcNow.Date)));
+        todayTodolist.TodoItems.AddRange(itemsToAdd);
     }
 }

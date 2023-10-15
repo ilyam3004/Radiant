@@ -38,7 +38,7 @@ public class CreateTodoItemCommandHandler
             TodoListId = command.TodoListId
         });
         
-        _unitOfWork.SaveChanges();
+        _unitOfWork.SaveChangesAsync();
 
         var todoList = await _unitOfWork.TodoLists
             .GetTodoListByIdWithItems(command.TodoListId);

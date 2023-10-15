@@ -19,9 +19,9 @@ public class UnitOfWork : IUnitOfWork
     public ITodoListRepository TodoLists { get; }
     public ITodoItemRepository TodoItems { get; }
     
-    public int SaveChanges()
+    public async Task<int> SaveChangesAsync()
     {
-        return _context.SaveChanges();
+        return await _context.SaveChangesAsync();
     }
 
     private void Dispose(bool disposing)
