@@ -31,11 +31,13 @@ public class RemoveTodoItemCommandHandler
 
         _unitOfWork.TodoItems.Remove(command.TodoItemId);
         await _unitOfWork.SaveChangesAsync();
+        
         var todoList = await _unitOfWork.TodoLists
             .GetTodoListByIdWithItems(todoItem.TodoListId);
+        SortTodoItemsByDate(todoList);
         
         if (todoList.IsTodayTodoList)
-            AddItemsWithTodayDeadline(todoList);
+            await AddItemsWithTodayDeadline(todoList);
 
         return new TodoListResult(todoList);
     }
@@ -51,5 +53,10 @@ public class RemoveTodoItemCommandHandler
             .ToList();
 
         todayTodolist.TodoItems.AddRange(itemsToAdd);
+        SortTodoItemsByDate(todayTodolist);
     }
+    
+    private void SortTodoItemsByDate(TodoList todoList)
+        => todoList.TodoItems = todoList.TodoItems
+            .OrderByDescending(todoItem => todoItem.CreatedAt).ToList(); 
 }

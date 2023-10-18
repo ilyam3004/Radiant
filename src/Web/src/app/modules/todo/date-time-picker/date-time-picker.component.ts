@@ -23,7 +23,7 @@ export class DateTimePickerComponent {
   }
 
   sendValueAndCloseModal(modal: any) {
-    if (this.isTodayTodoList === true) {
+    if (this.isTodayTodoList) {
       this.setTodayDate();
     }
 

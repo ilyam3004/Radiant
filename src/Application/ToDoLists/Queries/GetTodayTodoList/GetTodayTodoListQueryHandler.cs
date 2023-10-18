@@ -38,17 +38,16 @@ public class GetTodayTodoListQueryHandler : IRequestHandler<GetTodayTodoListQuer
         if (todayTodolist is null)
         {
             _unitOfWork.TodoLists.RemovePrevTodayTodoLists(userId);
-            await _unitOfWork.SaveChangesAsync();
             todayTodolist = await _unitOfWork.TodoLists.CreateNewTodayTodoList(userId);
             await _unitOfWork.SaveChangesAsync();
         }
 
-        todayTodolist = await AddTodoItemsWithTodayDeadline(todayTodolist);
+        await AddTodoItemsWithTodayDeadline(todayTodolist);
         
         return new TodoListResult(todayTodolist);
     }
 
-    private async Task<TodoList> AddTodoItemsWithTodayDeadline(TodoList todayTodolist)
+    private async Task AddTodoItemsWithTodayDeadline(TodoList todayTodolist)
     {
         var userTodoLists = await _unitOfWork.TodoLists
             .GetUserTodoLists(todayTodolist.UserId);
@@ -59,7 +58,10 @@ public class GetTodayTodoListQueryHandler : IRequestHandler<GetTodayTodoListQuer
             .ToList();
     
         todayTodolist.TodoItems.AddRange(itemsToAdd);
-    
-        return todayTodolist;
+        SortTodoItemsByDate(todayTodolist);
     }
+    
+    private void SortTodoItemsByDate(TodoList todoList)
+        => todoList.TodoItems = todoList.TodoItems
+            .OrderByDescending(todoItem => todoItem.CreatedAt).ToList();
 }

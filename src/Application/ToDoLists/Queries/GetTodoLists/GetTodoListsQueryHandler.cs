@@ -2,6 +2,8 @@
 using Application.Common.Interfaces.Persistence;
 using Application.Models.TodoLists;
 using Domain.Common.Exceptions;
+using Domain.Common.Messages;
+using Domain.Entities;
 using LanguageExt.Common;
 using MediatR;
 
@@ -33,7 +35,20 @@ public class GetTodoListsQueryHandler
 
         var userTodos = await _unitOfWork.TodoLists
             .GetUserTodoLists(userId!);
+        
+        SortTodoListsAndTodoItemsByDate(userTodos);
 
         return new GetTodoListsResult(userTodos);
+    }
+    
+    private void SortTodoListsAndTodoItemsByDate(List<TodoList> todoLists)
+    {
+        todoLists.ForEach(todoList =>
+        {
+            todoList.TodoItems = todoList.TodoItems
+                .OrderBy(todoItem => todoItem.CreatedAt).ToList();
+        });
+
+        todoLists = todoLists.OrderBy(tl => tl.CreatedAt).ToList();
     }
 }

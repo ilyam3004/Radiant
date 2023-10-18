@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {CreateTodoItemRequest, Priority, TodoItem, TodoList} from "../../../core/models/todo";
+import {TodoService} from "../../../core/services/todo.service";
 import {AlertService} from "../../../core/services/alert.service";
 import {DatePipe} from "@angular/common";
 
@@ -11,16 +12,17 @@ import {DatePipe} from "@angular/common";
 export class TodoListComponent {
   @Input() todoList!: TodoList;
   @Output() removeTodoListEvent = new EventEmitter<string>();
-  @Output() addTodoItemEvent = new EventEmitter<[CreateTodoItemRequest, boolean]>();
-  @Output() removeTodoItemEvent = new EventEmitter<[TodoItem, boolean]>();
-  @Output() toggleTodoItemEvent = new EventEmitter<[string, boolean]>();
+  @Output() addTodoItemEvent = new EventEmitter<[CreateTodoItemRequest, TodoList, boolean]>();
+  @Output() removeTodoItemEvent = new EventEmitter<[TodoItem, TodoList, boolean]>();
+  @Output() toggleTodoItemEvent = new EventEmitter<[TodoItem, boolean]>();
   priorities: string[] = ["🟢", "🟡", "🔴"];
-
+  newTodoItemLoading: boolean = false;
   selectedPriority: Priority | null = null;
   deadline: string | null = null;
   note: string = "";
 
-  constructor(private alertService: AlertService,
+  constructor(private todoService: TodoService,
+              private alertService: AlertService,
               private datePipe: DatePipe) { }
 
   removeTodoList() {
@@ -28,28 +30,68 @@ export class TodoListComponent {
   }
 
   addTodoItem() {
-    if (this.selectedPriority !== null) {
-      this.addTodoItemEvent.emit(
-        [
-          {
-            note: this.note,
-            todoListId: this.todoList!.id,
-            priority: this.selectedPriority,
-            deadline: this.deadline == null ? null : new Date(this.deadline).toISOString()
-          },
-          this.todoList.isTodayTodoList
-        ])
-    } else {
+    if (this.selectedPriority === null) {
       this.alertService.error("Please select a priority");
+      return;
     }
+    if(!this.note){
+      this.alertService.error("Please enter a note");
+      this.resetInputFields();
+      return;
+    }
+
+    var createRequest: CreateTodoItemRequest = {
+      note: this.note,
+      todoListId: this.todoList!.id,
+      priority: this.selectedPriority,
+      deadline: this.deadline == null ? null : new Date(this.deadline).toISOString()
+    }
+
+    this.newTodoItemLoading = true;
+    this.todoService.addTodoItem(createRequest)
+      .subscribe({
+        next: (todoList: TodoList) => {
+          this.addTodoItemEvent.emit([createRequest, todoList, this.todoList.isTodayTodoList]);
+          this.newTodoItemLoading = false;
+          this.resetInputFields();
+        },
+        error: (error) => {
+          this.newTodoItemLoading = false;
+          this.alertService.error(error,
+            {keepAfterRouteChange: true, autoClose: true});
+        }
+      });
   }
 
   toggleTodoItem(itemId: string) {
-    this.toggleTodoItemEvent.emit([itemId, this.todoList.isTodayTodoList]);
+    this.changeTodoItemLoadingState(itemId, true);
+    this.todoService.toggleTodoItem(itemId)
+      .subscribe({
+        next: (todoItem: TodoItem) => {
+          this.changeTodoItemLoadingState(itemId, false);
+          this.toggleTodoItemEvent.emit([todoItem, this.todoList.isTodayTodoList]);
+        },
+        error: (error) => {
+          this.changeTodoItemLoadingState(itemId, false);
+          this.alertService.error(error,
+            { keepAfterRouteChange: true, autoClose: true });
+        }
+      });
   }
 
   removeTodoItem(todoItem: TodoItem) {
-    this.removeTodoItemEvent.emit([todoItem, this.todoList.isTodayTodoList]);
+    this.changeTodoItemLoadingState(todoItem.id, true);
+    this.todoService.removeTodoItem(todoItem.id)
+      .subscribe({
+        next: (todoList: TodoList) => {
+          this.removeTodoItemEvent.emit([todoItem, todoList, this.todoList.isTodayTodoList]);
+        },
+        error: (error) => {
+          this.changeTodoItemLoadingState(todoItem.id, false);
+          this.alertService.error(error,
+            { keepAfterRouteChange: true, autoClose: true });
+        }
+      });
   }
 
   handlePriorityChange(priority: Priority): void {
@@ -82,7 +124,7 @@ export class TodoListComponent {
     }
 
     if (this.isDeadLineTomorrow(date)) {
-      return 'Tomorrow';
+      return 'Tomorrow at ' + this.datePipe.transform(isoDate, 'HH:mm') ?? '-';
     }
 
     if (this.isDeadLineToday(date)) {
@@ -124,5 +166,16 @@ export class TodoListComponent {
   isYearsEqual(date: Date): boolean {
     const currentDate = new Date();
     return date.getFullYear() == currentDate.getFullYear();
+  }
+
+  private changeTodoItemLoadingState(itemId: string, state: boolean) {
+    this.todoList.todoItems
+      .find((item) => item.id === itemId)!.loading = state;
+  }
+
+  private resetInputFields() {
+    this.selectedPriority = null;
+    this.deadline = null;
+    this.note = "";
   }
 }

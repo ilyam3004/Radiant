@@ -43,9 +43,10 @@ public class CreateTodoItemCommandHandler
 
         var todoList = await _unitOfWork.TodoLists
             .GetTodoListByIdWithItems(command.TodoListId);
-
+        SortTodoItemsByDate(todoList);
+        
         if (todoList.IsTodayTodoList)
-            AddItemsWithTodayDeadline(todoList);
+            await AddItemsWithTodayDeadline(todoList);
 
         return new TodoListResult(todoList);
     }
@@ -61,5 +62,10 @@ public class CreateTodoItemCommandHandler
             .ToList();
 
         todayTodolist.TodoItems.AddRange(itemsToAdd);
+        SortTodoItemsByDate(todayTodolist);
     }
+
+    private void SortTodoItemsByDate(TodoList todoList)
+        => todoList.TodoItems = todoList.TodoItems
+            .OrderByDescending(ti => ti.CreatedAt).ToList();
 }

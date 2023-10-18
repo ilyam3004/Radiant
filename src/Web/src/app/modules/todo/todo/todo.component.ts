@@ -17,6 +17,7 @@ export class TodoComponent implements OnInit {
   todoLists: TodoList[] = [];
   fetchTodoListsLoading: boolean = false;
   fetchTodayTodoListLoading: boolean = false;
+  newTodoLoading: boolean = false;
   todoListsNotFound: boolean = false;
 
   constructor(private authService: AuthService,
@@ -38,7 +39,6 @@ export class TodoComponent implements OnInit {
       .subscribe((response: GetTodoListsResponse) => {
           this.fetchTodoListsLoading = false;
           this.todoLists = response.todoLists;
-          console.log(this.todoLists)
           this.todoListsNotFound = this.todoLists.length === 0;
         },
         (error) => {
@@ -64,6 +64,7 @@ export class TodoComponent implements OnInit {
   }
 
   createTodolist() {
+    this.newTodoLoading = true;
     this.todoService.createTodoList({title: this.todoListTitle})
       .subscribe({
         next: (todoList: TodoList) => {
@@ -71,10 +72,13 @@ export class TodoComponent implements OnInit {
             `Todo ${todoList.title} list created`,
             {keepAfterRouteChange: true, autoClose: true});
           this.todoLists.push(todoList);
+          this.newTodoLoading = false;
           this.todoListsNotFound = false;
+          this.todoListTitle = "";
         },
         error: error => {
           this.alertService.error(error);
+          this.newTodoLoading = false;
         }
       });
   }
@@ -99,66 +103,42 @@ export class TodoComponent implements OnInit {
     return this.todoListsNotFound = this.todoLists.length === 0;
   }
 
-  addTodoItem(params: [CreateTodoItemRequest, boolean]) {
-    var createRequest = params[0];
-    var isTodayTodoList = params[1];
+  addTodoItem(params: [CreateTodoItemRequest, TodoList, boolean]) {
+    const createRequest = params[0];
+    const todoList = params[1];
+    const isTodayTodoList = params[2];
 
-    this.todoService.addTodoItem(createRequest)
-      .subscribe({
-        next: (todoList: TodoList) => {
-          if (isTodayTodoList) {
-            this.todayTodoList = todoList;
-          } else {
-            this.updateTodoList(todoList);
-            this.reloadTodayTodoListIfDeadlineToday(createRequest.deadline);
-          }
-        },
-        error: (error) => {
-          this.alertService.error(error,
-            {keepAfterRouteChange: true, autoClose: true});
-        }
-      });
+    if (isTodayTodoList) {
+      this.todayTodoList = todoList;
+    } else {
+      this.updateTodoList(todoList);
+      this.reloadTodayTodoListIfDeadlineToday(createRequest.deadline);
+    }
   }
 
-  removeTodoItem(params: [TodoItem, boolean]) {
+  removeTodoItem(params: [TodoItem, TodoList, boolean]) {
+    const todoItem = params[0];
+    const todoList = params[1];
+    const isTodayTodoList = params[2];
+
+    if (isTodayTodoList) {
+      this.todayTodoList = todoList;
+    } else {
+      this.updateTodoList(todoList);
+      this.reloadTodayTodoListIfDeadlineToday(todoItem.deadline);
+    }
+  }
+
+  toggleTodoItem(params: [TodoItem, boolean]) {
     const todoItem = params[0];
     const isTodayTodoList = params[1];
 
-    this.todoService.removeTodoItem(todoItem.id)
-      .subscribe({
-        next: (todoList: TodoList) => {
-          if (isTodayTodoList) {
-            this.todayTodoList = todoList;
-          } else {
-            this.updateTodoList(todoList);
-            this.reloadTodayTodoListIfDeadlineToday(todoItem.deadline);
-          }
-        },
-        error: (error) => {
-          this.alertService.error(error,
-            {keepAfterRouteChange: true, autoClose: true});
-        }
-      });
-  }
-
-  toggleTodoItem(params: [string, boolean]) {
-    const todoItemId = params[0];
-    const isTodayTodoList = params[1];
-
-    this.todoService.toggleTodoItem(todoItemId)
-      .subscribe({
-        next: (todoItem: TodoItem) => {
-          if (isTodayTodoList) {
-            this.updateTodayTodoListItem(todoItem)
-          } else {
-            this.updateTodoItem(todoItem);
-          }
-        },
-        error: (error) => {
-          this.alertService.error(error,
-            {keepAfterRouteChange: true, autoClose: true});
-        }
-      });
+    if (isTodayTodoList) {
+      this.updateTodayTodoListItem(todoItem)
+    } else {
+      this.updateTodoItem(todoItem);
+      this.reloadTodayTodoListIfDeadlineToday(todoItem.deadline);
+    }
   }
 
   logOut() {
@@ -177,7 +157,7 @@ export class TodoComponent implements OnInit {
       });
   }
 
-  updateTodoList(updatedTodoList: TodoList) {
+  private updateTodoList(updatedTodoList: TodoList) {
     const index = this.todoLists.findIndex((item) => item.id === updatedTodoList.id);
 
     if (index !== -1) {
@@ -185,7 +165,7 @@ export class TodoComponent implements OnInit {
     }
   }
 
-  updateTodoItem(updatedTodoItem: TodoItem) {
+  private updateTodoItem(updatedTodoItem: TodoItem) {
     const todoList = this.todoLists.find(
       (item) => item.id === updatedTodoItem.todoListId);
 
@@ -209,7 +189,7 @@ export class TodoComponent implements OnInit {
   }
 
   private reloadTodayTodoListIfDeadlineToday(deadline: string | null) {
-    if(deadline) {
+    if (deadline) {
       if (this.isDeadLineToday(new Date(deadline))) {
         this.loadTodayTodoList();
       }
