@@ -5,5 +5,5 @@ public interface IUnitOfWork : IDisposable
     IUserRepository Users { get; }
     ITodoListRepository TodoLists { get; }
     ITodoItemRepository TodoItems { get; }
-    int SaveChanges();
+    Task<int> SaveChangesAsync();
 }

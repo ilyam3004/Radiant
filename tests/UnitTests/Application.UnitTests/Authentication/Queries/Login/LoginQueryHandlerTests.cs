@@ -4,6 +4,7 @@ using Application.Common.Interfaces.Persistence;
 using Application.Authentication.Services;
 using Application.Authentication.Queries;
 using System.Security.Authentication;
+using Application.Models.Authentication;
 using Domain.Common.Exceptions;
 using FluentAssertions;
 using Domain.Entities;
@@ -45,7 +46,7 @@ public class LoginQueryHandlerTests
 
         _mockUnitOfWork.Verify(m => m.Users.GetByEmail(query.Email),
             Times.Once);
-        _mockAuthService.Verify(m => m.Login(query),
+        _mockAuthService.Verify(m => m.Login(It.IsAny<AuthRequest>()),
             Times.Once);
     }
 
@@ -71,7 +72,7 @@ public class LoginQueryHandlerTests
         _mockUnitOfWork.Verify(m =>
             m.Users.GetByEmail(query.Email), Times.Once);
         _mockAuthService.Verify(m =>
-            m.Login(query), Times.Never);
+            m.Login(It.IsAny<AuthRequest>()), Times.Never);
     }
 
     [Fact]
@@ -96,6 +97,6 @@ public class LoginQueryHandlerTests
         _mockUnitOfWork.Verify(m =>
             m.Users.GetByEmail(query.Email), Times.Once);
         _mockAuthService.Verify(m =>
-            m.Login(query), Times.Never);
+            m.Login(It.IsAny<AuthRequest>()), Times.Never);
     }
 }

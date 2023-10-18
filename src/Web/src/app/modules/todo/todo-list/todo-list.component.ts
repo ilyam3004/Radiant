@@ -12,10 +12,9 @@ import {DatePipe} from "@angular/common";
 export class TodoListComponent {
   @Input() todoList!: TodoList;
   @Output() removeTodoListEvent = new EventEmitter<string>();
-  @Output() addTodoItemEvent = new EventEmitter<TodoList>();
-  @Output() removeTodoItemEvent = new EventEmitter<TodoList>();
-  @Output() toggleTodoItemEvent = new EventEmitter<TodoItem>();
-
+  @Output() addTodoItemEvent = new EventEmitter<[CreateTodoItemRequest, TodoList, boolean]>();
+  @Output() removeTodoItemEvent = new EventEmitter<[TodoItem, TodoList, boolean]>();
+  @Output() toggleTodoItemEvent = new EventEmitter<[TodoItem, boolean]>();
   priorities: string[] = ["🟢", "🟡", "🔴"];
   newTodoItemLoading: boolean = false;
   selectedPriority: Priority | null = null;
@@ -35,6 +34,12 @@ export class TodoListComponent {
       this.alertService.error("Please select a priority");
       return;
     }
+    if(!this.note){
+      this.alertService.error("Please enter a note");
+      this.resetInputFields();
+      return;
+    }
+
     var createRequest: CreateTodoItemRequest = {
       note: this.note,
       todoListId: this.todoList!.id,
@@ -46,8 +51,9 @@ export class TodoListComponent {
     this.todoService.addTodoItem(createRequest)
       .subscribe({
         next: (todoList: TodoList) => {
-          this.addTodoItemEvent.emit(todoList);
+          this.addTodoItemEvent.emit([createRequest, todoList, this.todoList.isTodayTodoList]);
           this.newTodoItemLoading = false;
+          this.resetInputFields();
         },
         error: (error) => {
           this.newTodoItemLoading = false;
@@ -63,7 +69,7 @@ export class TodoListComponent {
       .subscribe({
         next: (todoItem: TodoItem) => {
           this.changeTodoItemLoadingState(itemId, false);
-          this.toggleTodoItemEvent.emit(todoItem);
+          this.toggleTodoItemEvent.emit([todoItem, this.todoList.isTodayTodoList]);
         },
         error: (error) => {
           this.changeTodoItemLoadingState(itemId, false);
@@ -73,15 +79,15 @@ export class TodoListComponent {
       });
   }
 
-  removeTodoItem(todoItemId: string) {
-    this.changeTodoItemLoadingState(todoItemId, true);
-    this.todoService.removeTodoItem(todoItemId)
+  removeTodoItem(todoItem: TodoItem) {
+    this.changeTodoItemLoadingState(todoItem.id, true);
+    this.todoService.removeTodoItem(todoItem.id)
       .subscribe({
         next: (todoList: TodoList) => {
-          this.removeTodoItemEvent.emit(todoList);
+          this.removeTodoItemEvent.emit([todoItem, todoList, this.todoList.isTodayTodoList]);
         },
         error: (error) => {
-          this.changeTodoItemLoadingState(todoItemId, false);
+          this.changeTodoItemLoadingState(todoItem.id, false);
           this.alertService.error(error,
             { keepAfterRouteChange: true, autoClose: true });
         }
@@ -165,5 +171,11 @@ export class TodoListComponent {
   private changeTodoItemLoadingState(itemId: string, state: boolean) {
     this.todoList.todoItems
       .find((item) => item.id === itemId)!.loading = state;
+  }
+
+  private resetInputFields() {
+    this.selectedPriority = null;
+    this.deadline = null;
+    this.note = "";
   }
 }

@@ -10,5 +10,6 @@ public static partial class Constants
         public const string WrongPasswordHash = "$2a$12$kYjwqxC8qAr6Mlhq0kwAR.zM7ijGxYaL.fGC2EGyaFiHDZftHj1e2";
         public const string Username = "username";
         public const string Token = "token";
+        public static readonly Guid UserIdClaim = Guid.NewGuid();
     }
 }

@@ -4,4 +4,6 @@ public record TodoListResponse(
     Guid Id,
     string Title,
     List<TodoItemResponse> TodoItems,
-    Guid UserId);
+    Guid UserId,
+    DateTime CreatedAt,
+    bool IsTodayTodoList);

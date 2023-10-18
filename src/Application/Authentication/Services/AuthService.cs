@@ -44,7 +44,7 @@ public class AuthService : IAuthService
     }
 
     public List<UserClaim> GetUserClaims()
-        => _httpContextAccessor.HttpContext
+        => _httpContextAccessor.HttpContext!
             .User
             .Claims
             .Select(x => new UserClaim(x.Type, x.Value))

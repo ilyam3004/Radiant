@@ -26,7 +26,7 @@ public class RegisterCommandHandlerTests
     {
         //Arrange
         var registerCommand = RegisterCommandUtils.CreateRegisterCommand();
-        _mockUnitOfWork.Setup(m => m.Users.UserExists(
+        _mockUnitOfWork.Setup(m => m.Users.UserExistsByEmail(
             registerCommand.Email)).ReturnsAsync(false);
         
         //Act
@@ -49,7 +49,7 @@ public class RegisterCommandHandlerTests
         var registerCommand = RegisterCommandUtils.CreateRegisterCommand();
 
         _mockUnitOfWork.Setup(m => 
-            m.Users.UserExists(registerCommand.Email)).
+            m.Users.UserExistsByEmail(registerCommand.Email)).
             ReturnsAsync(true);
         
         //Act

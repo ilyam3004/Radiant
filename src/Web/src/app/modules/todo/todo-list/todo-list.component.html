@@ -18,7 +18,8 @@
     <div style="margin-right: 2%"></div>
     <priority-picker (selectPriorityEvent)="handlePriorityChange($event)"/>
     <div style="margin-right: 2%"></div>
-    <date-time-picker (valueChange)="handleDateTimeChange($event)"/>
+    <date-time-picker (valueChange)="handleDateTimeChange($event)"
+                      [isTodayTodoList]="todoList.isTodayTodoList" />
   </div>
   <div class="table-wrapper">
     <table class="table table-hover table-bordered">
@@ -59,7 +60,7 @@
             <div *ngIf="!item.loading">
               <button class="btn btn-close p-0"
                       style="font-size: 12px; margin-left: 30%;"
-                      (click)="removeTodoItem(item.id)">
+                      (click)="removeTodoItem(item)">
               </button>
             </div>
           </td>

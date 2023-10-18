@@ -3,7 +3,7 @@ using Domain.Entities;
 using LanguageExt.Common;
 using MediatR;
 
-namespace Application.ToDoItems.Commands;
+namespace Application.ToDoItems.Commands.CreateTodoItem;
 
 public record CreateTodoItemCommand(
     string Note,

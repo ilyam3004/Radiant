@@ -1,8 +1,6 @@
-﻿using Application.Authentication.Services;
-using Application.Common.Behaviors;
-using Application.Common.Interfaces.Persistence;
+﻿using Application.Common.Interfaces.Persistence;
+using Application.Authentication.Services;
 using Application.Models.TodoLists;
-using Domain.Common;
 using Domain.Common.Exceptions;
 using Domain.Common.Messages;
 using LanguageExt.Common;
@@ -37,7 +35,7 @@ public class RemoveTodoListCommandHandler
         }
         
         _unitOfWork.TodoLists.Remove(todoList.Id);
-        _unitOfWork.SaveChanges();
+        await _unitOfWork.SaveChangesAsync();
         
         return new RemoveTodoListResult(
             Success.TodoList.Removed(todoList.Title));

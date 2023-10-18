@@ -32,7 +32,7 @@ public class ToggleTodoItemCommandHandler :
         todoItem.Done = !todoItem.Done;
 
         _unitUnitOfWork.TodoItems.Update(todoItem);
-        _unitUnitOfWork.SaveChanges();
+        await _unitUnitOfWork.SaveChangesAsync();
 
         return new TodoItemResult(todoItem);
     }

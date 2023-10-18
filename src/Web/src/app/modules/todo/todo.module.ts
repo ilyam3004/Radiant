@@ -6,7 +6,7 @@ import {AuthGuard} from "../../helpers/auth.guard";
 import {TodoListComponent} from './todo-list/todo-list.component';
 import {FormsModule} from '@angular/forms';
 import {PriorityPickerComponent} from './priority-picker/priority-picker.component';
-import {NgbDatepickerModule, NgbDropdownModule, NgbTimepickerModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbDatepickerModule, NgbDropdownModule, NgbNavModule, NgbTimepickerModule} from '@ng-bootstrap/ng-bootstrap';
 import {DateTimePickerComponent} from './date-time-picker/date-time-picker.component';
 import {ApiInterceptor} from "../../helpers/api.interceptor";
 import {ErrorInterceptor} from "../../helpers/error.interceptor";
@@ -27,6 +27,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     NgbDropdownModule,
     NgbDatepickerModule,
     NgbTimepickerModule,
+    NgbNavModule
   ],
   providers: [AuthGuard, DatePipe,
     {provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true},
