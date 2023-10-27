@@ -32,7 +32,7 @@ internal sealed class TodoListRepository :
             .ToListAsync();
     }
 
-    public async Task<TodoList> GetUserTodayTodolist(Guid userId)
+    public async Task<TodoList?> GetUserTodayTodolist(Guid userId)
     {
         return await DbContext.TodoLists
             .Include(tl => tl.TodoItems)
