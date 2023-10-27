@@ -37,7 +37,7 @@ public class GetTodayTodoListQueryHandler : IRequestHandler<GetTodayTodoListQuer
 
         if (todayTodolist is null)
         {
-            _unitOfWork.TodoLists.RemovePrevTodayTodoLists(userId);
+            await _unitOfWork.TodoLists.RemovePrevTodayTodoLists(userId);
             todayTodolist = await _unitOfWork.TodoLists.CreateNewTodayTodoList(userId);
             await _unitOfWork.SaveChangesAsync();
         }
