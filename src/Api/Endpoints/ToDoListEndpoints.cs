@@ -4,14 +4,14 @@ using Application.ToDoLists.Commands.RemoveTodoList;
 using Application.ToDoLists.Queries.GetTodoLists;
 using Contracts.Responses.TodoLists;
 using Microsoft.AspNetCore.Mvc;
+using Contracts.Requests;
 using MapsterMapper;
 using MediatR;
 using Carter;
-using Contracts.Requests;
 
 namespace Api.Endpoints;
 
-public class ToDoListController : ICarterModule
+public class ToDoListEndpoints : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {

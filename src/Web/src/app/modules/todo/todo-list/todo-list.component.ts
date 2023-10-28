@@ -128,7 +128,7 @@ export class TodoListComponent {
     }
 
     if (this.isDeadLineToday(date)) {
-      return 'Today';
+      return 'Today at' + this.datePipe.transform(isoDate, 'HH:mm') ?? '-';
     }
 
     if (this.isYearsEqual(date)) {

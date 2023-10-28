@@ -24,8 +24,7 @@ export class TodoComponent implements OnInit {
               private alertService: AlertService,
               private todoService: TodoService,
               private route: ActivatedRoute,
-              private router: Router) {
-  }
+              private router: Router) { }
 
   ngOnInit(): void {
     this.loadTodayTodoList();

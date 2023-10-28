@@ -50,11 +50,11 @@ internal sealed class TodoListRepository :
     
     public async Task RemovePrevTodayTodoLists(Guid userId)
     {
-        var prevTodoLists = await DbContext.TodoLists
-            .Where(tl => tl.UserId == userId && !tl.IsTodayTodoList)
+        var prevTodayTodoLists = await DbContext.TodoLists
+            .Where(tl => tl.UserId == userId && tl.IsTodayTodoList)
             .ToListAsync();
         
-        DbContext.RemoveRange(prevTodoLists);
+        DbContext.RemoveRange(prevTodayTodoLists);
     }
 
     public async Task<TodoList> CreateNewTodayTodoList(Guid userId)
