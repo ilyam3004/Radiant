@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {CreateTodoItemRequest, Priority, TodoItem, TodoList} from "../../../core/models/todo";
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {TodoService} from "../../../core/services/todo.service";
 import {AlertService} from "../../../core/services/alert.service";
 import {DatePipe} from "@angular/common";
@@ -15,6 +15,7 @@ export class TodoListComponent {
   @Output() addTodoItemEvent = new EventEmitter<[CreateTodoItemRequest, TodoList, boolean]>();
   @Output() removeTodoItemEvent = new EventEmitter<[TodoItem, TodoList, boolean]>();
   @Output() toggleTodoItemEvent = new EventEmitter<[TodoItem, boolean]>();
+
   priorities: string[] = ["🟢", "🟡", "🔴"];
   newTodoItemLoading: boolean = false;
   selectedPriority: Priority | null = null;
@@ -34,9 +35,8 @@ export class TodoListComponent {
       this.alertService.error("Please select a priority");
       return;
     }
-    if(!this.note){
+    if (!this.note) {
       this.alertService.error("Please enter a note");
-      this.resetInputFields();
       return;
     }
 
@@ -74,7 +74,7 @@ export class TodoListComponent {
         error: (error) => {
           this.changeTodoItemLoadingState(itemId, false);
           this.alertService.error(error,
-            { keepAfterRouteChange: true, autoClose: true });
+            {keepAfterRouteChange: true, autoClose: true});
         }
       });
   }
@@ -89,7 +89,7 @@ export class TodoListComponent {
         error: (error) => {
           this.changeTodoItemLoadingState(todoItem.id, false);
           this.alertService.error(error,
-            { keepAfterRouteChange: true, autoClose: true });
+            {keepAfterRouteChange: true, autoClose: true});
         }
       });
   }
@@ -128,7 +128,7 @@ export class TodoListComponent {
     }
 
     if (this.isDeadLineToday(date)) {
-      return 'Today at' + this.datePipe.transform(isoDate, 'HH:mm') ?? '-';
+      return 'Today at ' + this.datePipe.transform(isoDate, 'HH:mm') ?? '-';
     }
 
     if (this.isYearsEqual(date)) {
@@ -174,8 +174,6 @@ export class TodoListComponent {
   }
 
   private resetInputFields() {
-    this.selectedPriority = null;
-    this.deadline = null;
     this.note = "";
   }
 }

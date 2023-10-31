@@ -1,23 +1,25 @@
+import {CreateTodoItemRequest, GetTodoListsResponse, TodoItem, TodoList} from 'src/app/core/models/todo';
 import {TodoService} from "../../../core/services/todo.service";
 import {AlertService} from "../../../core/services/alert.service";
 import {AuthService} from "../../../core/services/auth.service";
 import {ActivatedRoute, Router} from '@angular/router';
 import {Component, OnInit} from '@angular/core';
-import {CreateTodoItemRequest, GetTodoListsResponse, TodoItem, TodoList} from 'src/app/core/models/todo';
 import {first} from "rxjs";
 
 @Component({
   selector: 'app-todo',
   templateUrl: './todo.component.html',
-  styleUrls: ['./todo.component.scss']
+  styleUrls: ['./todo.component.scss'],
 })
 export class TodoComponent implements OnInit {
   todoListTitle: string = "";
   todayTodoList: TodoList = {} as TodoList;
   todoLists: TodoList[] = [];
+
   fetchTodoListsLoading: boolean = false;
   fetchTodayTodoListLoading: boolean = false;
   newTodoLoading: boolean = false;
+
   todoListsNotFound: boolean = false;
 
   constructor(private authService: AuthService,
@@ -27,12 +29,14 @@ export class TodoComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit(): void {
+    this.fetchTodayTodoListLoading = true;
     this.loadTodayTodoList();
+
+    this.fetchTodoListsLoading = true;
     this.loadTodoLists();
   }
 
   private loadTodoLists() {
-    this.fetchTodoListsLoading = true;
     this.todoService.getTodoLists()
       .pipe(first())
       .subscribe((response: GetTodoListsResponse) => {
@@ -48,11 +52,10 @@ export class TodoComponent implements OnInit {
   }
 
   private loadTodayTodoList() {
-    this.fetchTodayTodoListLoading = true;
     this.todoService.getTodayTodoList()
       .pipe(first())
       .subscribe((response: TodoList) => {
-          this.todayTodoList = response;
+       this.todayTodoList = response;
           this.fetchTodayTodoListLoading = false;
         },
         (error) => {
@@ -157,7 +160,8 @@ export class TodoComponent implements OnInit {
   }
 
   private updateTodoList(updatedTodoList: TodoList) {
-    const index = this.todoLists.findIndex((item) => item.id === updatedTodoList.id);
+    const index = this.todoLists.findIndex((item) =>
+      item.id === updatedTodoList.id);
 
     if (index !== -1) {
       this.todoLists[index] = updatedTodoList;

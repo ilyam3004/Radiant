@@ -14,6 +14,7 @@ export class PriorityPickerComponent {
 
   selectPriority(priority: Priority): void {
     this.selectedPriority = priority;
+    console.log(this.selectedPriority)
     this.selectPriorityEvent.emit(this.selectedPriority);
   }
 }
