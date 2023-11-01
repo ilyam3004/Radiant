@@ -79,6 +79,18 @@ export class TodoListComponent {
       });
   }
 
+  updateTodoItem(updatedTodoItem: TodoItem) {
+    this.todoService.updateTodoItem(updatedTodoItem)
+      .subscribe({
+        next: (todoItem: TodoItem) => {
+        },
+        error: (error) => {
+          //this.changeTodoItemLoadingState(itemId, false);
+          this.alertService.error(error,
+            {keepAfterRouteChange: true, autoClose: true});
+        }
+      });
+  }
   removeTodoItem(todoItem: TodoItem) {
     this.changeTodoItemLoadingState(todoItem.id, true);
     this.todoService.removeTodoItem(todoItem.id)
@@ -140,7 +152,7 @@ export class TodoListComponent {
     return readableDate == null ? '-' : readableDate;
   }
 
-  isDeadLineTomorrow(date: Date): boolean {
+  private isDeadLineTomorrow(date: Date): boolean {
     const currentDate = new Date();
     const tomorrowDate = new Date();
     tomorrowDate.setDate(currentDate.getDate() + 1);
@@ -150,7 +162,7 @@ export class TodoListComponent {
       && date.getFullYear() === tomorrowDate.getFullYear();
   }
 
-  isDeadLineToday(date: Date): boolean {
+  private isDeadLineToday(date: Date): boolean {
     const currentDate = new Date();
 
     return date.getDate() === currentDate.getDate()
@@ -158,12 +170,12 @@ export class TodoListComponent {
       && date.getFullYear() === currentDate.getFullYear();
   }
 
-  isDeadLineExpired(date: Date): boolean {
+  private isDeadLineExpired(date: Date): boolean {
     const currentDate = new Date();
     return date < currentDate;
   }
 
-  isYearsEqual(date: Date): boolean {
+  private isYearsEqual(date: Date): boolean {
     const currentDate = new Date();
     return date.getFullYear() == currentDate.getFullYear();
   }

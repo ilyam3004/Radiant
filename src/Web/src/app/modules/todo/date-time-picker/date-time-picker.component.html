@@ -25,5 +25,5 @@
   </div>
 </ng-template>
 <button class="btn btn-outline-primary" (click)="open(content)">
-  {{selectedDateTime == "" ? "Set deadline" : selectedDateTime}}
+  {{shownDateTime === null ? "Set deadline" : shownDateTime}}
 </button>

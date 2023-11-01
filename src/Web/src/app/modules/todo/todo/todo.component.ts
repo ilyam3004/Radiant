@@ -55,7 +55,7 @@ export class TodoComponent implements OnInit {
     this.todoService.getTodayTodoList()
       .pipe(first())
       .subscribe((response: TodoList) => {
-       this.todayTodoList = response;
+          this.todayTodoList = response;
           this.fetchTodayTodoListLoading = false;
         },
         (error) => {
