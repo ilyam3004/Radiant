@@ -8,7 +8,7 @@
   <div style="margin-bottom: 2%"></div>
   <div class="d-flex justify-content-center mb-3">
     <div class="form-group mr-3 mb-0">
-      <input type="text" class="form-control" [(ngModel)]="note" placeholder="Enter a note" />
+      <input type="text" class="form-control" [(ngModel)]="note" placeholder="Enter a note"/>
     </div>
     <button [disabled]="newTodoItemLoading" class="btn btn-success mr-3"
             (click)="addTodoItem()">
@@ -19,52 +19,62 @@
     <priority-picker (selectPriorityEvent)="handlePriorityChange($event)"/>
     <div style="margin-right: 2%"></div>
     <date-time-picker (valueChange)="handleDateTimeChange($event)"
-                      [isTodayTodoList]="todoList.isTodayTodoList" />
+                      [isTodayTodoList]="todoList.isTodayTodoList"/>
   </div>
   <div class="table-wrapper">
     <table class="table table-hover table-bordered">
       <thead>
-        <tr>
-          <th>№</th>
-          <th>Note</th>
-          <th>Status</th>
-          <th>Priority</th>
-          <th>Deadline</th>
-          <th></th>
-        </tr>
+      <tr>
+        <th>№</th>
+        <th>Note</th>
+        <th>Status</th>
+        <th>Priority</th>
+        <th>Deadline</th>
+        <th></th>
+      </tr>
       </thead>
       <tbody>
-        <tr *ngIf="todoList.todoItems.length === 0">
-          <td colspan="5" class="text-center">TodoList is empty</td>
-        </tr>
-        <tr *ngFor="let item of todoList.todoItems; let i = index">
-          <td [width]="40">{{ i + 1 }}</td>
-          <td [class]="getCompletedClass(item.done)"
-              [ngClass]="{ 'disabled-click': item.loading }"
-              (click)="toggleTodoItem(item.id)">
-            {{ item.note }}
-          </td>
-          <td [width]="100"
-              (click)="toggleTodoItem(item.id)"
-              [ngClass]="{ 'disabled-click': item.loading }">
-            {{ item.done ? 'Done' : 'In progress' }}
-          </td>
-          <td [width]="40">{{priorities[item.priority]}}</td>
-          <td [width]="170" [class]="getDeadlineClass(item)">
-            {{ item.deadline == null ? 'No deadline' : convertDateToReadableFormat(item.deadline) }}
-          </td>
-          <td [width]="40">
-            <div *ngIf="item.loading">
-              <span class="spinner-border spinner-border-sm me-1"></span>
-            </div>
-            <div *ngIf="!item.loading">
-              <button class="btn btn-close p-0"
-                      style="font-size: 12px; margin-left: 30%;"
-                      (click)="removeTodoItem(item)">
+      <tr *ngIf="todoList.todoItems.length === 0">
+        <td colspan="5" class="text-center">TodoList is empty</td>
+      </tr>
+      <tr *ngFor="let item of todoList.todoItems; let i = index">
+        <td [width]="40">{{ i + 1 }}</td>
+        <td [class]="getCompletedClass(item.done)"
+            [ngClass]="{ 'disabled-click': item.loading }"
+            (click)="toggleTodoItem(item.id)">
+          {{ item.note }}
+        </td>
+        <td [width]="100"
+            (click)="toggleTodoItem(item.id)"
+            [ngClass]="{ 'disabled-click': item.loading }">
+          {{ item.done ? 'Done' : 'In progress' }}
+        </td>
+        <td [width]="40">{{priorities[item.priority]}}</td>
+        <td [width]="170" [class]="getDeadlineClass(item)">
+          {{ item.deadline == null ? 'No deadline' : convertDateToReadableFormat(item.deadline) }}
+        </td>
+        <td [width]="40">
+          <div *ngIf="item.loading">
+            <span class="spinner-border spinner-border-sm me-1"></span>
+          </div>
+          <div *ngIf="!item.loading">
+            <div ngbDropdown container="body">
+              <button type="button" class="btn btn-outline-secondary" ngbDropdownToggle>
+                Actions
               </button>
+              <div ngbDropdownMenu>
+                <button ngbDropdownItem>
+                  <update-todoitem-modal [todoItem]="item"
+                                         [isTodayTodoList]="todoList.isTodayTodoList"/>
+                </button>
+                <button ngbDropdownItem (click)="removeTodoItem(item)">
+                  Remove
+                </button>
+              </div>
             </div>
-          </td>
-        </tr>
+          </div>
+        </td>
+      </tr>
       </tbody>
     </table>
   </div>

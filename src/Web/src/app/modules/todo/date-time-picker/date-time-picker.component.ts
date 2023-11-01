@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NgbCalendar, NgbDateStruct, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -6,17 +6,26 @@ import {NgbCalendar, NgbDateStruct, NgbModal} from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './date-time-picker.component.html',
   styleUrls: ['./date-time-picker.component.scss']
 })
-export class DateTimePickerComponent {
+export class DateTimePickerComponent implements OnInit {
   @Input() isTodayTodoList: boolean = false;
   @Output() valueChange = new EventEmitter<string>();
+  @Input() selectedDateTime: string | null = null;
+
   model: NgbDateStruct = this.calendar.getToday();
   date: { year: number; month: number } = this.calendar.getToday();
   time = {hour: 0, minute: 0};
 
-  selectedDateTime: string = "";
-
   constructor(private modalService: NgbModal,
-              private calendar: NgbCalendar) { }
+              private calendar: NgbCalendar) {
+  }
+
+  ngOnInit() {
+    if(this.selectedDateTime){
+      const date = new Date(this.selectedDateTime);
+      this.model = {year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate()};
+      this.time = {hour: date.getHours(), minute: date.getMinutes()};
+    }
+  }
 
   selectToday() {
     this.model = this.calendar.getToday();

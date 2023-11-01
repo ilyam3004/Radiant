@@ -11,6 +11,7 @@ import {DateTimePickerComponent} from './date-time-picker/date-time-picker.compo
 import {ApiInterceptor} from "../../helpers/api.interceptor";
 import {ErrorInterceptor} from "../../helpers/error.interceptor";
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { UpdateTodoItemModalComponent } from './update-todoitem-modal/update-todo-item-modal.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     TodoComponent,
     TodoListComponent,
     PriorityPickerComponent,
-    DateTimePickerComponent
+    DateTimePickerComponent,
+    UpdateTodoItemModalComponent
   ],
   imports: [
     CommonModule,

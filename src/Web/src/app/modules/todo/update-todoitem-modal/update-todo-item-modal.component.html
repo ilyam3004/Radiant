@@ -1,0 +1,29 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Edit task</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <div class="d-flex justify-content-center mb-3">
+      <div class="form-group mr-3 mb-0">
+        <input type="text" class="form-control" [(ngModel)]="this.todoItem.note"
+               placeholder="Enter a note" />
+      </div>
+      <div style="margin-right: 2%"></div>
+      <priority-picker [selectedPriority]="todoItem.priority"
+                       (selectPriorityEvent)="handlePriorityChange($event)"/>
+      <div style="margin-right: 2%"></div>
+      <date-time-picker (valueChange)="handleDateTimeChange($event)"
+                        [selectedDateTime]="todoItem.deadline"
+                        [isTodayTodoList]="isTodayTodoList"/>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="sendValueAndCloseModal(modal)">
+      Edit
+    </button>
+  </div>
+</ng-template>
+
+<div (click)="open(content)">Edit</div>
+
