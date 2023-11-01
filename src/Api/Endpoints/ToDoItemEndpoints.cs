@@ -1,12 +1,14 @@
 ﻿using Application.ToDoItems.Commands.RemoveTodoItem;
 using Application.ToDoItems.Commands.ToggleTodoItem;
 using Application.ToDoItems.Commands.CreateTodoItem;
+using Application.ToDoItems.Commands.UpdateTodoItem;
 using Contracts.Responses.TodoLists;
 using Microsoft.AspNetCore.Mvc;
 using Contracts.Requests;
 using MapsterMapper;
 using MediatR;
 using Carter;
+using Domain.Entities;
 
 namespace Api.Endpoints;
 
@@ -16,12 +18,13 @@ public class ToDoItemEndpoints : ICarterModule
     {
         var group = app.MapGroup("todo-items").RequireAuthorization();
 
-        group.MapPost("", CreateTodoListItem);
-        group.MapDelete("{id:guid}", RemoveTodoListItem);
+        group.MapPost("", CreateTodoItem);
+        group.MapDelete("{id:guid}", RemoveTodoItem);
         group.MapPut("{id:guid}/toggle", ToggleTodoListItem);
+        group.MapPut("", UpdateTodoItem);
     }
     
-    private async Task<IResult> CreateTodoListItem(ISender sender,
+    private async Task<IResult> CreateTodoItem(ISender sender,
         IMapper mapper,
         CreateTodoItemRequest request)
     {
@@ -33,8 +36,21 @@ public class ToDoItemEndpoints : ICarterModule
                 mapper.Map<TodoListResponse>(value)),
             ApiEndpoints.Problem);
     }
-    
-    private async Task<IResult> RemoveTodoListItem([FromRoute] Guid id,
+
+    private async Task<IActionResult> UpdateTodoItem(UpdateTodoItemRequest request,
+        ISender sender,
+        IMapper mapper)
+    {
+        var command = mapper.Map<UpdateTodoItemCommand>(request);
+
+        var result = await sender.Send(command);
+
+        return result.Match(
+            value => Results.Ok(mapper.Map<TodoItemResponse>(value)),
+            ApiEndpoints.Problem);
+    }
+
+    private async Task<IResult> RemoveTodoItem([FromRoute] Guid id,
         ISender sender,
         IMapper mapper)
     {
