@@ -7,7 +7,7 @@ import {Component, OnInit} from '@angular/core';
 import {first} from "rxjs";
 
 @Component({
-  selector: 'app-todo',
+  selector: 'todo',
   templateUrl: './todo.component.html',
   styleUrls: ['./todo.component.scss'],
 })

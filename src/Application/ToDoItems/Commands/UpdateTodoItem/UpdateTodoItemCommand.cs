@@ -1,10 +1,13 @@
-﻿using Domain.Entities;
+﻿using Application.Models.TodoLists;
+using Domain.Entities;
+using LanguageExt.Common;
+using MediatR;
 
-namespace Application.ToDoItems.Commands.UpdateTodoItem; 
+namespace Application.ToDoItems.Commands.UpdateTodoItem;
 
 public record UpdateTodoItemCommand(
-    Guid Id, 
+    Guid Id,
     string Note,
     bool Done,
     DateTime? Deadline,
-    Priority Priority);
+    Priority Priority) : IRequest<Result<TodoItemResult>>;

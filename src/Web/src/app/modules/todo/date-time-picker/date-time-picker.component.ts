@@ -9,7 +9,7 @@ import {NgbCalendar, NgbDateStruct, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 })
 export class DateTimePickerComponent implements OnInit {
   @Input() isTodayTodoList: boolean = false;
-  @Output() valueChange = new EventEmitter<string>();
+  @Output() valueChange = new EventEmitter<string | null>();
   @Input() selectedDateTime: string | null = null;
 
   shownDateTime: string | null = null;
@@ -48,6 +48,14 @@ export class DateTimePickerComponent implements OnInit {
     this.setShownDateInReadableFormat(this.selectedDateTime);
 
     this.valueChange.emit(this.selectedDateTime);
+    modal.close();
+  }
+
+  clearDateTimePickerAndCloseModal(modal: any) {
+    this.selectedDateTime = null;
+    this.shownDateTime = null;
+    this.valueChange.emit(this.selectedDateTime);
+
     modal.close();
   }
 

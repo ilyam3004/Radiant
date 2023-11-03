@@ -24,7 +24,8 @@ export class TodoListComponent {
 
   constructor(private todoService: TodoService,
               private alertService: AlertService,
-              private datePipe: DatePipe) { }
+              private datePipe: DatePipe) {
+  }
 
   removeTodoList() {
     this.removeTodoListEvent.emit(this.todoList.id);
@@ -79,18 +80,6 @@ export class TodoListComponent {
       });
   }
 
-  updateTodoItem(updatedTodoItem: TodoItem) {
-    this.todoService.updateTodoItem(updatedTodoItem)
-      .subscribe({
-        next: (todoItem: TodoItem) => {
-        },
-        error: (error) => {
-          //this.changeTodoItemLoadingState(itemId, false);
-          this.alertService.error(error,
-            {keepAfterRouteChange: true, autoClose: true});
-        }
-      });
-  }
   removeTodoItem(todoItem: TodoItem) {
     this.changeTodoItemLoadingState(todoItem.id, true);
     this.todoService.removeTodoItem(todoItem.id)
@@ -110,12 +99,26 @@ export class TodoListComponent {
     this.selectedPriority = priority;
   }
 
-  handleDateTimeChange(dateTime: string): void {
+  handleDateTimeChange(dateTime: string | null): void {
     this.deadline = dateTime;
   }
 
   getCompletedClass(done: boolean): string {
     return done ? "completed" : "";
+  }
+
+  getTaskColorClass(todoItem: TodoItem): string {
+    if(todoItem.done) {
+      return "table-success";
+    } else {
+      if (todoItem.deadline !== null) {
+        if (!todoItem.done && this.isDeadLineExpired(new Date(todoItem.deadline))) {
+          return "table-danger";
+        }
+      }
+    }
+
+    return "";
   }
 
   getDeadlineClass(todoItem: TodoItem): string {
@@ -150,6 +153,16 @@ export class TodoListComponent {
 
     const readableDate = this.datePipe.transform(isoDate, 'MMM d, y, HH:mm');
     return readableDate == null ? '-' : readableDate;
+  }
+
+  updateTodoItem(updatedTodoItem: TodoItem) {
+    const index = this.todoList.todoItems
+      .findIndex((item) =>
+        item.id === updatedTodoItem.id);
+
+    if (index != -1) {
+      this.todoList.todoItems[index] = updatedTodoItem;
+    }
   }
 
   private isDeadLineTomorrow(date: Date): boolean {

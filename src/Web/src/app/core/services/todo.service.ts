@@ -2,7 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import { CreateTodoItemRequest, CreateTodoListRequest, GetTodoListsResponse,
-  RemoveTodoListResponse, TodoItem, TodoList } from "../models/todo";
+  RemoveTodoListResponse, TodoItem, TodoList, UpdateTodoItemRequest } from "../models/todo";
 
 @Injectable({
   providedIn: 'root'
@@ -34,8 +34,8 @@ export class TodoService {
     return this.http.delete<TodoList>(`todo-items/${todoItemId}`);
   }
 
-  public updateTodoItem(updatedTodoItem:TodoItem): Observable<TodoItem> {
-    return this.http.put<TodoItem>(`todo-items`, updatedTodoItem);
+  public updateTodoItem(updateRequest: UpdateTodoItemRequest): Observable<TodoItem> {
+    return this.http.patch<TodoItem>(`todo-items`, updateRequest);
   }
 
   public toggleTodoItem(todoItemId: string): Observable<TodoItem> {

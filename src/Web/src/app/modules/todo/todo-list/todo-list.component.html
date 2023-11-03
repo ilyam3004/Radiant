@@ -22,7 +22,7 @@
                       [isTodayTodoList]="todoList.isTodayTodoList"/>
   </div>
   <div class="table-wrapper">
-    <table class="table table-hover table-bordered">
+    <table class="table table-hover">
       <thead>
       <tr>
         <th>№</th>
@@ -37,7 +37,8 @@
       <tr *ngIf="todoList.todoItems.length === 0">
         <td colspan="5" class="text-center">TodoList is empty</td>
       </tr>
-      <tr *ngFor="let item of todoList.todoItems; let i = index">
+      <tr *ngFor="let item of todoList.todoItems; let i = index"
+          [class]="getTaskColorClass(item)">
         <td [width]="40">{{ i + 1 }}</td>
         <td [class]="getCompletedClass(item.done)"
             [ngClass]="{ 'disabled-click': item.loading }"
@@ -54,7 +55,7 @@
           {{ item.deadline == null ? 'No deadline' : convertDateToReadableFormat(item.deadline) }}
         </td>
         <td [width]="40">
-          <div *ngIf="item.loading">
+          <div *ngIf="item.loading" class="d-flex justify-content-center align-middle">
             <span class="spinner-border spinner-border-sm me-1"></span>
           </div>
           <div *ngIf="!item.loading">

@@ -43,9 +43,9 @@ public class CreateTodoItemCommandHandler
 
         var todoList = await _unitOfWork.TodoLists
             .GetTodoListByIdWithItems(command.TodoListId);
-        SortTodoItemsByDate(todoList);
-        
-        if (todoList.IsTodayTodoList)
+        SortTodoItemsByDate(todoList!);
+
+        if (todoList!.IsTodayTodoList)
             await AddItemsWithTodayDeadline(todoList);
 
         return new TodoListResult(todoList);

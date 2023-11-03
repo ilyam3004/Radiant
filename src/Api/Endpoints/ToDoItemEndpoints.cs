@@ -8,7 +8,6 @@ using Contracts.Requests;
 using MapsterMapper;
 using MediatR;
 using Carter;
-using Domain.Entities;
 
 namespace Api.Endpoints;
 
@@ -21,23 +20,23 @@ public class ToDoItemEndpoints : ICarterModule
         group.MapPost("", CreateTodoItem);
         group.MapDelete("{id:guid}", RemoveTodoItem);
         group.MapPut("{id:guid}/toggle", ToggleTodoListItem);
-        group.MapPut("", UpdateTodoItem);
+        group.MapPatch("", UpdateTodoItem);
     }
-    
+
     private async Task<IResult> CreateTodoItem(ISender sender,
         IMapper mapper,
         CreateTodoItemRequest request)
     {
         var command = mapper.Map<CreateTodoItemCommand>(request);
         var result = await sender.Send(command);
-        
+
         return result.Match(
             value => Results.Ok(
                 mapper.Map<TodoListResponse>(value)),
             ApiEndpoints.Problem);
     }
 
-    private async Task<IActionResult> UpdateTodoItem(UpdateTodoItemRequest request,
+    private async Task<IResult> UpdateTodoItem(UpdateTodoItemRequest request,
         ISender sender,
         IMapper mapper)
     {
@@ -62,7 +61,7 @@ public class ToDoItemEndpoints : ICarterModule
             value => Results.Ok(mapper.Map<TodoListResponse>(value)),
             ApiEndpoints.Problem);
     }
-    
+
     private async Task<IResult> ToggleTodoListItem([FromRoute] Guid id,
         ISender sender,
         IMapper mapper)

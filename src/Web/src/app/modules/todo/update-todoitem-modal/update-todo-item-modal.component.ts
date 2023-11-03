@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {Priority, TodoItem} from "../../../core/models/todo";
+import {Priority, TodoItem, UpdateTodoItemRequest} from "../../../core/models/todo";
 import {TodoService} from "../../../core/services/todo.service";
 import {AlertService} from "../../../core/services/alert.service";
 
@@ -31,10 +31,19 @@ export class UpdateTodoItemModalComponent implements OnInit {
 
 
   updateTodoItem(updatedTodoItem: TodoItem) {
-    this.todoService.updateTodoItem(updatedTodoItem)
+    const updateRequest: UpdateTodoItemRequest = {
+      id: updatedTodoItem.id,
+      note: updatedTodoItem.note,
+      priority: updatedTodoItem.priority,
+      deadline: updatedTodoItem.deadline,
+      done: updatedTodoItem.done
+    };
+
+    this.todoService.updateTodoItem(updateRequest)
       .subscribe({
         next: (todoItem: TodoItem) => {
-          this.todoItem = todoItem;
+          this.updateTodoItemEvent.emit(todoItem);
+          this.alertService.success("Todo item updated successfully");
         },
         error: (error) => {
           this.alertService.error(error,
@@ -49,16 +58,20 @@ export class UpdateTodoItemModalComponent implements OnInit {
     updatedTodoItem.priority = this.updatedPriority;
     updatedTodoItem.deadline = this.updatedDeadline == null
       ? null : new Date(this.updatedDeadline).toISOString()
-    //this.updateTodoItemEvent.emit(this.todoItem);
+
     this.updateTodoItem(updatedTodoItem);
     modal.close();
+  }
+
+  removeDeadline() {
+    this.updatedDeadline = null;
   }
 
   handlePriorityChange(priority: Priority) {
     this.updatedPriority = priority;
   }
 
-  handleDateTimeChange(dateTime: string): void {
+  handleDateTimeChange(dateTime: string | null): void {
     this.updatedDeadline = dateTime;
   }
 

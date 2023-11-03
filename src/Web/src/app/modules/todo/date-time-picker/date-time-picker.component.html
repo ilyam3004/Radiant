@@ -8,20 +8,29 @@
       <div *ngIf="!isTodayTodoList">
         <ngb-datepicker #dp [(ngModel)]="model" (navigate)="date = $event.next"/>
         <div style="margin-bottom: 5%"></div>
-          <button class="btn btn-sm btn-outline-primary me-2" (click)="selectToday()">
-            Select Today
-          </button>
-          <button class="btn btn-sm btn-outline-primary me-2" (click)="dp.navigateTo()">
-            To current month
-          </button>
+        <button class="btn btn-sm btn-outline-primary me-2" (click)="selectToday()">
+          Select Today
+        </button>
+        <button class="btn btn-sm btn-outline-primary me-2" (click)="dp.navigateTo()">
+          To current month
+        </button>
       </div>
       <ngb-timepicker class="flex-container" [(ngModel)]="time"></ngb-timepicker>
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-primary" (click)="sendValueAndCloseModal(modal)">
-      Add
-    </button>
+    <div *ngIf="selectedDateTime !== null">
+      <button class="btn btn-outline-danger"
+              (click)="clearDateTimePickerAndCloseModal(modal)">
+        Clear deadline
+      </button>
+    </div>
+    <div *ngIf="selectedDateTime === null">
+      <button type="button" class="btn btn-outline-primary"
+              (click)="sendValueAndCloseModal(modal)">
+        Set deadline
+      </button>
+    </div>
   </div>
 </ng-template>
 <button class="btn btn-outline-primary" (click)="open(content)">

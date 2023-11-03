@@ -3,20 +3,18 @@
     <h4 class="modal-title" id="modal-basic-title">Edit task</h4>
     <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
   </div>
-  <div class="modal-body">
-    <div class="d-flex justify-content-center mb-3">
-      <div class="form-group mr-3 mb-0" style="width: 50%">
-        <input type="text" class="form-control" [(ngModel)]="this.updatedNote"
-               placeholder="Enter a note"/>
-      </div>
-      <div style="margin-right: 2%"></div>
-      <priority-picker [selectedPriority]="this.updatedPriority"
-                       (selectPriorityEvent)="handlePriorityChange($event)"/>
-      <div style="margin-right: 2%"></div>
-      <date-time-picker (valueChange)="handleDateTimeChange($event)"
-                        [selectedDateTime]="this.updatedDeadline"
-                        [isTodayTodoList]="isTodayTodoList"/>
+  <div class="modal-body d-flex justify-content-center mb-3">
+    <div class="form-group mr-3 mb-0" style="width: 50%">
+      <input type="text" class="form-control" [(ngModel)]="this.updatedNote"
+             placeholder="Enter a note"/>
     </div>
+    <div style="margin-right: 2%"></div>
+    <priority-picker [selectedPriority]="this.updatedPriority"
+                     (selectPriorityEvent)="handlePriorityChange($event)"/>
+    <div style="margin-right: 2%"></div>
+    <date-time-picker (valueChange)="handleDateTimeChange($event)"
+                      [selectedDateTime]="this.updatedDeadline"
+                      [isTodayTodoList]="isTodayTodoList"/>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-primary" (click)="sendValueAndCloseModal(modal)">
