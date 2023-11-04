@@ -1,8 +1,8 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {Priority, TodoItem, UpdateTodoItemRequest} from "../../../core/models/todo";
-import {TodoService} from "../../../core/services/todo.service";
-import {AlertService} from "../../../core/services/alert.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Priority, TodoItem, UpdateTodoItemRequest } from "../../../core/models/todo";
+import { TodoService } from "../../../core/services/todo.service";
+import { AlertService } from "../../../core/services/alert.service";
 
 @Component({
   selector: 'update-todoitem-modal',
@@ -19,8 +19,8 @@ export class UpdateTodoItemModalComponent implements OnInit {
   updatedDeadline: string | null = null;
 
   constructor(private modalService: NgbModal,
-              private todoService: TodoService,
-              private alertService: AlertService) {
+    private todoService: TodoService,
+    private alertService: AlertService) {
   }
 
   ngOnInit(): void {
@@ -43,11 +43,11 @@ export class UpdateTodoItemModalComponent implements OnInit {
       .subscribe({
         next: (todoItem: TodoItem) => {
           this.updateTodoItemEvent.emit(todoItem);
-          this.alertService.success("Todo item updated successfully");
+          this.alertService.success("Task updated successfully");
         },
         error: (error) => {
           this.alertService.error(error,
-            {keepAfterRouteChange: true, autoClose: true});
+            { keepAfterRouteChange: true, autoClose: true });
         }
       });
   }
@@ -76,6 +76,6 @@ export class UpdateTodoItemModalComponent implements OnInit {
   }
 
   open(content: any) {
-    this.modalService.open(content, {size: 'lg'});
+    this.modalService.open(content, { size: 'lg' });
   }
 }
