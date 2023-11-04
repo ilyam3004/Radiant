@@ -2,6 +2,16 @@
   text-decoration: line-through;
 }
 
+.table-danger {
+  --bs-table-bg: #ffe6e6;
+  --bs-table-hover-bg: #fdd8d8;
+}
+
+.table-success {
+  --bs-table-bg: #dcfddc;
+  --bs-table-hover-bg: rgb(203, 249, 203);
+}
+
 .deadline-expired {
   color: #ff0000;
 }

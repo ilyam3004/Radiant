@@ -1,8 +1,9 @@
-import {CreateTodoItemRequest, Priority, TodoItem, TodoList} from "../../../core/models/todo";
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {TodoService} from "../../../core/services/todo.service";
-import {AlertService} from "../../../core/services/alert.service";
-import {DatePipe} from "@angular/common";
+import { CreateTodoItemRequest, Priority, TodoItem, TodoList } from "../../../core/models/todo";
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { TodoService } from "../../../core/services/todo.service";
+import { AlertService } from "../../../core/services/alert.service";
+import { DatePipe } from "@angular/common";
+import { ConfirmationDialogService } from "src/app/core/services/confirmation-dialog.service";
 
 @Component({
   selector: 'todo-list',
@@ -23,11 +24,21 @@ export class TodoListComponent {
   note: string = "";
 
   constructor(private todoService: TodoService,
-              private alertService: AlertService,
-              private datePipe: DatePipe) { }
+    private alertService: AlertService,
+    private confirmationDialogService: ConfirmationDialogService,
+    private datePipe: DatePipe) {
+  }
 
-  removeTodoList() {
-    this.removeTodoListEvent.emit(this.todoList.id);
+  openRemoveConfirmationDialog(): void {
+    this.confirmationDialogService.confirm("Remove todolist",
+      `Are you sure you want to remove todolist: ${this.todoList.title}?`,
+      "Remove", "Cancel")
+      .then((confirmed) => {
+        if (confirmed) {
+          this.removeTodoListEvent.emit(this.todoList.id);
+        }
+      })
+      .catch(() => { });
   }
 
   addTodoItem() {
@@ -58,7 +69,7 @@ export class TodoListComponent {
         error: (error) => {
           this.newTodoItemLoading = false;
           this.alertService.error(error,
-            {keepAfterRouteChange: true, autoClose: true});
+            { keepAfterRouteChange: true, autoClose: true });
         }
       });
   }
@@ -74,7 +85,7 @@ export class TodoListComponent {
         error: (error) => {
           this.changeTodoItemLoadingState(itemId, false);
           this.alertService.error(error,
-            {keepAfterRouteChange: true, autoClose: true});
+            { keepAfterRouteChange: true, autoClose: true });
         }
       });
   }
@@ -89,7 +100,7 @@ export class TodoListComponent {
         error: (error) => {
           this.changeTodoItemLoadingState(todoItem.id, false);
           this.alertService.error(error,
-            {keepAfterRouteChange: true, autoClose: true});
+            { keepAfterRouteChange: true, autoClose: true });
         }
       });
   }
@@ -98,12 +109,26 @@ export class TodoListComponent {
     this.selectedPriority = priority;
   }
 
-  handleDateTimeChange(dateTime: string): void {
+  handleDateTimeChange(dateTime: string | null): void {
     this.deadline = dateTime;
   }
 
   getCompletedClass(done: boolean): string {
     return done ? "completed" : "";
+  }
+
+  getTaskColorClass(todoItem: TodoItem): string {
+    if (todoItem.done) {
+      return "table-success";
+    } else {
+      if (todoItem.deadline !== null) {
+        if (!todoItem.done && this.isDeadLineExpired(new Date(todoItem.deadline))) {
+          return "table-danger";
+        }
+      }
+    }
+
+    return "";
   }
 
   getDeadlineClass(todoItem: TodoItem): string {
@@ -140,7 +165,17 @@ export class TodoListComponent {
     return readableDate == null ? '-' : readableDate;
   }
 
-  isDeadLineTomorrow(date: Date): boolean {
+  updateTodoItem(updatedTodoItem: TodoItem) {
+    const index = this.todoList.todoItems
+      .findIndex((item) =>
+        item.id === updatedTodoItem.id);
+
+    if (index != -1) {
+      this.todoList.todoItems[index] = updatedTodoItem;
+    }
+  }
+
+  private isDeadLineTomorrow(date: Date): boolean {
     const currentDate = new Date();
     const tomorrowDate = new Date();
     tomorrowDate.setDate(currentDate.getDate() + 1);
@@ -150,7 +185,7 @@ export class TodoListComponent {
       && date.getFullYear() === tomorrowDate.getFullYear();
   }
 
-  isDeadLineToday(date: Date): boolean {
+  private isDeadLineToday(date: Date): boolean {
     const currentDate = new Date();
 
     return date.getDate() === currentDate.getDate()
@@ -158,12 +193,12 @@ export class TodoListComponent {
       && date.getFullYear() === currentDate.getFullYear();
   }
 
-  isDeadLineExpired(date: Date): boolean {
+  private isDeadLineExpired(date: Date): boolean {
     const currentDate = new Date();
     return date < currentDate;
   }
 
-  isYearsEqual(date: Date): boolean {
+  private isYearsEqual(date: Date): boolean {
     const currentDate = new Date();
     return date.getFullYear() == currentDate.getFullYear();
   }

@@ -33,6 +33,14 @@ export interface CreateTodoItemRequest {
   deadline: string | null,
 }
 
+export interface UpdateTodoItemRequest {
+  id: string,
+  note: string,
+  done: boolean,
+  priority: Priority,
+  deadline: string | null,
+}
+
 export interface GetTodoListsResponse {
   todoLists: TodoList[]
 }

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Priority} from "../../../core/models/todo";
 
 @Component({
@@ -8,8 +8,8 @@ import {Priority} from "../../../core/models/todo";
 })
 export class PriorityPickerComponent {
   @Output() selectPriorityEvent = new EventEmitter<Priority>();
+  @Input() selectedPriority: Priority | null = null;
   priorityOptions: Priority[] = [Priority.Low, Priority.Medium, Priority.High];
-  selectedPriority: Priority | null = null;
   priorities: string[] = ["Low🟢", "Medium🟡", "High🔴"];
 
   selectPriority(priority: Priority): void {

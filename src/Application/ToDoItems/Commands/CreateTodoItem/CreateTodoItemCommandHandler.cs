@@ -1,7 +1,6 @@
 ﻿using Application.Common.Interfaces.Persistence;
 using Application.Models.TodoLists;
 using Domain.Common.Exceptions;
-using Domain.Common.Messages;
 using LanguageExt.Common;
 using Domain.Entities;
 using MediatR;
@@ -43,9 +42,9 @@ public class CreateTodoItemCommandHandler
 
         var todoList = await _unitOfWork.TodoLists
             .GetTodoListByIdWithItems(command.TodoListId);
-        SortTodoItemsByDate(todoList);
-        
-        if (todoList.IsTodayTodoList)
+        SortTodoItemsByDate(todoList!);
+
+        if (todoList!.IsTodayTodoList)
             await AddItemsWithTodayDeadline(todoList);
 
         return new TodoListResult(todoList);
