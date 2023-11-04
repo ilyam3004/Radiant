@@ -20,7 +20,8 @@
   </div>
   <div class="modal-footer">
     <div *ngIf="selectedDateTime !== null" class="d-flex justify-content-center">
-      <button type="button" class="btn btn-outline-primary" (click)="sendValueAndCloseModal(modal)">
+      <button type="button" class="btn btn-outline-primary" (click)="sendValueAndCloseModal(modal)"
+        style="margin-right: 5%;">
         Edit
       </button>
       <button class="btn btn-outline-danger" (click)="clearDateTimePickerAndCloseModal(modal)">
