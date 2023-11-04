@@ -1,6 +1,6 @@
-import { DatePipe } from '@angular/common';
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NgbCalendar, NgbDateStruct, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'date-time-picker',

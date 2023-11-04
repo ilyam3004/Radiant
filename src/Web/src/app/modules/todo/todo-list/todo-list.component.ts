@@ -1,8 +1,9 @@
-import {CreateTodoItemRequest, Priority, TodoItem, TodoList} from "../../../core/models/todo";
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {TodoService} from "../../../core/services/todo.service";
-import {AlertService} from "../../../core/services/alert.service";
-import {DatePipe} from "@angular/common";
+import { CreateTodoItemRequest, Priority, TodoItem, TodoList } from "../../../core/models/todo";
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { TodoService } from "../../../core/services/todo.service";
+import { AlertService } from "../../../core/services/alert.service";
+import { DatePipe } from "@angular/common";
+import { ConfirmationDialogService } from "src/app/core/services/confirmation-dialog.service";
 
 @Component({
   selector: 'todo-list',
@@ -23,12 +24,21 @@ export class TodoListComponent {
   note: string = "";
 
   constructor(private todoService: TodoService,
-              private alertService: AlertService,
-              private datePipe: DatePipe) {
+    private alertService: AlertService,
+    private confirmationDialogService: ConfirmationDialogService,
+    private datePipe: DatePipe) {
   }
 
-  removeTodoList() {
-    this.removeTodoListEvent.emit(this.todoList.id);
+  openRemoveConfirmationDialog(): void {
+    this.confirmationDialogService.confirm("Remove todolist",
+      `Are you sure you want to remove todolist: ${this.todoList.title}?`,
+      "Remove", "Cancel")
+      .then((confirmed) => {
+        if (confirmed) {
+          this.removeTodoListEvent.emit(this.todoList.id);
+        }
+      })
+      .catch(() => { });
   }
 
   addTodoItem() {
@@ -59,7 +69,7 @@ export class TodoListComponent {
         error: (error) => {
           this.newTodoItemLoading = false;
           this.alertService.error(error,
-            {keepAfterRouteChange: true, autoClose: true});
+            { keepAfterRouteChange: true, autoClose: true });
         }
       });
   }
@@ -75,7 +85,7 @@ export class TodoListComponent {
         error: (error) => {
           this.changeTodoItemLoadingState(itemId, false);
           this.alertService.error(error,
-            {keepAfterRouteChange: true, autoClose: true});
+            { keepAfterRouteChange: true, autoClose: true });
         }
       });
   }
@@ -90,7 +100,7 @@ export class TodoListComponent {
         error: (error) => {
           this.changeTodoItemLoadingState(todoItem.id, false);
           this.alertService.error(error,
-            {keepAfterRouteChange: true, autoClose: true});
+            { keepAfterRouteChange: true, autoClose: true });
         }
       });
   }
@@ -108,7 +118,7 @@ export class TodoListComponent {
   }
 
   getTaskColorClass(todoItem: TodoItem): string {
-    if(todoItem.done) {
+    if (todoItem.done) {
       return "table-success";
     } else {
       if (todoItem.deadline !== null) {

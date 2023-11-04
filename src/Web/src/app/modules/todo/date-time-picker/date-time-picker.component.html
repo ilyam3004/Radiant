@@ -6,7 +6,7 @@
   <div class="modal-body">
     <div class="flex-container" style="margin-bottom: 3%">
       <div *ngIf="!isTodayTodoList">
-        <ngb-datepicker #dp [(ngModel)]="model" (navigate)="date = $event.next"/>
+        <ngb-datepicker #dp [(ngModel)]="model" (navigate)="date = $event.next" />
         <div style="margin-bottom: 5%"></div>
         <button class="btn btn-sm btn-outline-primary me-2" (click)="selectToday()">
           Select Today
@@ -19,16 +19,17 @@
     </div>
   </div>
   <div class="modal-footer">
-    <div *ngIf="selectedDateTime !== null">
-      <button class="btn btn-outline-danger"
-              (click)="clearDateTimePickerAndCloseModal(modal)">
-        Clear deadline
+    <div *ngIf="selectedDateTime !== null" class="d-flex justify-content-center">
+      <button type="button" class="btn btn-outline-primary" (click)="sendValueAndCloseModal(modal)">
+        Edit
+      </button>
+      <button class="btn btn-outline-danger" (click)="clearDateTimePickerAndCloseModal(modal)">
+        Clear
       </button>
     </div>
     <div *ngIf="selectedDateTime === null">
-      <button type="button" class="btn btn-outline-primary"
-              (click)="sendValueAndCloseModal(modal)">
-        Set deadline
+      <button type="button" class="btn btn-outline-primary" (click)="sendValueAndCloseModal(modal)">
+        Set
       </button>
     </div>
   </div>
