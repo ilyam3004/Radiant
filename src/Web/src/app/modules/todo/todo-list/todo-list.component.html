@@ -34,10 +34,10 @@
       </thead>
       <tbody>
         <tr *ngIf="todoList.todoItems.length === 0">
-          <td colspan="5" class="text-center">There is no tasks</td>
-        </tr>
-        <tr *ngIf="todoList.todoItems.length === 0 && todoList.isTodayTodoList">
-          <td colspan="5" class="text-center">There is no tasks for today</td>
+          <td colspan="5" class="text-center">
+            {{todoList.isTodayTodoList ? 
+              "There is no tasks for today" : "There is no tasks"}}
+          </td>
         </tr>
         <tr *ngFor="let item of todoList.todoItems; let i = index" [class]="getTaskColorClass(item)">
           <td [width]="40">{{ i + 1 }}</td>
