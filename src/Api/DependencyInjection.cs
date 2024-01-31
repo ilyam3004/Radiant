@@ -1,4 +1,5 @@
-﻿using Carter;
+﻿using Api.Extensions;
+using Carter;
 
 namespace Api;
 
@@ -20,9 +21,9 @@ public static class DependencyInjection
         
         services.AddAuthorization();
         
-        services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
         services.AddCarter();
+
+        services.AddExceptionHandlingMiddleware();
 
         return services;
     }

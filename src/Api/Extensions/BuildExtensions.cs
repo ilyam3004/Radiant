@@ -1,7 +1,7 @@
-﻿using Serilog;
-using Carter;
+﻿using Carter;
+using Serilog;
 
-namespace Api;
+namespace Api.Extensions;
 
 public static class BuildExtensions
 {
@@ -13,13 +13,12 @@ public static class BuildExtensions
 
         app.UseCors("CorsPolicy");
 
-        app.UseSwagger();
-        app.UseSwaggerUI();
-
         app.UseAuthentication();
         app.UseAuthorization();
         
         app.MapCarter();
+        
+        app.UseExceptionMiddleware();
 
         return app;
     }
