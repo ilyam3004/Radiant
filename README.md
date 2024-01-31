@@ -1,7 +1,6 @@
 ﻿<div align="center">
 
-![Radiant](assets/logo.png)
-
+<img src="assets/logo.png" width="700">
 
 [![Contributors](https://img.shields.io/github/contributors/ilyam3004/Radiant)](https://GitHub.com/ilyam3004/graphs/contributors/) 
 [![GitHub License](https://img.shields.io/github/license/ilyam3004/Radiant)](https://github.com/ilyam3004/Radiant/blob/main/LICENSE)
