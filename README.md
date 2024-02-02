@@ -93,13 +93,13 @@ Mediator provides a simple and elegant way to implement communication between di
 ## CQRS
 CQRS (Command Query Responsibility Segregation) design pattern separates the operations that modify state from those that read state in a system. This separation allows for different optimizations and scaling strategies for the two types of operations. In a CQRS architecture, commands represent actions that change the state of the system, while queries represent requests for information about the system's current state. By separating these concerns, a CQRS system can be optimized for both high write throughput and fast query performance. However, implementing a CQRS architecture can be complex and may require significant changes to existing systems.
 
-### Unit of Work
+## Unit of Work
 The Unit of Work pattern ensures the proper management of transactions and maintains data consistency throughout an application. It helps orchestrate multiple operations within a single transaction, either committing all changes or rolling back if an error occurs. The Unit of Work pattern is crucial for maintaining data integrity and ensuring atomicity in data operations.
 
-### Generic Repository
+## Generic Repository
 The Generic Repository pattern provides a standardized interface for data access operations. It allows for generic implementations of common data access methods, promoting code reusability and consistency in data interactions. The Generic Repository pattern simplifies the data access layer by providing a uniform API for various entities within the application.
 
-### Result
+## Result
 The Result pattern enhances error handling and response generation in an application. It provides a structured way to handle success and failure scenarios, allowing for better communication of outcomes between components. The Result pattern contributes to the overall robustness of the system by promoting clear and consistent handling of results.
 These patterns collectively contribute to a well-architected system, promoting modularity, testability, and maintainability in software development.
 
