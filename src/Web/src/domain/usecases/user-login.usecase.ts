@@ -1,7 +1,6 @@
-import {LoginRequest, UserModel} from "../models/user.model";
 import {UserRepository} from "../repositories/user.repository";
+import {LoginRequest, UserModel} from "../models/user.model";
 import {UseCase} from "../../base/use-case";
-import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 
 

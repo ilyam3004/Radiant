@@ -1,10 +1,11 @@
-import { TodoService } from "../../../core/services/todo.service";
+import {CreateTodoItemRequest, GetTodoListsResponse, TodoItem, TodoList} from "../../../core/models/todo";
+import {TodolistCreateUseCase} from "../../../../../domain/usecases/todolist-create.usecase";
 import { AlertService } from "../../../core/services/alert.service";
-import { AuthService } from "../../../core/services/auth.service";
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { first } from "rxjs";
-import {CreateTodoItemRequest, GetTodoListsResponse, TodoItem, TodoList} from "../../../core/models/todo";
+import {TodoService} from "../../../core/services/todo.service";
+import {AuthService} from "../../../core/services/auth.service";
 
 @Component({
   selector: 'todo',
@@ -22,9 +23,10 @@ export class TodoComponent implements OnInit {
 
   todoListsNotFound: boolean = false;
 
-  constructor(private authService: AuthService,
-    private alertService: AlertService,
+  constructor(private todolistCreateUseCase: TodolistCreateUseCase,
+    private authService: AuthService,
     private todoService: TodoService,
+    private alertService: AlertService,
     private route: ActivatedRoute,
     private router: Router) { }
 
@@ -67,7 +69,7 @@ export class TodoComponent implements OnInit {
 
   createTodolist() {
     this.newTodoLoading = true;
-    this.todoService.createTodoList({ title: this.todoListTitle })
+    this.todolistCreateUseCase.execute({ title: this.todoListTitle })
       .subscribe({
         next: (todoList: TodoList) => {
           this.alertService.success(
