@@ -41,7 +41,7 @@ services:
     depends_on: 
       - api
     ports:
-      - "4200:80"
+      - "4201:80"
     networks:
       - dev
 
