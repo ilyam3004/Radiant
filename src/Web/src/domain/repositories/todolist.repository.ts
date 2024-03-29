@@ -11,5 +11,5 @@ export abstract class TodolistRepository {
   abstract createTodoList(request: CreateTodoListRequest): Observable<TodoListModel>;
   abstract removeTodoList(todoListId: string): Observable<void>;
   abstract getTodoLists(): Observable<TodoListModel[]>;
-  abstract getTodayTodoList(): Observable<TodoList>;
+  abstract getTodayTodoList(): Observable<TodoListModel>;
 }

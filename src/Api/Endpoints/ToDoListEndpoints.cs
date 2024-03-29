@@ -33,7 +33,7 @@ public class ToDoListEndpoints : ICarterModule
 
         return result.Match(
             value => Results.Ok(
-                mapper.Map<GetTodoListsResponse>(value)),
+                mapper.Map<List<TodoListResponse>>(value)),
             ApiEndpoints.Problem);
     }
     
@@ -59,10 +59,7 @@ public class ToDoListEndpoints : ICarterModule
 
         var result = await sender.Send(command);
         
-        return result.Match(
-            value => Results.Ok(
-                mapper.Map<RemoveTodoListResponse>(value)),
-            ApiEndpoints.Problem);
+        return result.Match(value => Results.Ok(), ApiEndpoints.Problem);
     }
 
     private async Task<IResult> GetTodayTodoList(

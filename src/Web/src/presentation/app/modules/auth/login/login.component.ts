@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AlertService} from "../../../core/services/alert.service";
 import {LoginRequest} from "../../../core/models/user";
-import {UserLoginUseCase} from "../../../../../domain/usecases/user-login.usecase";
+import {UserLoginUseCase} from "../../../../../domain/usecases/user/user-login.usecase";
 
 @Component({
   selector: 'app-login',
