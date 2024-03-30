@@ -7,12 +7,9 @@ import {TodolistRepository} from "../domain/repositories/todolist.repository";
 import {TodolistImplementationRepository} from "./repositories/todolist/todolist-implementation.repository";
 import {TodoItemRepository} from "../domain/repositories/todoitem.repository";
 import {TodoItemImplementationRepository} from "./repositories/todoitem/todoitem-implementation.repository";
-import {userLoginUseCaseProvider, userRegisterUseCaseProvider} from "./di/user.dependencies";
-import {
-  todolistCreateUseCaseProvider,
-  todolistGetAllUseCaseProvider,
-  todolistRemoveUseCaseProvider, todolistTodayUseCaseProvider
-} from "./di/todolist.dependencies";
+import {userUseCases} from "./di/user.dependencies";
+import {todolistUseCases} from "./di/todolist.dependencies";
+import {todoItemUseCases} from "./di/todoitem.dependencies";
 
 
 @NgModule({
@@ -21,16 +18,14 @@ import {
     HttpClientModule
   ],
   providers: [
-    userLoginUseCaseProvider,
-    userRegisterUseCaseProvider,
-    todolistCreateUseCaseProvider,
-    todolistRemoveUseCaseProvider,
-    todolistGetAllUseCaseProvider,
-    todolistTodayUseCaseProvider,
+    userUseCases,
+    todolistUseCases,
+    todoItemUseCases,
     {provide: UserRepository, useClass: UserImplementationRepository},
     {provide: TodolistRepository, useClass: TodolistImplementationRepository},
     {provide: TodoItemRepository, useClass: TodoItemImplementationRepository}
   ]
 })
 
-export class DataModule { }
+export class DataModule {
+}

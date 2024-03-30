@@ -1,11 +1,10 @@
 import {
   CreateTodoItemRequest,
-  TodoItem,
-  TodoList, UpdateTodoItemRequest
-} from "../../presentation/app/core/models/todo";
-import {Observable} from "rxjs";
+  TodoItemModel,
+  UpdateTodoItemRequest
+} from "../models/todoitem.model";
 import {TodoListModel} from "../models/todolist.model";
-import {TodoItemModel} from "../models/todoitem.model";
+import {Observable} from "rxjs";
 
 export abstract class TodoItemRepository {
   abstract addTodoItem(createRequest: CreateTodoItemRequest): Observable<TodoListModel>;

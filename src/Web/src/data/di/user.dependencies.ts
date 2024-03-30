@@ -14,3 +14,8 @@ export const userRegisterUseCaseProvider = {
   useFactory: (userRepository: UserRepository) => new UserRegisterUseCase(userRepository),
   deps: [UserRepository]
 };
+
+export const userUseCases = [
+  userLoginUseCaseProvider,
+  userRegisterUseCaseProvider
+];

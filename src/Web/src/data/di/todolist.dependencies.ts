@@ -32,3 +32,10 @@ export const todolistTodayUseCaseProvider = {
     new TodolistTodayUseCase(todolistRepository),
   deps: [TodolistRepository]
 };
+
+export const todolistUseCases = [
+  todolistCreateUseCaseProvider,
+  todolistRemoveUseCaseProvider,
+  todolistGetAllUseCaseProvider,
+  todolistTodayUseCaseProvider
+];

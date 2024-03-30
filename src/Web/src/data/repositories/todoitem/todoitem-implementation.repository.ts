@@ -1,8 +1,7 @@
 import {map, Observable} from "rxjs";
-import {CreateTodoItemRequest, UpdateTodoItemRequest} from "src/presentation/app/core/models/todo";
 import {TodoItemRepository} from "../../../domain/repositories/todoitem.repository";
 import {TodoListModel} from "../../../domain/models/todolist.model";
-import {TodoItemModel} from "src/domain/models/todoitem.model";
+import {CreateTodoItemRequest, TodoItemModel, UpdateTodoItemRequest} from "src/domain/models/todoitem.model";
 import {HttpClient} from "@angular/common/http";
 import {TodoItemEntityMapper} from "./mappers/todoitem-entity.mapper";
 import {TodoItemEntity} from "../../entities/todoitem-entity";

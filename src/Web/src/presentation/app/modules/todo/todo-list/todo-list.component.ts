@@ -1,9 +1,13 @@
-import { CreateTodoItemRequest, Priority, TodoItem, TodoList } from "../../../core/models/todo";
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { TodoService } from "../../../core/services/todo.service";
-import { AlertService } from "../../../core/services/alert.service";
-import { DatePipe } from "@angular/common";
+import {CreateTodoItemRequest, TodoItemModel} from "../../../../../domain/models/todoitem.model";
 import {ConfirmationDialogService} from "../../../core/services/confirmation-dialog.service";
+import {TodoListModel} from "../../../../../domain/models/todolist.model";
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AlertService } from "../../../core/services/alert.service";
+import {Priority} from "../../../../../domain/enums/priority";
+import { DatePipe } from "@angular/common";
+import {TodoItemCreateUseCase} from "../../../../../domain/usecases/todoitem/todoitem-create.usecase";
+import {TodoItemToggleUseCase} from "../../../../../domain/usecases/todoitem/todoitem-toggle.usecase";
+import {TodoItemRemoveUseCase} from "../../../../../domain/usecases/todoitem/todoitem-remove.usecase";
 
 @Component({
   selector: 'todo-list',
@@ -11,11 +15,11 @@ import {ConfirmationDialogService} from "../../../core/services/confirmation-dia
   styleUrls: ['./todo-list.component.scss']
 })
 export class TodoListComponent {
-  @Input() todoList!: TodoList;
+  @Input() todoList!: TodoListModel;
   @Output() removeTodoListEvent = new EventEmitter<string>();
-  @Output() addTodoItemEvent = new EventEmitter<[CreateTodoItemRequest, TodoList, boolean]>();
-  @Output() removeTodoItemEvent = new EventEmitter<[TodoItem, TodoList, boolean]>();
-  @Output() toggleTodoItemEvent = new EventEmitter<[TodoItem, boolean]>();
+  @Output() addTodoItemEvent = new EventEmitter<[CreateTodoItemRequest, TodoListModel, boolean]>();
+  @Output() removeTodoItemEvent = new EventEmitter<[TodoItemModel, TodoListModel, boolean]>();
+  @Output() toggleTodoItemEvent = new EventEmitter<[TodoItemModel, boolean]>();
 
   priorities: string[] = ["🟢", "🟡", "🔴"];
   newTodoItemLoading: boolean = false;
@@ -23,9 +27,11 @@ export class TodoListComponent {
   deadline: string | null = null;
   note: string = "";
 
-  constructor(private todoService: TodoService,
+  constructor(private confirmationDialogService: ConfirmationDialogService,
+    private todoItemCreateUseCase: TodoItemCreateUseCase,
+    private todoItemToggleUseCase: TodoItemToggleUseCase,
+    private todoItemRemoveUseCase: TodoItemRemoveUseCase,
     private alertService: AlertService,
-    private confirmationDialogService: ConfirmationDialogService,
     private datePipe: DatePipe) {
   }
 
@@ -59,9 +65,9 @@ export class TodoListComponent {
     }
 
     this.newTodoItemLoading = true;
-    this.todoService.addTodoItem(createRequest)
+    this.todoItemCreateUseCase.execute(createRequest)
       .subscribe({
-        next: (todoList: TodoList) => {
+        next: (todoList: TodoListModel) => {
           this.addTodoItemEvent.emit([createRequest, todoList, this.todoList.isTodayTodoList]);
           this.newTodoItemLoading = false;
           this.resetInputFields();
@@ -76,9 +82,9 @@ export class TodoListComponent {
 
   toggleTodoItem(itemId: string) {
     this.changeTodoItemLoadingState(itemId, true);
-    this.todoService.toggleTodoItem(itemId)
+    this.todoItemToggleUseCase.execute(itemId)
       .subscribe({
-        next: (todoItem: TodoItem) => {
+        next: (todoItem: TodoItemModel) => {
           this.changeTodoItemLoadingState(itemId, false);
           this.toggleTodoItemEvent.emit([todoItem, this.todoList.isTodayTodoList]);
         },
@@ -90,11 +96,11 @@ export class TodoListComponent {
       });
   }
 
-  removeTodoItem(todoItem: TodoItem) {
+  removeTodoItem(todoItem: TodoItemModel) {
     this.changeTodoItemLoadingState(todoItem.id, true);
-    this.todoService.removeTodoItem(todoItem.id)
+    this.todoItemRemoveUseCase.execute(todoItem.id)
       .subscribe({
-        next: (todoList: TodoList) => {
+        next: (todoList: TodoListModel) => {
           this.removeTodoItemEvent.emit([todoItem, todoList, this.todoList.isTodayTodoList]);
         },
         error: (error) => {
@@ -117,7 +123,7 @@ export class TodoListComponent {
     return done ? "completed" : "";
   }
 
-  getTaskColorClass(todoItem: TodoItem): string {
+  getTaskColorClass(todoItem: TodoItemModel): string {
     if (todoItem.done) {
       return "table-success";
     } else {
@@ -131,7 +137,7 @@ export class TodoListComponent {
     return "";
   }
 
-  getDeadlineClass(todoItem: TodoItem): string {
+  getDeadlineClass(todoItem: TodoItemModel): string {
     if (todoItem.deadline !== null) {
       if (!todoItem.done && this.isDeadLineExpired(new Date(todoItem.deadline))) {
         return "deadline-expired";
@@ -165,7 +171,7 @@ export class TodoListComponent {
     return readableDate == null ? '-' : readableDate;
   }
 
-  updateTodoItem(updatedTodoItem: TodoItem) {
+  updateTodoItem(updatedTodoItem: TodoItemModel) {
     const index = this.todoList.todoItems
       .findIndex((item) =>
         item.id === updatedTodoItem.id);
