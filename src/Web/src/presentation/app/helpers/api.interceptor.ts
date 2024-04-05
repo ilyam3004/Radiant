@@ -1,13 +1,12 @@
-﻿import {Injectable} from '@angular/core';
-import { HttpInterceptor, HttpHandler, HttpRequest, HttpEvent } from '@angular/common/http';
-import {Observable} from "rxjs";
+﻿import { HttpInterceptor, HttpHandler, HttpRequest, HttpEvent } from '@angular/common/http';
 import {environment} from "../../../environments/environment";
-import {AuthService} from "../core/services/auth.service";
+import {Injectable} from '@angular/core';
+import {Observable} from "rxjs";
 
 @Injectable()
 export class ApiInterceptor implements HttpInterceptor {
 
-  constructor(private accountService: AuthService) { }
+  constructor() { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const apiReq = request

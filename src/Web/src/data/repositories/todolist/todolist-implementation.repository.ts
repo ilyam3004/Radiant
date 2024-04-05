@@ -1,11 +1,13 @@
-import {CreateTodoListRequest} from "src/presentation/app/core/models/todo";
 import {TodolistRepository} from "../../../domain/repositories/todolist.repository";
 import {TodoListEntity} from "../../entities/todolist-entity";
-import {TodoListModel} from "../../../domain/models/todolist.model";
+import {CreateTodoListRequest, TodoListModel} from "../../../domain/models/todolist.model";
 import {TodolistEntityMapper} from "./mappers/todolist-entity.mapper";
 import {HttpClient} from "@angular/common/http";
 import {map, Observable} from "rxjs";
+import {Injectable} from "@angular/core";
 
+
+@Injectable()
 export class TodolistImplementationRepository extends TodolistRepository {
   private todolistEntityMapper: TodolistEntityMapper;
 

@@ -1,4 +1,4 @@
-﻿export class Alert {
+﻿export class AlertModel {
   id?: string;
   type?: AlertType;
   message?: string;
@@ -6,7 +6,7 @@
   keepAfterRouteChange?: boolean;
   fade?: boolean;
 
-  constructor(init?:Partial<Alert>) {
+  constructor(init?:Partial<AlertModel>) {
     Object.assign(this, init);
   }
 }

@@ -1,10 +1,10 @@
+import {UserRegisterUseCase} from "../../../../../domain/usecases/user/user-register.usecase";
+import {AlertService} from "../../../../../domain/services/alert.service";
+import {RegisterRequest} from "../../../../../domain/models/user.model";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {RegisterRequest} from "../../../core/models/user";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Component, OnInit} from '@angular/core';
 import {first} from "rxjs";
-import {AuthService} from "../../../core/services/auth.service";
-import {AlertService} from "../../../core/services/alert.service";
 
 @Component({
   templateUrl: './register.component.html'
@@ -18,7 +18,7 @@ export class RegisterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private accountService: AuthService,
+    private userRegisterUseCase: UserRegisterUseCase,
     private alertService: AlertService
   ) { }
 
@@ -48,7 +48,7 @@ export class RegisterComponent implements OnInit {
     }
 
     this.loading = true;
-    this.accountService.register(request)
+    this.userRegisterUseCase.execute(request)
       .pipe(first())
       .subscribe({
         next: () => {

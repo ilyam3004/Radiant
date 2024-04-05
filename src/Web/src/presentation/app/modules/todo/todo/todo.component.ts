@@ -1,15 +1,14 @@
-import {CreateTodoItemRequest} from "../../../core/models/todo";
 import {TodolistCreateUseCase} from "../../../../../domain/usecases/todolist/todolist-create.usecase";
-import {AlertService} from "../../../core/services/alert.service";
 import {ActivatedRoute, Router} from '@angular/router';
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from "../../../core/services/auth.service";
 import {TodoListModel} from "../../../../../domain/models/todolist.model";
 import {TodolistRemoveUseCase} from "src/domain/usecases/todolist/todolist-remove.usecase";
 import {TodoSuccessMessages} from "../../../../../domain/messages/success";
-import {TodoItemModel} from "../../../../../domain/models/todoitem.model";
+import {CreateTodoItemRequest, TodoItemModel} from "../../../../../domain/models/todoitem.model";
 import {TodolistGetAllUseCase} from "../../../../../domain/usecases/todolist/todolist-get-all.usecase";
 import {TodolistTodayUseCase} from "../../../../../domain/usecases/todolist/todolist-today.usecase";
+import {AlertService} from "../../../../../domain/services/alert.service";
+import {UserLogoutUseCase} from "../../../../../domain/usecases/user/user-logout.usecase";
 
 @Component({
   selector: 'todo',
@@ -31,11 +30,10 @@ export class TodoComponent implements OnInit {
               private todolistRemoveUseCase: TodolistRemoveUseCase,
               private todolistGetAllUseCase: TodolistGetAllUseCase,
               private todolistTodayUseCase: TodolistTodayUseCase,
-              private authService: AuthService,
+              private userLogOutUseCase: UserLogoutUseCase,
               private alertService: AlertService,
               private route: ActivatedRoute,
-              private router: Router) {
-  }
+              private router: Router) { }
 
   ngOnInit(): void {
     this.fetchTodayTodoListLoading = true;
@@ -151,7 +149,7 @@ export class TodoComponent implements OnInit {
   }
 
   logOut() {
-    this.authService.logout()
+    this.userLogOutUseCase.execute()
       .subscribe({
         next: () => {
           this.alertService.success("Log out successful",

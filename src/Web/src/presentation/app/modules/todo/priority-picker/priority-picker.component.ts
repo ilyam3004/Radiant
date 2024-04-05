@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Priority} from "../../../core/models/todo";
+import {Priority} from "../../../../../domain/enums/priority";
 
 @Component({
   selector: 'priority-picker',

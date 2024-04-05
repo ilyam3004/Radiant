@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import {NavigationStart, Router } from '@angular/router';
-import {AlertService} from "../../../core/services/alert.service";
 import { Subscription } from 'rxjs';
-import {Alert, AlertType} from "../../../core/models/alert";
+import {AlertService} from "../../../../../domain/services/alert.service";
+import {AlertModel, AlertType} from "../../../../../domain/models/alert.model";
 
 @Component({
   selector: 'alert',
@@ -13,7 +13,7 @@ export class AlertComponent {
   @Input() id = 'default-alert';
   @Input() fade = true;
 
-  alerts: Alert[] = [];
+  alerts: AlertModel[] = [];
   alertSubscription!: Subscription;
   routeSubscription!: Subscription;
 
@@ -48,7 +48,7 @@ export class AlertComponent {
     this.routeSubscription.unsubscribe();
   }
 
-  removeAlert(alert: Alert){
+  removeAlert(alert: AlertModel){
     if (!this.alerts.includes(alert)) return;
 
     if (this.fade) {
@@ -62,7 +62,7 @@ export class AlertComponent {
     }
   }
 
-  cssClass(alert: Alert) {
+  cssClass(alert: AlertModel) {
     if (!alert) return;
 
     const classes = ['alert', 'alert-dismissible', 'mt-4', 'container'];

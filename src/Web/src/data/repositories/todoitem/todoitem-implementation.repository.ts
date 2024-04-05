@@ -7,7 +7,9 @@ import {TodoItemEntityMapper} from "./mappers/todoitem-entity.mapper";
 import {TodoItemEntity} from "../../entities/todoitem-entity";
 import {TodolistEntityMapper} from "../todolist/mappers/todolist-entity.mapper";
 import {TodoListEntity} from "../../entities/todolist-entity";
+import {Injectable} from "@angular/core";
 
+@Injectable()
 export class TodoItemImplementationRepository extends TodoItemRepository {
   private todoItemEntityMapper: TodoItemEntityMapper;
   private todoListEntityMapper: TodolistEntityMapper;

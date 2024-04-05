@@ -1,13 +1,13 @@
 import {CreateTodoItemRequest, TodoItemModel} from "../../../../../domain/models/todoitem.model";
-import {ConfirmationDialogService} from "../../../core/services/confirmation-dialog.service";
 import {TodoListModel} from "../../../../../domain/models/todolist.model";
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { AlertService } from "../../../core/services/alert.service";
 import {Priority} from "../../../../../domain/enums/priority";
 import { DatePipe } from "@angular/common";
 import {TodoItemCreateUseCase} from "../../../../../domain/usecases/todoitem/todoitem-create.usecase";
 import {TodoItemToggleUseCase} from "../../../../../domain/usecases/todoitem/todoitem-toggle.usecase";
 import {TodoItemRemoveUseCase} from "../../../../../domain/usecases/todoitem/todoitem-remove.usecase";
+import {ConfirmationDialogService} from "../../../../../domain/services/confirmation-dialog.service";
+import {AlertService} from "../../../../../domain/services/alert.service";
 
 @Component({
   selector: 'todo-list',

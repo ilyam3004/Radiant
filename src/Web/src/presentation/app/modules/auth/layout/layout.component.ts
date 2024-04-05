@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router'
-import {AuthService} from "../../../core/services/auth.service";
+import {UserAuthenticationUseCase} from "../../../../../domain/usecases/user/user-authentication.usecase";
 
 @Component({
   selector: 'app-layout',
@@ -9,10 +9,10 @@ import {AuthService} from "../../../core/services/auth.service";
 export class LayoutComponent {
   constructor(
     private router: Router,
-    private authService: AuthService
+    private userAuthenticationUseCase: UserAuthenticationUseCase,
   ) {
-    // if (this.authService.isAuthenticated()) {
-    //   this.router.navigate(['/todo'])
-    // }
+    if (this.userAuthenticationUseCase.execute()) {
+      this.router.navigate(['/todo'])
+    }
   }
 }

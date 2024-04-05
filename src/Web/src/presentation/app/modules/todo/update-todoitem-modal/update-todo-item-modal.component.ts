@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Priority, TodoItem, UpdateTodoItemRequest } from "../../../core/models/todo";
-import { TodoService } from "../../../core/services/todo.service";
-import { AlertService } from "../../../core/services/alert.service";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {Priority} from "../../../../../domain/enums/priority";
+import {TodoItemModel, UpdateTodoItemRequest} from "../../../../../domain/models/todoitem.model";
+import {AlertService} from "../../../../../domain/services/alert.service";
+import {TodoItemUpdateUseCase} from "../../../../../domain/usecases/todoitem/todoitem-update.usecase";
 
 @Component({
   selector: 'update-todoitem-modal',
@@ -10,18 +11,17 @@ import { AlertService } from "../../../core/services/alert.service";
   styleUrls: ['./update-todo-item-modal.component.scss']
 })
 export class UpdateTodoItemModalComponent implements OnInit {
-  @Input() todoItem!: TodoItem;
+  @Input() todoItem!: TodoItemModel;
   @Input() isTodayTodoList: boolean = false;
 
-  @Output() updateTodoItemEvent = new EventEmitter<TodoItem>();
+  @Output() updateTodoItemEvent = new EventEmitter<TodoItemModel>();
   updatedNote: string = "";
   updatedPriority: Priority = {} as Priority;
   updatedDeadline: string | null = null;
 
   constructor(private modalService: NgbModal,
-    private todoService: TodoService,
-    private alertService: AlertService) {
-  }
+              private todoItemUpdateUseCase: TodoItemUpdateUseCase,
+              private alertService: AlertService) { }
 
   ngOnInit(): void {
     this.updatedNote = this.todoItem.note;
@@ -29,8 +29,7 @@ export class UpdateTodoItemModalComponent implements OnInit {
     this.updatedDeadline = this.todoItem.deadline;
   }
 
-
-  updateTodoItem(updatedTodoItem: TodoItem) {
+  updateTodoItem(updatedTodoItem: TodoItemModel) {
     const updateRequest: UpdateTodoItemRequest = {
       id: updatedTodoItem.id,
       note: updatedTodoItem.note,
@@ -39,15 +38,15 @@ export class UpdateTodoItemModalComponent implements OnInit {
       done: updatedTodoItem.done
     };
 
-    this.todoService.updateTodoItem(updateRequest)
+    this.todoItemUpdateUseCase.execute(updateRequest)
       .subscribe({
-        next: (todoItem: TodoItem) => {
+        next: (todoItem: TodoItemModel) => {
           this.updateTodoItemEvent.emit(todoItem);
           this.alertService.success("Task updated successfully");
         },
         error: (error) => {
           this.alertService.error(error,
-            { keepAfterRouteChange: true, autoClose: true });
+            {keepAfterRouteChange: true, autoClose: true});
         }
       });
   }
@@ -63,10 +62,6 @@ export class UpdateTodoItemModalComponent implements OnInit {
     modal.close();
   }
 
-  removeDeadline() {
-    this.updatedDeadline = null;
-  }
-
   handlePriorityChange(priority: Priority) {
     this.updatedPriority = priority;
   }
@@ -76,6 +71,6 @@ export class UpdateTodoItemModalComponent implements OnInit {
   }
 
   open(content: any) {
-    this.modalService.open(content, { size: 'lg' });
+    this.modalService.open(content, {size: 'lg'});
   }
 }
