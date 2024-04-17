@@ -68,7 +68,7 @@ export class AlertComponent {
     const classes = ['alert', 'alert-dismissible', 'mt-4', 'container'];
 
     const alertTypeClass = {
-      [AlertType.Success]: 'alert-success',
+      [AlertType.Success]: 'alert-secondary',
       [AlertType.Error]: 'alert-danger',
       [AlertType.Info]: 'alert-info',
       [AlertType.Warning]: 'alert-warning'

@@ -8,10 +8,10 @@
       <div *ngIf="!isTodayTodoList">
         <ngb-datepicker #dp [(ngModel)]="model" (navigate)="date = $event.next" />
         <div style="margin-bottom: 5%"></div>
-        <button class="btn btn-sm btn-outline-primary me-2" (click)="selectToday()">
+        <button class="btn btn-sm btn-outline-secondary me-2" (click)="selectToday()">
           Select Today
         </button>
-        <button class="btn btn-sm btn-outline-primary me-2" (click)="dp.navigateTo()">
+        <button class="btn btn-sm btn-outline-secondary me-2" (click)="dp.navigateTo()">
           To current month
         </button>
       </div>
@@ -35,6 +35,6 @@
     </div>
   </div>
 </ng-template>
-<button class="btn btn-outline-primary" (click)="open(content)">
+<button class="btn btn-outline-secondary" (click)="open(content)">
   {{shownDateTime === null ? "Set deadline" : shownDateTime}}
 </button>

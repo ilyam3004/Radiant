@@ -1,0 +1,31 @@
+.low-priority-icon {
+  background-color: #d7deea;
+  width: 15%;
+  height: 0;
+  padding-bottom: 15%;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.middle-priority-icon {
+  background-color: #68c2d2;
+  width: 15%;
+  height: 0;
+  padding-bottom: 15%;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.high-priority-icon {
+  background-color: #476a9c;
+  width: 15%;
+  height: 0;
+  padding-bottom: 15%;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.priority-content {
+  display: flex;
+  justify-content: space-between;
+}

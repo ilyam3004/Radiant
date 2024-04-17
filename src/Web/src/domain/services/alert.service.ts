@@ -11,7 +11,8 @@ export class AlertService {
   private defaultId = 'default-alert';
 
   onAlert(id = this.defaultId): Observable<AlertModel> {
-    return this.subject.asObservable().pipe(filter(x => x && x.id === id));
+    return this.subject.asObservable()
+      .pipe(filter(x => x && x.id === id));
   }
 
   success(message: string, options?: AlertOptions) {

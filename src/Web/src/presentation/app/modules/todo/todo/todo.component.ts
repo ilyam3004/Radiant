@@ -33,7 +33,8 @@ export class TodoComponent implements OnInit {
               private userLogOutUseCase: UserLogoutUseCase,
               private alertService: AlertService,
               private route: ActivatedRoute,
-              private router: Router) { }
+              private router: Router) {
+  }
 
   ngOnInit(): void {
     this.fetchTodayTodoListLoading = true;
@@ -84,7 +85,8 @@ export class TodoComponent implements OnInit {
           this.todoListTitle = "";
         },
         error: error => {
-          this.alertService.error(error);
+          console.log(error)
+          this.alertService.error(error.error.detail);
           this.newTodoLoading = false;
         }
       });

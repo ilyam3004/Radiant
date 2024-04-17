@@ -1,13 +1,19 @@
 <div class="col">
   <div ngbDropdown class="d-inline-block">
     <button class="btn btn-outline-secondary" id="priorityDropdown" ngbDropdownToggle>
-      Priority: {{ selectedPriority == null ? '' : priorities[selectedPriority.valueOf()] }}
+      Priority: {{ selectedPriority == null ? '' : priorities[selectedPriority.valueOf()]  }}
     </button>
     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-      <button ngbDropdownItem *ngFor="let option of priorityOptions" class="dropdown-item"
-              (click)="selectPriority(option)">
-        {{ priorities[option.valueOf()] }}
-      </button>
+      @for (option of priorityOptions; track option) {
+        <button ngbDropdownItem
+                class="dropdown-item"
+                (click)="selectPriority(option)">
+          <div class="priority-content">
+            <span>{{ priorities[option.valueOf()] }}</span>
+            <div [class]="getPriorityStyleClass(option)"></div>
+          </div>
+        </button>
+      }
     </div>
   </div>
 </div>

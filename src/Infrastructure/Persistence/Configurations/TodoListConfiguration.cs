@@ -12,7 +12,7 @@ public class TodoListConfiguration : IEntityTypeConfiguration<TodoList>
         
         builder.Property(tl => tl.Title)
             .IsRequired()
-            .HasMaxLength(20);
+            .HasMaxLength(40);
         
         builder.Property(tl => tl.CreatedAt)
             .IsRequired();

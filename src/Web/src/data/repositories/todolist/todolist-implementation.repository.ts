@@ -20,23 +20,29 @@ export class TodolistImplementationRepository extends TodolistRepository {
     return this.http
       .post<TodoListEntity>("todo-lists", request)
       .pipe(map(todoList =>
-        this.todolistEntityMapper.mapFrom(todoList)));
+      {
+        console.log(todoList)
+        return this.todolistEntityMapper.mapFrom(todoList)
+      }));
   }
 
   override removeTodoList(todoListId: string): Observable<void> {
-    return this.http.delete<void>(`todo-lists/${todoListId}`);
+    return this.http
+      .delete<void>(`todo-lists/${todoListId}`);
   }
 
   override getTodoLists(): Observable<TodoListModel[]> {
     return this.http
       .get<TodoListEntity[]>("todo-lists")
-      .pipe(map(todoLists =>
-        todoLists.map(todoList =>
-          this.todolistEntityMapper.mapFrom(todoList))));
+      .pipe(map(todoLists => {
+        return todoLists.map(todoList =>
+          this.todolistEntityMapper.mapFrom(todoList))
+      }));
   }
 
   override getTodayTodoList(): Observable<TodoListModel> {
-    return this.http.get<TodoListEntity>("todo-lists/today")
+    return this.http
+      .get<TodoListEntity>("todo-lists/today")
       .pipe(map(todolist =>
         this.todolistEntityMapper.mapFrom(todolist)));
   }

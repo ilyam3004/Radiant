@@ -1,8 +1,8 @@
-import {TodoItemRepository} from "../../domain/repositories/todoitem.repository";
 import {TodoItemCreateUseCase} from "../../domain/usecases/todoitem/todoitem-create.usecase";
 import {TodoItemToggleUseCase} from "../../domain/usecases/todoitem/todoitem-toggle.usecase";
 import {TodoItemRemoveUseCase} from "../../domain/usecases/todoitem/todoitem-remove.usecase";
 import {TodoItemUpdateUseCase} from "../../domain/usecases/todoitem/todoitem-update.usecase";
+import {TodoItemRepository} from "../../domain/repositories/todoitem.repository";
 
 export const todoItemCreateUseCaseProvider = {
   provide: TodoItemCreateUseCase,

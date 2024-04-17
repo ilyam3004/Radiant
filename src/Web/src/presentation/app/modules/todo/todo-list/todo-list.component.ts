@@ -1,13 +1,13 @@
-import {CreateTodoItemRequest, TodoItemModel} from "../../../../../domain/models/todoitem.model";
-import {TodoListModel} from "../../../../../domain/models/todolist.model";
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import {Priority} from "../../../../../domain/enums/priority";
-import { DatePipe } from "@angular/common";
 import {TodoItemCreateUseCase} from "../../../../../domain/usecases/todoitem/todoitem-create.usecase";
 import {TodoItemToggleUseCase} from "../../../../../domain/usecases/todoitem/todoitem-toggle.usecase";
 import {TodoItemRemoveUseCase} from "../../../../../domain/usecases/todoitem/todoitem-remove.usecase";
 import {ConfirmationDialogService} from "../../../../../domain/services/confirmation-dialog.service";
+import {CreateTodoItemRequest, TodoItemModel} from "../../../../../domain/models/todoitem.model";
 import {AlertService} from "../../../../../domain/services/alert.service";
+import {TodoListModel} from "../../../../../domain/models/todolist.model";
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Priority} from "../../../../../domain/enums/priority";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'todo-list',
@@ -21,18 +21,17 @@ export class TodoListComponent {
   @Output() removeTodoItemEvent = new EventEmitter<[TodoItemModel, TodoListModel, boolean]>();
   @Output() toggleTodoItemEvent = new EventEmitter<[TodoItemModel, boolean]>();
 
-  priorities: string[] = ["🟢", "🟡", "🔴"];
   newTodoItemLoading: boolean = false;
   selectedPriority: Priority | null = null;
   deadline: string | null = null;
   note: string = "";
 
   constructor(private confirmationDialogService: ConfirmationDialogService,
-    private todoItemCreateUseCase: TodoItemCreateUseCase,
-    private todoItemToggleUseCase: TodoItemToggleUseCase,
-    private todoItemRemoveUseCase: TodoItemRemoveUseCase,
-    private alertService: AlertService,
-    private datePipe: DatePipe) {
+              private todoItemCreateUseCase: TodoItemCreateUseCase,
+              private todoItemToggleUseCase: TodoItemToggleUseCase,
+              private todoItemRemoveUseCase: TodoItemRemoveUseCase,
+              private alertService: AlertService,
+              private datePipe: DatePipe) {
   }
 
   openRemoveConfirmationDialog(): void {
@@ -44,7 +43,8 @@ export class TodoListComponent {
           this.removeTodoListEvent.emit(this.todoList.id);
         }
       })
-      .catch(() => { });
+      .catch(() => {
+      });
   }
 
   addTodoItem() {
@@ -75,7 +75,7 @@ export class TodoListComponent {
         error: (error) => {
           this.newTodoItemLoading = false;
           this.alertService.error(error,
-            { keepAfterRouteChange: true, autoClose: true });
+            {keepAfterRouteChange: true, autoClose: true});
         }
       });
   }
@@ -91,7 +91,7 @@ export class TodoListComponent {
         error: (error) => {
           this.changeTodoItemLoadingState(itemId, false);
           this.alertService.error(error,
-            { keepAfterRouteChange: true, autoClose: true });
+            {keepAfterRouteChange: true, autoClose: true});
         }
       });
   }
@@ -106,7 +106,7 @@ export class TodoListComponent {
         error: (error) => {
           this.changeTodoItemLoadingState(todoItem.id, false);
           this.alertService.error(error,
-            { keepAfterRouteChange: true, autoClose: true });
+            {keepAfterRouteChange: true, autoClose: true});
         }
       });
   }
@@ -216,5 +216,15 @@ export class TodoListComponent {
 
   private resetInputFields() {
     this.note = "";
+  }
+
+  protected getPriorityStyleClass(priority: number): string {
+    if (priority === Priority.Low) {
+      return "low-priority-circle";
+    } else if (priority === Priority.Medium) {
+      return "middle-priority-circle";
+    } else {
+      return "high-priority-circle";
+    }
   }
 }

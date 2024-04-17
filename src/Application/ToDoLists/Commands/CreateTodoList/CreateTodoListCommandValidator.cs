@@ -9,7 +9,7 @@ public class CreateTodoListCommandValidator : AbstractValidator<CreateTodoListCo
         RuleFor(x => x.Title)
             .NotNull()
             .NotEmpty()
-            .MaximumLength(20)
-            .WithMessage("Title should be not empty and less than 20 characters");
+            .MaximumLength(40)
+            .WithMessage("Title should be not empty and less than 40 characters");
     }
 }

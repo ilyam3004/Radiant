@@ -15,3 +15,36 @@
 .deadline-expired {
   color: #ff0000;
 }
+
+.low-priority-circle {
+  background-color: #d7deea;
+  width: 30%;
+  height: 0;
+  padding-bottom: 30%;
+  display: inline-block;
+  border-radius: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.middle-priority-circle {
+  background-color: #68c2d2;
+  width: 30%;
+  height: 0;
+  padding-bottom: 30%;
+  display: inline-block;
+  border-radius: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.high-priority-circle {
+  background-color: #476a9c;
+  width: 30%;
+  height: 0;
+  padding-bottom: 30%;
+  display: inline-block;
+  border-radius: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}

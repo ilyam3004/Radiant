@@ -23,7 +23,7 @@ public class ToDoListEndpoints : ICarterModule
         group.MapDelete("{id:guid}", RemoveTodoList);
         group.MapGet("today", GetTodayTodoList);
     }
-    
+
     private async Task<IResult> GetUserTodoLists(ISender sender,
         IMapper mapper)
     {
@@ -33,10 +33,10 @@ public class ToDoListEndpoints : ICarterModule
 
         return result.Match(
             value => Results.Ok(
-                mapper.Map<List<TodoListResponse>>(value)),
+                mapper.Map<List<TodoListResponse>>(value.TodoLists)),
             ApiEndpoints.Problem);
     }
-    
+
     private async Task<IResult> CreateTodoList(CreateTodoListRequest request,
         ISender sender,
         IMapper mapper)
@@ -44,13 +44,13 @@ public class ToDoListEndpoints : ICarterModule
         var command = mapper.Map<CreateTodoListCommand>(request);
 
         var result = await sender.Send(command);
-        
+
         return result.Match(
             value => Results.Ok(
                 mapper.Map<TodoListResponse>(value)),
             ApiEndpoints.Problem);
     }
-    
+
     private async Task<IResult> RemoveTodoList([FromRoute] Guid id,
         ISender sender,
         IMapper mapper)
@@ -58,7 +58,7 @@ public class ToDoListEndpoints : ICarterModule
         var command = new RemoveTodoListCommand(id);
 
         var result = await sender.Send(command);
-        
+
         return result.Match(value => Results.Ok(), ApiEndpoints.Problem);
     }
 
@@ -66,9 +66,9 @@ public class ToDoListEndpoints : ICarterModule
         ISender sender, IMapper mapper)
     {
         var query = new GetTodayTodoListQuery();
-        
+
         var result = await sender.Send(query);
-        
+
         return result.Match(
             value => Results.Ok(
                 mapper.Map<TodoListResponse>(value)),

@@ -34,6 +34,13 @@ public class RemoveTodoItemCommandHandler
         
         var todoList = await _unitOfWork.TodoLists
             .GetTodoListByIdWithItems(todoItem.TodoListId);
+
+        if (todoList is null)
+        {
+            var exception = new TodoListNotFoundException();
+            return new Result<TodoListResult>(exception);
+        }
+
         SortTodoItemsByDate(todoList);
         
         if (todoList.IsTodayTodoList)

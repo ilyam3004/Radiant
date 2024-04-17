@@ -2,7 +2,6 @@
 using Application.Common.Interfaces.Persistence;
 using Application.Models.TodoLists;
 using Domain.Common.Exceptions;
-using Domain.Common.Messages;
 using Domain.Entities;
 using LanguageExt.Common;
 using MediatR;

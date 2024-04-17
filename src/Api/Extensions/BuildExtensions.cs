@@ -18,7 +18,7 @@ public static class BuildExtensions
         
         app.MapCarter();
         
-        app.UseExceptionMiddleware();
+        //app.UseExceptionMiddleware();
 
         return app;
     }
