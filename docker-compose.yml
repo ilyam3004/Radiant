@@ -2,7 +2,7 @@
 
 services:
   api:
-    image: ilya3004/todo:api
+    image: ilya3004/radiant:api
     build:
       context: .
       dockerfile: src/Api/Dockerfile
@@ -34,7 +34,7 @@ services:
   
   web:
     container_name: web
-    image: ilya3004/todo:web
+    image: ilya3004/radaint:web
     build:
       context: src/Web
       dockerfile: Dockerfile

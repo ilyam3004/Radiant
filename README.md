@@ -33,7 +33,7 @@
 
 
 # Overview📖
-Simple task management solution designed using Angular 16 and ASP.NET 8. This application, following Clean Architecture principles, serves as more than just a task organizer—it can be utilized as a clean architecture template project, providing a solid foundation for scalable and maintainable applications.
+Simple task management solution designed using Angular 17 and ASP.NET 8. This application, following Clean Architecture principles, serves as more than just a task organizer—it can be utilized as a clean architecture template project, providing a solid foundation for scalable and maintainable applications.
 
 # Give a Star!⭐
 If you like this project please consider giving it a ⭐ Star ⭐ at the top right of this page. Thanks a lot!

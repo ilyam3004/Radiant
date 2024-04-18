@@ -36,7 +36,7 @@ export class TodoItemImplementationRepository extends TodoItemRepository {
 
   override updateTodoItem(updateRequest: UpdateTodoItemRequest): Observable<TodoItemModel> {
     return this.httpClient
-      .put<TodoItemEntity>(`todo-items`, updateRequest)
+      .patch<TodoItemEntity>(`todo-items`, updateRequest)
       .pipe(map(todoItem =>
         this.todoItemEntityMapper.mapFrom(todoItem)));
   }

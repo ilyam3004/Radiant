@@ -8,16 +8,16 @@
 }
 
 .table-success {
-  --bs-table-bg: #dcfddc;
-  --bs-table-hover-bg: rgb(203, 249, 203);
+  --bs-table-bg: #e7e7e9;
+  --bs-table-hover-bg: #dedfe1;
 }
 
 .deadline-expired {
-  color: #ff0000;
+  color: #da3544;
 }
 
 .low-priority-circle {
-  background-color: #d7deea;
+  background-color: #afcedb;
   width: 30%;
   height: 0;
   padding-bottom: 30%;
@@ -28,7 +28,7 @@
 }
 
 .middle-priority-circle {
-  background-color: #68c2d2;
+  background-color: #2da5bb;
   width: 30%;
   height: 0;
   padding-bottom: 30%;
@@ -39,7 +39,7 @@
 }
 
 .high-priority-circle {
-  background-color: #476a9c;
+  background-color: #2d5785;
   width: 30%;
   height: 0;
   padding-bottom: 30%;
